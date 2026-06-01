@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SIGAEDU - Gestão de Turmas</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-high": "#ebe7e6",
+                    "on-primary": "#ffffff",
+                    "inverse-surface": "#313030",
+                    "on-secondary-fixed-variant": "#544600",
+                    "surface-bright": "#fdf8f8",
+                    "surface-variant": "#e5e2e1",
+                    "secondary-fixed": "#ffe16d",
+                    "primary-container": "#1c1b1b",
+                    "on-secondary-container": "#6e5c00",
+                    "on-tertiary-fixed": "#191c1e",
+                    "inverse-on-surface": "#f4f0ef",
+                    "secondary": "#705d00",
+                    "on-background": "#1c1b1b",
+                    "surface-dim": "#ddd9d8",
+                    "tertiary-container": "#191c1e",
+                    "inverse-primary": "#c8c6c5",
+                    "on-tertiary": "#ffffff",
+                    "primary": "#000000",
+                    "tertiary-fixed-dim": "#c4c7ca",
+                    "surface": "#fdf8f8",
+                    "on-primary-fixed-variant": "#474746",
+                    "error": "#ba1a1a",
+                    "outline": "#747878",
+                    "surface-container-highest": "#e5e2e1",
+                    "primary-fixed-dim": "#c8c6c5",
+                    "surface-container-lowest": "#ffffff",
+                    "primary-fixed": "#e5e2e1",
+                    "secondary-fixed-dim": "#e9c400",
+                    "on-primary-fixed": "#1c1b1b",
+                    "on-secondary-fixed": "#221b00",
+                    "surface-container-low": "#f7f3f2",
+                    "surface-container": "#f1edec",
+                    "tertiary": "#000000",
+                    "on-error": "#ffffff",
+                    "on-tertiary-fixed-variant": "#44474a",
+                    "surface-tint": "#5f5e5e",
+                    "error-container": "#ffdad6",
+                    "on-primary-container": "#858383",
+                    "on-tertiary-container": "#818487",
+                    "secondary-container": "#fcd400",
+                    "outline-variant": "#c4c7c7",
+                    "background": "#fdf8f8",
+                    "on-surface-variant": "#444748",
+                    "on-secondary": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "tertiary-fixed": "#e0e3e6",
+                    "on-surface": "#1c1b1b"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "base": "8px",
+                    "gutter": "24px",
+                    "md": "24px",
+                    "xl": "80px",
+                    "container-max": "1440px",
+                    "lg": "48px",
+                    "sm": "12px",
+                    "xs": "4px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Inter"],
+                    "headline-xl": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "label-md": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "body-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "body-sm": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-xl": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "500"}],
+                    "label-md": ["14px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #F8F9FA; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .crystalline { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+        .sidebar-active { transition: transform 0.3s ease-in-out; }
+        .shift-morning { background-color: #e0f2fe; color: #0369a1; }
+        .shift-afternoon { background-color: #fef3c7; color: #92400e; }
+        .shift-night { background-color: #f3f4f6; color: #1f2937; }
+        input:focus, select:focus { outline: none; border-color: #000000 !important; }
+    </style>
+</head>
+<body class="bg-background text-on-surface">
+<!-- Top Header (TopNavBar Shared Component Unificado) -->
+<header class="fixed top-0 right-0 left-0 md:left-64 z-40 h-xl px-gutter flex justify-between items-center bg-white/70 backdrop-blur-xl dark:bg-surface-container/70 border-b border-surface-variant dark:border-outline-variant shadow-sm transition-all duration-300">
+      <div class="flex items-center gap-md">
+        <button class="md:hidden p-2 text-on-surface hover:bg-surface-container-high rounded-full transition-colors" onclick="toggleSidebar()">
+          <span class="material-symbols-outlined">menu</span>
+        </button>
+        <div class="hidden sm:flex items-center bg-surface-container-low rounded-full px-md py-2 w-96 border border-surface-variant/50 focus-within:border-primary transition-colors">
+          <span class="material-symbols-outlined text-on-surface-variant mr-sm">search</span>
+          <input class="bg-transparent border-none focus:ring-0 text-body-sm w-full p-0" placeholder="Pesquisar..." type="text"/>
+        </div>
+      </div>
+      <div class="flex items-center gap-md">
+        <div class="flex items-center gap-sm">
+          <button class="p-2 text-on-surface-variant hover:bg-surface-container-low transition-all duration-200 rounded-full relative hover:scale-105 active:scale-95">
+            <span class="material-symbols-outlined">notifications</span>
+            <span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full animate-pulse"></span>
+          </button>
+          <button class="p-2 text-on-surface-variant hover:bg-surface-container-low transition-all duration-200 rounded-full hover:scale-105 active:scale-95">
+            <span class="material-symbols-outlined">help</span>
+          </button>
+        </div>
+        <div class="h-8 w-[1px] bg-surface-variant hidden sm:block"></div>
+        <div class="flex items-center gap-sm pl-sm cursor-pointer hover:bg-surface-container-low p-xs rounded-xl transition-all duration-200">
+          <div class="text-right hidden sm:block">
+            <p class="text-label-md font-bold text-primary leading-none">Dhenison Carlos</p>
+            <p class="text-label-sm text-on-surface-variant">Administrador</p>
+          </div>
+          <img alt="Dhenison Carlos - Administrador" class="w-10 h-10 rounded-full object-cover border-2 border-secondary-container hover:scale-105 transition-transform duration-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRGSGbqGOo2dzNp40hZk4pp_0rVieA-Su6u1WdWdVVqvGIA6n7dJMIDQVg3vkTYKgYN5HRKv7SOzuV4CGLSmB4xKZHKFpq-2ab9UNYf9ye3MByCMdx_JIehrQjusuLvStYhxK5Qj2eZHDffXBfYxzFUFDsX7kk7oInOP0foJp972O4lAIpD8pOJMQ4ehoA3BKsZHDj0gIh6Fx7Dr-Uvdu89v6j1O2f_mCuy7lSXEnJdzNLXbaD9C36QemEJIA6ok8BwdRRm8oVmvA"/>
+        </div>
+      </div>
+    </header>
+<!-- SideNavBar Componente Unificado -->
+<aside id="sidebar" class="fixed left-0 top-0 bottom-0 z-50 flex flex-col p-sm pt-xl overflow-y-auto w-64 bg-white/70 backdrop-blur-xl border-r border-surface-variant dark:border-outline-variant shadow-md transition-transform duration-300 -translate-x-full md:translate-x-0">
+    <div class="px-sm mb-lg flex justify-between items-center">
+      <div class="flex items-center gap-sm">
+        <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-md">
+          <span class="material-symbols-outlined text-secondary-container" data-icon="school">school</span>
+        </div>
+        <div>
+          <h1 class="text-label-md font-bold text-primary tracking-tight leading-none">SIGAEDU</h1>
+          <p class="text-body-sm font-medium text-on-surface-variant">Gestão Acadêmica</p>
+        </div>
+      </div>
+      <button class="md:hidden p-1 text-on-surface hover:bg-surface-container-high rounded-full transition-colors" onclick="toggleSidebar()">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <nav class="flex-1 space-y-1">
+      <!-- Links Uniformes com Transições Suaves -->
+      <a id="menu-dashboard" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="dashboard.html">
+        <span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+        <span class="text-label-md font-label-md">Dashboard</span>
+      </a>
+      <a id="menu-turmas" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="turmas.html">
+        <span class="material-symbols-outlined" data-icon="groups">groups</span>
+        <span class="text-label-md font-label-md">Turmas</span>
+      </a>
+      <a id="menu-alunos" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="fichadoaluno.html">
+        <span class="material-symbols-outlined" data-icon="person">person</span>
+        <span class="text-label-md font-label-md">Alunos</span>
+      </a>
+      <a id="menu-calendario" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="calendario.html">
+        <span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+        <span class="text-label-md font-label-md">Calendário</span>
+      </a>
+      <a id="menu-agenda" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="agenda.html">
+        <span class="material-symbols-outlined" data-icon="event_note">event_note</span>
+        <span class="text-label-md font-label-md">Agenda</span>
+      </a>
+      <a id="menu-frequencia" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="frequencia.html">
+        <span class="material-symbols-outlined" data-icon="fact_check">fact_check</span>
+        <span class="text-label-md font-label-md">Frequência</span>
+      </a>
+      <a id="menu-ocorrencias" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="ocorrencias.html">
+        <span class="material-symbols-outlined" data-icon="report_problem">report_problem</span>
+        <span class="text-label-md font-label-md">Ocorrências</span>
+      </a>
+      <a id="menu-solicitacoes" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="solicitacoes.html">
+        <span class="material-symbols-outlined" data-icon="task">task</span>
+        <span class="text-label-md font-label-md">Solicitações</span>
+      </a>
+      <a id="menu-whatsapp" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="whatsapp.html">
+        <span class="material-symbols-outlined" data-icon="message">message</span>
+        <span class="text-label-md font-label-md">Whatsapp</span>
+      </a>
+      <a id="menu-relatorios" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="relatorios.html">
+        <span class="material-symbols-outlined" data-icon="description">description</span>
+        <span class="text-label-md font-label-md">Relatórios</span>
+      </a>
+      <a id="menu-boletins" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="boletins.html">
+        <span class="material-symbols-outlined" data-icon="assignment_ind">assignment_ind</span>
+        <span class="text-label-md font-label-md">Boletins</span>
+      </a>
+      <a id="menu-usuarios" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="usuarios.html">
+        <span class="material-symbols-outlined" data-icon="manage_accounts">manage_accounts</span>
+        <span class="text-label-md font-label-md">Usuários</span>
+      </a>
+    </nav>
+    <div class="mt-xl border-t border-surface-variant/30 pt-md space-y-1">
+      <a id="menu-suporte" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="#">
+        <span class="material-symbols-outlined" data-icon="contact_support">contact_support</span>
+        <span class="text-label-md font-label-md">Suporte</span>
+      </a>
+      <a id="menu-configuracoes" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="#">
+        <span class="material-symbols-outlined" data-icon="settings">settings</span>
+        <span class="text-label-md font-label-md">Configurações</span>
+      </a>
+    </div>
+  </aside>
+<!-- Overlay para Foco Mobile -->
+<div id="sidebar-overlay" class="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm hidden md:hidden" onclick="toggleSidebar()"></div>
+<!-- Main Content -->
+<main class="md:ml-64 ml-0 pt-xl min-h-screen flex flex-col transition-all duration-300">
+<div class="p-gutter flex-1">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row md:items-center justify-between mb-lg gap-md">
+<div>
+<h1 class="text-headline-lg font-headline-lg text-primary">Gestão de Turmas</h1>
+<p class="text-body-md text-on-surface-variant">Gerencie as turmas, horários e enturmação dos alunos do ensino pedagógico.</p>
+</div>
+<button class="flex items-center gap-sm bg-secondary-container text-on-secondary-container px-lg py-sm rounded-xl font-bold shadow-sm hover:scale-[1.02] transition-transform" onclick="toggleModal('modal-turma')">
+<span class="material-symbols-outlined">add</span>
+                    Cadastrar Nova Turma
+                </button>
+</div>
+<!-- Bento Stats -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-md mb-lg">
+<div class="bg-white p-md rounded-xl border border-surface-variant shadow-sm flex items-center gap-md">
+<div class="w-12 h-12 bg-surface-container-low rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">groups</span>
+</div>
+<div>
+<p class="text-label-sm text-on-surface-variant">Total de Turmas</p>
+<p class="text-headline-md font-bold">24</p>
+</div>
+</div>
+<div class="bg-white p-md rounded-xl border border-surface-variant shadow-sm flex items-center gap-md">
+<div class="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-blue-600">wb_sunny</span>
+</div>
+<div>
+<p class="text-label-sm text-on-surface-variant">Manhã</p>
+<p class="text-headline-md font-bold">12</p>
+</div>
+</div>
+<div class="bg-white p-md rounded-xl border border-surface-variant shadow-sm flex items-center gap-md">
+<div class="w-12 h-12 bg-amber-50 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-amber-600">partly_cloudy_day</span>
+</div>
+<div>
+<p class="text-label-sm text-on-surface-variant">Tarde</p>
+<p class="text-headline-md font-bold">8</p>
+</div>
+</div>
+<div class="bg-white p-md rounded-xl border border-surface-variant shadow-sm flex items-center gap-md">
+<div class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-600">dark_mode</span>
+</div>
+<div>
+<p class="text-label-sm text-on-surface-variant">Noite</p>
+<p class="text-headline-md font-bold">4</p>
+</div>
+</div>
+</div>
+<!-- Main Data Table -->
+<div class="bg-white rounded-xl border border-surface-variant shadow-sm overflow-hidden mb-lg">
+<div class="px-md py-sm border-b border-surface-variant flex justify-between items-center bg-surface-container-lowest">
+<h2 class="text-label-md font-bold text-primary">Listagem de Turmas</h2>
+<div class="flex gap-sm">
+<select class="bg-white border-outline-variant rounded-lg text-label-sm px-md py-xs focus:border-primary">
+<option>Todos os Turnos</option>
+<option>Manhã</option>
+<option>Tarde</option>
+<option>Noite</option>
+</select>
+<button class="p-xs text-on-surface-variant hover:bg-surface-container-low rounded-lg">
+<span class="material-symbols-outlined">filter_list</span>
+</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low text-on-surface-variant">
+<tr>
+<th class="px-md py-sm text-label-sm font-bold uppercase tracking-wider">Nome da Turma</th>
+<th class="px-md py-sm text-label-sm font-bold uppercase tracking-wider">Turno</th>
+<th class="px-md py-sm text-label-sm font-bold uppercase tracking-wider">Tipo</th>
+<th class="px-md py-sm text-label-sm font-bold uppercase tracking-wider">Vagas</th>
+<th class="px-md py-sm text-label-sm font-bold uppercase tracking-wider">Alunos</th>
+<th class="px-md py-sm text-label-sm font-bold uppercase tracking-wider text-right">Ações</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-variant">
+<tr class="hover:bg-surface-container-lowest transition-colors cursor-pointer group" onclick="openDetails('1º Ano A')">
+<td class="px-md py-md font-bold text-primary">1º Ano A</td>
+<td class="px-md py-md">
+<span class="px-sm py-xs rounded-full text-label-sm font-bold shift-morning">Manhã</span>
+</td>
+<td class="px-md py-md text-body-sm">Regular</td>
+<td class="px-md py-md text-body-sm">30</td>
+<td class="px-md py-md text-body-sm">28/30</td>
+<td class="px-md py-md text-right">
+<div class="flex justify-end gap-sm" onclick="event.stopPropagation()">
+<button class="p-xs text-on-surface-variant hover:text-primary transition-colors tooltip" title="Editar Turma">
+<span class="material-symbols-outlined text-[18px]">admin_panel_settings</span>
+</button>
+<button class="p-xs text-on-surface-variant hover:text-error transition-colors" title="Excluir Turma">
+<span class="material-symbols-outlined text-[18px]">lock_reset</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest transition-colors cursor-pointer" onclick="openDetails('9º Ano C')">
+<td class="px-md py-md font-bold text-primary">9º Ano C</td>
+<td class="px-md py-md">
+<span class="px-sm py-xs rounded-full text-label-sm font-bold shift-afternoon">Tarde</span>
+</td>
+<td class="px-md py-md text-body-sm">Fluxo</td>
+<td class="px-md py-md text-body-sm">25</td>
+<td class="px-md py-md text-body-sm">22/25</td>
+<td class="px-md py-md text-right">
+<div class="flex justify-end gap-sm" onclick="event.stopPropagation()">
+<button class="p-xs text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">admin_panel_settings</span>
+</button>
+<button class="p-xs text-on-surface-variant hover:text-error transition-colors">
+<span class="material-symbols-outlined text-[18px]">lock_reset</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest transition-colors cursor-pointer" onclick="openDetails('EJA Mod I')">
+<td class="px-md py-md font-bold text-primary">EJA Mod I</td>
+<td class="px-md py-md">
+<span class="px-sm py-xs rounded-full text-label-sm font-bold shift-night">Noite</span>
+</td>
+<td class="px-md py-md text-body-sm">EJA</td>
+<td class="px-md py-md text-body-sm">40</td>
+<td class="px-md py-md text-body-sm">35/40</td>
+<td class="px-md py-md text-right">
+<div class="flex justify-end gap-sm" onclick="event.stopPropagation()">
+<button class="p-xs text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">admin_panel_settings</span>
+</button>
+<button class="p-xs text-on-surface-variant hover:text-error transition-colors">
+<span class="material-symbols-outlined text-[18px]">lock_reset</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Student Management Details (Asymmetric Layout Hidden by Default) -->
+<div class="hidden grid grid-cols-1 lg:grid-cols-3 gap-lg animate-in fade-in slide-in-from-bottom-4 duration-500" id="details-section">
+<div class="lg:col-span-2 space-y-lg">
+<div class="bg-white p-md rounded-xl border border-surface-variant shadow-sm">
+<div class="flex justify-between items-center mb-md">
+<h3 class="text-headline-md text-primary flex items-center gap-sm">
+<span class="material-symbols-outlined">group</span>
+                                Lista de Alunos: <span class="font-black" id="active-turma-name">1º Ano A</span>
+</h3>
+<button class="text-on-surface-variant hover:text-primary" onclick="hideDetails()">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="space-y-sm">
+<div class="flex items-center justify-between p-sm border border-surface-variant rounded-lg hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-md">
+<img alt="Student" class="w-10 h-10 rounded-full" data-alt="A portrait of a young student in a school uniform, looking forward with a friendly expression. The lighting is soft and natural, emphasizing the professional and educational atmosphere. The background is a simple, light-colored studio wall that maintains focus on the subject." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAP80C3LDejN3T6NvYz6gSXVM6eNh_w661ejMGWGqh46GbnP5Y4nGI0NVcbYlrUCqcHq6m_kFkHMUlE6HPBnrZT2sbB-2GuVIg2O_s5vyGJ_QXMo7FuG9N1_cC11GGr5FgSBpkrV4nUHzhyRHPChCEhlU8GlQD1lWhYX-QZXXGSAnj9lMLWw-GQK93ZLVWe6l4zFskCnQtti35Audv4fhD-2Jk7GlOy0yYA15CCciBYzbAFzginJ6C7SsnRhZYCOn6gi434Xs5StE0"/>
+<div>
+<p class="font-bold text-primary">Ana Beatriz Silva</p>
+<p class="text-label-sm text-on-surface-variant">RA: 202600123</p>
+</div>
+</div>
+<button class="flex items-center gap-xs text-label-sm font-bold bg-surface-container-high px-md py-xs rounded-lg hover:bg-primary hover:text-white transition-all" onclick="promptPassword()">
+<span class="material-symbols-outlined text-[16px]">swap_horiz</span>
+                                    Mudar Turma
+                                </button>
+</div>
+<div class="flex items-center justify-between p-sm border border-surface-variant rounded-lg hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-md">
+<img alt="Student" class="w-10 h-10 rounded-full" data-alt="A young male student smiling at the camera, wearing a high-quality navy blue school polo. The shot is well-lit with high-fidelity corporate aesthetics, using a shallow depth of field. The overall vibe is clean, academic, and positive, consistent with a high-end school management system." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzxb8h-o_07736HbmV6IZp3RwfLan-loB4beGk_d0rkKf5xQ0p4xPD_1-XaYzol6UIjoxxokk_adPSVhqKkABNGpKG6Hy95HH8ujPIGgEySVFIB0ZWrQTTvk_dqqg92n-XHryRVpRzh_jR5JJnkHvrGOAi5ZMhkw5BK2-9oH7AMT3GeFnqdXpunjIs7jowhIc2L34jw1vvSxmb9SqclR4YeFJ1o_ewrb5YuV1eCz-9cisW_VAq0tsGxw5FNbJSLMlI9w5sZI8avOg"/>
+<div>
+<p class="font-bold text-primary">Carlos Eduardo Lima</p>
+<p class="text-label-sm text-on-surface-variant">RA: 202600456</p>
+</div>
+</div>
+<button class="flex items-center gap-xs text-label-sm font-bold bg-surface-container-high px-md py-xs rounded-lg hover:bg-primary hover:text-white transition-all" onclick="promptPassword()">
+<span class="material-symbols-outlined text-[16px]">swap_horiz</span>
+                                    Mudar Turma
+                                </button>
+</div>
+</div>
+</div>
+</div>
+<div class="space-y-lg">
+<div class="bg-white p-md rounded-xl border border-surface-variant shadow-sm">
+<h3 class="text-label-md font-bold text-primary mb-md">Controle de Frequência</h3>
+<div class="space-y-md">
+<div class="flex items-center justify-between">
+<span class="text-body-sm">Média da Turma</span>
+<span class="font-bold text-green-600">92%</span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-2">
+<div class="bg-green-600 h-2 rounded-full" style="width: 92%"></div>
+</div>
+<button class="w-full py-sm bg-primary text-white font-bold rounded-xl hover:opacity-90 transition-opacity">
+                                Lançar Chamada Hoje
+                            </button>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-md rounded-xl border-2 border-dashed border-outline-variant flex flex-col items-center justify-center text-center py-lg">
+<span class="material-symbols-outlined text-outline-variant text-[48px] mb-sm">analytics</span>
+<p class="text-label-md font-bold text-on-surface-variant">Relatórios de Turma</p>
+<p class="text-body-sm text-on-surface-variant mb-md">Gere boletins e atas de resultados finais.</p>
+<button class="text-primary font-bold hover:underline">Baixar PDF</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<footer class="w-full py-md px-gutter flex justify-between items-center mt-auto border-t border-surface-variant">
+<p class="text-body-sm text-on-surface-variant">Desenvolvido por Dhenison Carlos - 2026</p>
+<div class="flex gap-md">
+<a class="text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Termos de Uso</a>
+<a class="text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Privacidade</a>
+</div>
+</footer>
+</main>
+<!-- Modal Cadastrar Turma -->
+<div class="fixed inset-0 z-[100] hidden flex items-center justify-center p-md bg-black/40 backdrop-blur-sm" id="modal-turma">
+<div class="bg-white w-full max-w-lg rounded-xl shadow-xl overflow-hidden animate-in zoom-in-95 duration-200">
+<div class="p-md border-b border-surface-variant flex justify-between items-center">
+<h2 class="text-headline-md text-primary">Cadastrar Nova Turma</h2>
+<button class="text-on-surface-variant hover:text-primary" onclick="toggleModal('modal-turma')">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<form class="p-md space-y-md">
+<div>
+<label class="block text-label-md font-label-md text-on-surface-variant mb-xs">Nome da Turma</label>
+<input class="w-full border border-outline-variant p-sm rounded-lg text-body-md" placeholder="Ex: 2º Ano B" type="text"/>
+</div>
+<div class="grid grid-cols-2 gap-md">
+<div>
+<label class="block text-label-md font-label-md text-on-surface-variant mb-xs">Turno</label>
+<select class="w-full border border-outline-variant p-sm rounded-lg text-body-md">
+<option>Manhã</option>
+<option>Tarde</option>
+<option>Noite</option>
+</select>
+</div>
+<div>
+<label class="block text-label-md font-label-md text-on-surface-variant mb-xs">Tipo</label>
+<select class="w-full border border-outline-variant p-sm rounded-lg text-body-md">
+<option>Regular</option>
+<option>EJA</option>
+<option>Fluxo</option>
+</select>
+</div>
+</div>
+<div class="flex gap-md pt-md">
+<button class="flex-1 py-sm border border-primary text-primary font-bold rounded-xl hover:bg-surface-container-low" onclick="toggleModal('modal-turma')" type="button">Cancelar</button>
+<button class="flex-1 py-sm bg-secondary-container text-on-secondary-container font-bold rounded-xl hover:opacity-90" type="submit">Salvar Turma</button>
+</div>
+</form>
+</div>
+</div>
+<!-- Password Prompt Modal (Simulation) -->
+<div class="fixed inset-0 z-[110] hidden flex items-center justify-center p-md bg-black/60 backdrop-blur-md" id="modal-password">
+<div class="bg-white w-full max-w-sm rounded-xl shadow-2xl p-md text-center">
+<span class="material-symbols-outlined text-[48px] text-primary mb-sm">lock</span>
+<h2 class="text-headline-md mb-xs">Senha de Administrador</h2>
+<p class="text-body-sm text-on-surface-variant mb-md">Esta ação exige privilégios elevados. Por favor, confirme sua senha.</p>
+<input class="w-full border border-outline-variant p-sm rounded-lg text-center mb-md focus:ring-primary" placeholder="••••••••" type="password"/>
+<div class="flex gap-sm">
+<button class="flex-1 py-sm text-on-surface-variant font-bold" onclick="toggleModal('modal-password')">Cancelar</button>
+<button class="flex-1 py-sm bg-primary text-white font-bold rounded-xl" onclick="toggleModal('modal-password')">Confirmar</button>
+</div>
+</div>
+</div>
+<script>
+    // Função para abrir/fechar a Sidebar no Mobile
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebar-overlay');
+      if (sidebar.classList.contains('-translate-x-full')) {
+        sidebar.classList.remove('-translate-x-full');
+        overlay.classList.remove('hidden');
+      } else {
+        sidebar.classList.add('-translate-x-full');
+        overlay.classList.add('hidden');
+      }
+    }
+
+    // Destacar automaticamente o link do menu correspondente à página atual
+    document.addEventListener('DOMContentLoaded', () => {
+      const path = window.location.pathname;
+      const page = path.split('/').pop() || 'unificado.html';
+      
+      const menuMap = {
+        'dashboard.html': 'menu-dashboard',
+        'turmas.html': 'menu-turmas',
+        'fichadoaluno.html': 'menu-alunos',
+        'calendario.html': 'menu-calendario',
+        'agenda.html': 'menu-agenda',
+        'frequencia.html': 'menu-frequencia',
+        'ocorrencias.html': 'menu-ocorrencias',
+        'solicitacoes.html': 'menu-solicitacoes',
+        'whatsapp.html': 'menu-whatsapp',
+        'relatorios.html': 'menu-relatorios',
+        'boletins.html': 'menu-boletins',
+        'usuarios.html': 'menu-usuarios'
+      };
+      
+      const activeMenuId = menuMap[page];
+      if (activeMenuId) {
+        const activeLink = document.getElementById(activeMenuId);
+        if (activeLink) {
+          activeLink.classList.remove('text-on-surface-variant', 'hover:bg-surface-container-high', 'hover:scale-[1.02]');
+          activeLink.classList.add('bg-secondary-container', 'text-on-secondary-container', 'font-bold', 'scale-95', 'border-l-4', 'border-primary');
+        }
+      }
+    });
+  </script>
+</body></html>

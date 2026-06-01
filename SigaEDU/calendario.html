@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Calendário Letivo 2026 - SIGAEDU</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .cristalico {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        /* Custom transitions for calendar interactions */
+        .day-cell {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        /* Hide scrollbar for side nav but keep functionality */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-tertiary-container": "#818487",
+                      "secondary-container": "#fcd400",
+                      "primary": "#000000",
+                      "on-tertiary": "#ffffff",
+                      "on-error": "#ffffff",
+                      "surface-dim": "#ddd9d8",
+                      "tertiary": "#000000",
+                      "secondary": "#705d00",
+                      "on-surface": "#1c1b1b",
+                      "secondary-fixed-dim": "#e9c400",
+                      "on-background": "#1c1b1b",
+                      "on-primary-container": "#858383",
+                      "primary-fixed": "#e5e2e1",
+                      "secondary-fixed": "#ffe16d",
+                      "tertiary-fixed": "#e0e3e6",
+                      "surface-variant": "#e5e2e1",
+                      "surface-container-highest": "#e5e2e1",
+                      "outline-variant": "#c4c7c7",
+                      "primary-fixed-dim": "#c8c6c5",
+                      "on-primary-fixed-variant": "#474746",
+                      "inverse-primary": "#c8c6c5",
+                      "on-error-container": "#93000a",
+                      "error-container": "#ffdad6",
+                      "surface-container": "#f1edec",
+                      "on-secondary-fixed-variant": "#544600",
+                      "on-primary-fixed": "#1c1b1b",
+                      "error": "#ba1a1a",
+                      "background": "#fdf8f8",
+                      "tertiary-container": "#191c1e",
+                      "on-secondary-container": "#6e5c00",
+                      "on-tertiary-fixed": "#191c1e",
+                      "on-primary": "#ffffff",
+                      "on-secondary-fixed": "#221b00",
+                      "tertiary-fixed-dim": "#c4c7ca",
+                      "on-surface-variant": "#444748",
+                      "surface-bright": "#fdf8f8",
+                      "on-tertiary-fixed-variant": "#44474a",
+                      "surface-container-high": "#ebe7e6",
+                      "surface-tint": "#5f5e5e",
+                      "primary-container": "#1c1b1b",
+                      "on-secondary": "#ffffff",
+                      "surface-container-lowest": "#ffffff",
+                      "inverse-on-surface": "#f4f0ef",
+                      "surface": "#fdf8f8",
+                      "inverse-surface": "#313030",
+                      "outline": "#747878",
+                      "surface-container-low": "#f7f3f2"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "sm": "12px",
+                      "xl": "80px",
+                      "md": "24px",
+                      "xs": "4px",
+                      "base": "8px",
+                      "lg": "48px",
+                      "container-max": "1440px",
+                      "gutter": "24px"
+              },
+              "fontFamily": {
+                      "body-sm": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "headline-lg": ["Inter"],
+                      "label-sm": ["Inter"],
+                      "label-md": ["Inter"],
+                      "body-md": ["Inter"],
+                      "headline-xl": ["Inter"],
+                      "headline-md": ["Inter"]
+              },
+              "fontSize": {
+                      "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "label-sm": ["12px", {"lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "500"}],
+                      "label-md": ["14px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-xl": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="bg-background font-body-md text-on-surface min-h-screen flex flex-col">
+<!-- Top Header (TopNavBar Shared Component Unificado) -->
+<header class="fixed top-0 right-0 left-0 md:left-64 z-40 h-xl px-gutter flex justify-between items-center bg-white/70 backdrop-blur-xl dark:bg-surface-container/70 border-b border-surface-variant dark:border-outline-variant shadow-sm transition-all duration-300">
+      <div class="flex items-center gap-md">
+        <button class="md:hidden p-2 text-on-surface hover:bg-surface-container-high rounded-full transition-colors" onclick="toggleSidebar()">
+          <span class="material-symbols-outlined">menu</span>
+        </button>
+        <div class="hidden sm:flex items-center bg-surface-container-low rounded-full px-md py-2 w-96 border border-surface-variant/50 focus-within:border-primary transition-colors">
+          <span class="material-symbols-outlined text-on-surface-variant mr-sm">search</span>
+          <input class="bg-transparent border-none focus:ring-0 text-body-sm w-full p-0" placeholder="Pesquisar..." type="text"/>
+        </div>
+      </div>
+      <div class="flex items-center gap-md">
+        <div class="flex items-center gap-sm">
+          <button class="p-2 text-on-surface-variant hover:bg-surface-container-low transition-all duration-200 rounded-full relative hover:scale-105 active:scale-95">
+            <span class="material-symbols-outlined">notifications</span>
+            <span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full animate-pulse"></span>
+          </button>
+          <button class="p-2 text-on-surface-variant hover:bg-surface-container-low transition-all duration-200 rounded-full hover:scale-105 active:scale-95">
+            <span class="material-symbols-outlined">help</span>
+          </button>
+        </div>
+        <div class="h-8 w-[1px] bg-surface-variant hidden sm:block"></div>
+        <div class="flex items-center gap-sm pl-sm cursor-pointer hover:bg-surface-container-low p-xs rounded-xl transition-all duration-200">
+          <div class="text-right hidden sm:block">
+            <p class="text-label-md font-bold text-primary leading-none">Dhenison Carlos</p>
+            <p class="text-label-sm text-on-surface-variant">Administrador</p>
+          </div>
+          <img alt="Dhenison Carlos - Administrador" class="w-10 h-10 rounded-full object-cover border-2 border-secondary-container hover:scale-105 transition-transform duration-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRGSGbqGOo2dzNp40hZk4pp_0rVieA-Su6u1WdWdVVqvGIA6n7dJMIDQVg3vkTYKgYN5HRKv7SOzuV4CGLSmB4xKZHKFpq-2ab9UNYf9ye3MByCMdx_JIehrQjusuLvStYhxK5Qj2eZHDffXBfYxzFUFDsX7kk7oInOP0foJp972O4lAIpD8pOJMQ4ehoA3BKsZHDj0gIh6Fx7Dr-Uvdu89v6j1O2f_mCuy7lSXEnJdzNLXbaD9C36QemEJIA6ok8BwdRRm8oVmvA"/>
+        </div>
+      </div>
+    </header>
+<!-- SideNavBar Componente Unificado -->
+<aside id="sidebar" class="fixed left-0 top-0 bottom-0 z-50 flex flex-col p-sm pt-xl overflow-y-auto w-64 bg-white/70 backdrop-blur-xl border-r border-surface-variant dark:border-outline-variant shadow-md transition-transform duration-300 -translate-x-full md:translate-x-0">
+    <div class="px-sm mb-lg flex justify-between items-center">
+      <div class="flex items-center gap-sm">
+        <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-md">
+          <span class="material-symbols-outlined text-secondary-container" data-icon="school">school</span>
+        </div>
+        <div>
+          <h1 class="text-label-md font-bold text-primary tracking-tight leading-none">SIGAEDU</h1>
+          <p class="text-body-sm font-medium text-on-surface-variant">Gestão Acadêmica</p>
+        </div>
+      </div>
+      <button class="md:hidden p-1 text-on-surface hover:bg-surface-container-high rounded-full transition-colors" onclick="toggleSidebar()">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <nav class="flex-1 space-y-1">
+      <!-- Links Uniformes com Transições Suaves -->
+      <a id="menu-dashboard" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="dashboard.html">
+        <span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+        <span class="text-label-md font-label-md">Dashboard</span>
+      </a>
+      <a id="menu-turmas" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="turmas.html">
+        <span class="material-symbols-outlined" data-icon="groups">groups</span>
+        <span class="text-label-md font-label-md">Turmas</span>
+      </a>
+      <a id="menu-alunos" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="fichadoaluno.html">
+        <span class="material-symbols-outlined" data-icon="person">person</span>
+        <span class="text-label-md font-label-md">Alunos</span>
+      </a>
+      <a id="menu-calendario" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="calendario.html">
+        <span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+        <span class="text-label-md font-label-md">Calendário</span>
+      </a>
+      <a id="menu-agenda" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="agenda.html">
+        <span class="material-symbols-outlined" data-icon="event_note">event_note</span>
+        <span class="text-label-md font-label-md">Agenda</span>
+      </a>
+      <a id="menu-frequencia" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="frequencia.html">
+        <span class="material-symbols-outlined" data-icon="fact_check">fact_check</span>
+        <span class="text-label-md font-label-md">Frequência</span>
+      </a>
+      <a id="menu-ocorrencias" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="ocorrencias.html">
+        <span class="material-symbols-outlined" data-icon="report_problem">report_problem</span>
+        <span class="text-label-md font-label-md">Ocorrências</span>
+      </a>
+      <a id="menu-solicitacoes" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="solicitacoes.html">
+        <span class="material-symbols-outlined" data-icon="task">task</span>
+        <span class="text-label-md font-label-md">Solicitações</span>
+      </a>
+      <a id="menu-whatsapp" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="whatsapp.html">
+        <span class="material-symbols-outlined" data-icon="message">message</span>
+        <span class="text-label-md font-label-md">Whatsapp</span>
+      </a>
+      <a id="menu-relatorios" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="relatorios.html">
+        <span class="material-symbols-outlined" data-icon="description">description</span>
+        <span class="text-label-md font-label-md">Relatórios</span>
+      </a>
+      <a id="menu-boletins" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="boletins.html">
+        <span class="material-symbols-outlined" data-icon="assignment_ind">assignment_ind</span>
+        <span class="text-label-md font-label-md">Boletins</span>
+      </a>
+      <a id="menu-usuarios" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="usuarios.html">
+        <span class="material-symbols-outlined" data-icon="manage_accounts">manage_accounts</span>
+        <span class="text-label-md font-label-md">Usuários</span>
+      </a>
+    </nav>
+    <div class="mt-xl border-t border-surface-variant/30 pt-md space-y-1">
+      <a id="menu-suporte" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="#">
+        <span class="material-symbols-outlined" data-icon="contact_support">contact_support</span>
+        <span class="text-label-md font-label-md">Suporte</span>
+      </a>
+      <a id="menu-configuracoes" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="#">
+        <span class="material-symbols-outlined" data-icon="settings">settings</span>
+        <span class="text-label-md font-label-md">Configurações</span>
+      </a>
+    </div>
+  </aside>
+<!-- Overlay para Foco Mobile -->
+<div id="sidebar-overlay" class="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm hidden md:hidden" onclick="toggleSidebar()"></div>
+<!-- Main Content -->
+<main class="md:ml-64 ml-0 pt-xl flex-1 flex flex-col p-md bg-[#F8F9FA] transition-all duration-300">
+<!-- Page Header -->
+<header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-lg gap-md">
+<div>
+<nav class="flex items-center gap-xs text-on-surface-variant mb-xs">
+<span class="text-label-sm font-label-sm">Acadêmico</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-label-sm font-label-sm text-primary">Calendário Letivo</span>
+</nav>
+<h1 class="text-headline-lg font-headline-lg text-primary">Calendário Letivo 2026</h1>
+</div>
+<div class="flex items-center gap-sm">
+<button class="flex items-center gap-xs px-md py-sm bg-surface-container-lowest border border-outline-variant text-primary font-label-md rounded-xl hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined">print</span>
+                    Imprimir Calendário
+                </button>
+<button class="flex items-center gap-xs px-md py-sm bg-secondary-container text-primary font-label-md rounded-xl hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined">save</span>
+                    Salvar Alterações
+                </button>
+</div>
+</header>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-md items-start">
+<!-- Left Side: Interactive Calendar -->
+<section class="lg:col-span-8 bg-white border border-surface-variant rounded-xl p-md shadow-sm">
+<div class="flex items-center justify-between mb-md">
+<div class="flex items-center gap-md">
+<h3 class="text-headline-md font-headline-md text-primary">Agosto 2026</h3>
+<div class="flex items-center gap-xs bg-surface-container-low p-xs rounded-xl">
+<button class="p-xs hover:bg-surface-container-highest rounded-lg transition-colors">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="p-xs hover:bg-surface-container-highest rounded-lg transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+<div class="flex items-center gap-xs bg-surface-container-low p-xs rounded-xl">
+<button class="px-md py-xs bg-white shadow-sm rounded-lg text-label-md">Mês</button>
+<button class="px-md py-xs text-on-surface-variant text-label-md hover:bg-surface-container-highest rounded-lg transition-colors">Semestre</button>
+<button class="px-md py-xs text-on-surface-variant text-label-md hover:bg-surface-container-highest rounded-lg transition-colors">Ano</button>
+</div>
+</div>
+<!-- Calendar Grid -->
+<div class="grid grid-cols-7 gap-xs border border-surface-variant rounded-xl overflow-hidden bg-surface-variant">
+<!-- Days of Week Header -->
+<div class="bg-surface-container py-sm text-center text-label-md text-on-surface-variant font-bold border-r border-surface-variant">DOM</div>
+<div class="bg-surface-container py-sm text-center text-label-md text-on-surface-variant font-bold border-r border-surface-variant">SEG</div>
+<div class="bg-surface-container py-sm text-center text-label-md text-on-surface-variant font-bold border-r border-surface-variant">TER</div>
+<div class="bg-surface-container py-sm text-center text-label-md text-on-surface-variant font-bold border-r border-surface-variant">QUA</div>
+<div class="bg-surface-container py-sm text-center text-label-md text-on-surface-variant font-bold border-r border-surface-variant">QUI</div>
+<div class="bg-surface-container py-sm text-center text-label-md text-on-surface-variant font-bold border-r border-surface-variant">SEX</div>
+<div class="bg-surface-container py-sm text-center text-label-md text-on-surface-variant font-bold">SÁB</div>
+<!-- Week 1 -->
+<div class="day-cell min-h-[100px] bg-surface-container-low opacity-50 flex flex-col p-xs border-r border-b border-surface-variant pointer-events-none">
+<span class="text-label-sm font-label-sm">26</span>
+</div>
+<div class="day-cell min-h-[100px] bg-surface-container-low opacity-50 flex flex-col p-xs border-r border-b border-surface-variant pointer-events-none">
+<span class="text-label-sm font-label-sm">27</span>
+</div>
+<div class="day-cell min-h-[100px] bg-surface-container-low opacity-50 flex flex-col p-xs border-r border-b border-surface-variant pointer-events-none">
+<span class="text-label-sm font-label-sm">28</span>
+</div>
+<div class="day-cell min-h-[100px] bg-surface-container-low opacity-50 flex flex-col p-xs border-r border-b border-surface-variant pointer-events-none">
+<span class="text-label-sm font-label-sm">29</span>
+</div>
+<div class="day-cell min-h-[100px] bg-surface-container-low opacity-50 flex flex-col p-xs border-r border-b border-surface-variant pointer-events-none">
+<span class="text-label-sm font-label-sm">30</span>
+</div>
+<div class="day-cell min-h-[100px] bg-surface-container-low opacity-50 flex flex-col p-xs border-r border-b border-surface-variant pointer-events-none">
+<span class="text-label-sm font-label-sm">31</span>
+</div>
+<div class="day-cell min-h-[100px] bg-white cursor-pointer hover:bg-surface-container-lowest flex flex-col p-xs border-b border-surface-variant" onclick="cycleState(this)">
+<span class="text-label-sm font-bold">1</span>
+</div>
+<!-- Week 2 -->
+<div class="day-cell min-h-[100px] bg-surface-container opacity-30 flex flex-col p-xs border-r border-b border-surface-variant pointer-events-none">
+<span class="text-label-sm font-label-sm">2</span>
+</div>
+<div class="day-cell min-h-[100px] bg-white cursor-pointer hover:bg-surface-container-lowest flex flex-col p-xs border-r border-b border-surface-variant" onclick="cycleState(this)">
+<span class="text-label-sm font-bold">3</span>
+<div class="mt-auto day-indicator hidden h-1.5 w-full rounded-full"></div>
+</div>
+<div class="day-cell min-h-[100px] bg-white cursor-pointer hover:bg-surface-container-lowest flex flex-col p-xs border-r border-b border-surface-variant" onclick="cycleState(this)">
+<span class="text-label-sm font-bold">4</span>
+<div class="mt-auto day-indicator hidden h-1.5 w-full rounded-full"></div>
+</div>
+<div class="day-cell min-h-[100px] bg-white cursor-pointer hover:bg-surface-container-lowest flex flex-col p-xs border-r border-b border-surface-variant" onclick="cycleState(this)">
+<span class="text-label-sm font-bold">5</span>
+<div class="mt-auto day-indicator hidden h-1.5 w-full rounded-full"></div>
+</div>
+<div class="day-cell min-h-[100px] bg-white cursor-pointer hover:bg-surface-container-lowest flex flex-col p-xs border-r border-b border-surface-variant" onclick="cycleState(this)">
+<span class="text-label-sm font-bold">6</span>
+<div class="mt-auto day-indicator hidden h-1.5 w-full rounded-full"></div>
+</div>
+<div class="day-cell min-h-[100px] bg-white cursor-pointer hover:bg-surface-container-lowest flex flex-col p-xs border-r border-b border-surface-variant" onclick="cycleState(this)">
+<span class="text-label-sm font-bold">7</span>
+<div class="mt-auto day-indicator hidden h-1.5 w-full rounded-full"></div>
+</div>
+<div class="day-cell min-h-[100px] bg-white cursor-pointer hover:bg-surface-container-lowest flex flex-col p-xs border-b border-surface-variant" onclick="cycleState(this)">
+<span class="text-label-sm font-bold">8</span>
+</div>
+<!-- Week 3 -->
+<div class="day-cell min-h-[100px] bg-surface-container opacity-30 flex flex-col p-xs border-r border-b border-surface-variant pointer-events-none">
+<span class="text-label-sm font-label-sm">9</span>
+</div>
+<div class="day-cell min-h-[100px] bg-[#4ADE80] text-primary cursor-pointer flex flex-col p-xs border-r border-b border-surface-variant" data-state="1" onclick="cycleState(this)">
+<span class="text-label-sm font-bold">10</span>
+<span class="text-[10px] mt-xs uppercase font-bold opacity-70">Dia Letivo</span>
+</div>
+<div class="day-cell min-h-[100px] bg-[#4ADE80] text-primary cursor-pointer flex flex-col p-xs border-r border-b border-surface-variant" data-state="1" onclick="cycleState(this)">
+<span class="text-label-sm font-bold">11</span>
+<span class="text-[10px] mt-xs uppercase font-bold opacity-70">Dia Letivo</span>
+</div>
+<div class="day-cell min-h-[100px] bg-[#FCA5A5] text-primary cursor-pointer flex flex-col p-xs border-r border-b border-surface-variant" data-state="2" onclick="cycleState(this)">
+<span class="text-label-sm font-bold">12</span>
+<span class="text-[10px] mt-xs uppercase font-bold opacity-70 text-red-900">Feriado Municipal</span>
+</div>
+<div class="day-cell min-h-[100px] bg-[#D8B4FE] text-primary cursor-pointer flex flex-col p-xs border-r border-b border-surface-variant" data-state="3" onclick="cycleState(this)">
+<span class="text-label-sm font-bold">13</span>
+<span class="text-[10px] mt-xs uppercase font-bold opacity-70 text-purple-900">Evento: Reunião</span>
+</div>
+<div class="day-cell min-h-[100px] bg-[#4ADE80] text-primary cursor-pointer flex flex-col p-xs border-r border-b border-surface-variant" data-state="1" onclick="cycleState(this)">
+<span class="text-label-sm font-bold">14</span>
+<span class="text-[10px] mt-xs uppercase font-bold opacity-70">Dia Letivo</span>
+</div>
+<div class="day-cell min-h-[100px] bg-white cursor-pointer hover:bg-surface-container-lowest flex flex-col p-xs border-b border-surface-variant" onclick="cycleState(this)">
+<span class="text-label-sm font-bold">15</span>
+</div>
+<!-- Week 4 -->
+<div class="day-cell min-h-[100px] bg-surface-container opacity-30 flex flex-col p-xs border-r border-b border-surface-variant pointer-events-none">
+<span class="text-label-sm font-label-sm">16</span>
+</div>
+<div class="day-cell min-h-[100px] bg-[#FDBA74] text-primary cursor-pointer flex flex-col p-xs border-r border-b border-surface-variant" data-state="4" onclick="cycleState(this)">
+<span class="text-label-sm font-bold">17</span>
+<span class="text-[10px] mt-xs uppercase font-bold opacity-70">Férias Escolares</span>
+</div>
+<div class="day-cell min-h-[100px] bg-[#FDBA74] text-primary cursor-pointer flex flex-col p-xs border-r border-b border-surface-variant" data-state="4" onclick="cycleState(this)">
+<span class="text-label-sm font-bold">18</span>
+<span class="text-[10px] mt-xs uppercase font-bold opacity-70">Férias</span>
+</div>
+<div class="day-cell min-h-[100px] bg-[#FDBA74] text-primary cursor-pointer flex flex-col p-xs border-r border-b border-surface-variant" data-state="4" onclick="cycleState(this)">
+<span class="text-label-sm font-bold">19</span>
+<span class="text-[10px] mt-xs uppercase font-bold opacity-70">Férias</span>
+</div>
+<div class="day-cell min-h-[100px] bg-[#FDBA74] text-primary cursor-pointer flex flex-col p-xs border-r border-b border-surface-variant" data-state="4" onclick="cycleState(this)">
+<span class="text-label-sm font-bold">20</span>
+<span class="text-[10px] mt-xs uppercase font-bold opacity-70">Férias</span>
+</div>
+<div class="day-cell min-h-[100px] bg-[#FDBA74] text-primary cursor-pointer flex flex-col p-xs border-r border-b border-surface-variant" data-state="4" onclick="cycleState(this)">
+<span class="text-label-sm font-bold">21</span>
+<span class="text-[10px] mt-xs uppercase font-bold opacity-70">Férias</span>
+</div>
+<div class="day-cell min-h-[100px] bg-white cursor-pointer hover:bg-surface-container-lowest flex flex-col p-xs border-b border-surface-variant" onclick="cycleState(this)">
+<span class="text-label-sm font-bold">22</span>
+</div>
+<!-- Simplified rest of month for display -->
+<div class="day-cell min-h-[100px] bg-surface-container opacity-30 flex flex-col p-xs border-r border-surface-variant pointer-events-none">
+<span class="text-label-sm font-label-sm">23</span>
+</div>
+<div class="day-cell min-h-[100px] bg-white cursor-pointer hover:bg-surface-container-lowest flex flex-col p-xs border-r border-surface-variant" onclick="cycleState(this)">
+<span class="text-label-sm font-bold">24</span>
+</div>
+<div class="day-cell min-h-[100px] bg-white cursor-pointer hover:bg-surface-container-lowest flex flex-col p-xs border-r border-surface-variant" onclick="cycleState(this)">
+<span class="text-label-sm font-bold">25</span>
+</div>
+<div class="day-cell min-h-[100px] bg-white cursor-pointer hover:bg-surface-container-lowest flex flex-col p-xs border-r border-surface-variant" onclick="cycleState(this)">
+<span class="text-label-sm font-bold">26</span>
+</div>
+<div class="day-cell min-h-[100px] bg-white cursor-pointer hover:bg-surface-container-lowest flex flex-col p-xs border-r border-surface-variant" onclick="cycleState(this)">
+<span class="text-label-sm font-bold">27</span>
+</div>
+<div class="day-cell min-h-[100px] bg-white cursor-pointer hover:bg-surface-container-lowest flex flex-col p-xs border-r border-surface-variant" onclick="cycleState(this)">
+<span class="text-label-sm font-bold">28</span>
+</div>
+<div class="day-cell min-h-[100px] bg-white cursor-pointer hover:bg-surface-container-lowest flex flex-col p-xs" onclick="cycleState(this)">
+<span class="text-label-sm font-bold">29</span>
+</div>
+</div>
+</section>
+<!-- Right Side: Legend & Stats -->
+<aside class="lg:col-span-4 space-y-md">
+<!-- Legend System -->
+<div class="bg-white border border-surface-variant rounded-xl p-md shadow-sm">
+<h4 class="text-label-md font-bold text-primary mb-md border-b border-surface-variant pb-xs">Legenda Interativa</h4>
+<div class="space-y-sm">
+<div class="flex items-start gap-sm">
+<div class="w-6 h-6 bg-[#4ADE80] rounded shadow-inner mt-0.5"></div>
+<div>
+<p class="text-label-md font-bold text-primary">Dia Letivo</p>
+<p class="text-body-sm text-on-surface-variant leading-tight">1 clique. Contabiliza como dia normal de aula.</p>
+</div>
+</div>
+<div class="flex items-start gap-sm">
+<div class="w-6 h-6 bg-[#FCA5A5] rounded shadow-inner mt-0.5"></div>
+<div>
+<p class="text-label-md font-bold text-primary">Feriado / Recesso</p>
+<p class="text-body-sm text-on-surface-variant leading-tight">2 cliques. Dia sem atividade escolar.</p>
+</div>
+</div>
+<div class="flex items-start gap-sm">
+<div class="w-6 h-6 bg-[#D8B4FE] rounded shadow-inner mt-0.5"></div>
+<div>
+<p class="text-label-md font-bold text-primary">Evento / Prova</p>
+<p class="text-body-sm text-on-surface-variant leading-tight">3 cliques. Dia letivo com atividade especial.</p>
+</div>
+</div>
+<div class="flex items-start gap-sm">
+<div class="w-6 h-6 bg-[#FDBA74] rounded shadow-inner mt-0.5"></div>
+<div>
+<p class="text-label-md font-bold text-primary">Férias Escolares</p>
+<p class="text-body-sm text-on-surface-variant leading-tight">4 cliques. Período de férias regulamentares.</p>
+</div>
+</div>
+<div class="flex items-start gap-sm">
+<div class="w-6 h-6 border-2 border-dashed border-outline-variant rounded mt-0.5"></div>
+<div>
+<p class="text-label-md font-bold text-primary">Sábado Letivo</p>
+<p class="text-body-sm text-on-surface-variant leading-tight">Clique em sábados para ativar como dia letivo.</p>
+</div>
+</div>
+</div>
+<div class="mt-md pt-md border-t border-surface-variant">
+<p class="text-body-sm italic text-on-surface-variant">Dica: Clique repetidamente em um dia para alternar entre os status.</p>
+</div>
+</div>
+<!-- Stats Section -->
+<div class="bg-primary text-on-primary rounded-xl p-md shadow-lg">
+<h4 class="text-label-md font-bold mb-md">Contagem de Dias Letivos</h4>
+<div class="grid grid-cols-1 gap-md">
+<div class="bg-white/10 p-sm rounded-lg flex items-center justify-between">
+<span class="text-label-sm font-medium opacity-80 uppercase tracking-wider">No Mês</span>
+<span class="text-headline-md font-black">22</span>
+</div>
+<div class="bg-white/10 p-sm rounded-lg flex items-center justify-between">
+<span class="text-label-sm font-medium opacity-80 uppercase tracking-wider">No 3º Bimestre</span>
+<span class="text-headline-md font-black">48</span>
+</div>
+<div class="bg-secondary-container p-sm rounded-lg flex items-center justify-between">
+<span class="text-label-sm font-bold text-primary uppercase tracking-wider">Total Anual (Previsto)</span>
+<span class="text-headline-md font-black text-primary">204</span>
+</div>
+</div>
+<div class="mt-md p-sm bg-white/5 rounded-lg border border-white/10">
+<div class="flex items-center justify-between mb-xs">
+<span class="text-label-sm font-medium">Meta MEC (Min. 200)</span>
+<span class="text-label-sm font-bold text-[#4ADE80]">Atingida</span>
+</div>
+<div class="w-full bg-white/10 h-2 rounded-full overflow-hidden">
+<div class="bg-[#4ADE80] h-full w-full" style="width: 100%;"></div>
+</div>
+</div>
+</div>
+<!-- Events Selector Helper (Conceptual UI) -->
+<div class="hidden animate-in fade-in slide-in-from-top-4 bg-surface-container-lowest border-2 border-primary rounded-xl p-md shadow-2xl relative" id="event-selector">
+<div class="flex justify-between items-center mb-sm">
+<h5 class="text-label-md font-bold text-primary">Tipo de Evento</h5>
+<button class="text-on-surface-variant hover:text-primary" onclick="document.getElementById('event-selector').classList.add('hidden')">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="grid grid-cols-1 gap-xs">
+<button class="text-left px-sm py-xs hover:bg-surface-container-low rounded-lg text-body-sm border border-transparent hover:border-surface-variant">📝 Prova Bimestral</button>
+<button class="text-left px-sm py-xs hover:bg-surface-container-low rounded-lg text-body-sm border border-transparent hover:border-surface-variant">🏆 Olimpíada Científica</button>
+<button class="text-left px-sm py-xs hover:bg-surface-container-low rounded-lg text-body-sm border border-transparent hover:border-surface-variant">👥 Reunião Pedagógica</button>
+<button class="text-left px-sm py-xs hover:bg-surface-container-low rounded-lg text-body-sm border border-transparent hover:border-surface-variant">🚩 Início de Bimestre</button>
+<button class="text-left px-sm py-xs hover:bg-surface-container-low rounded-lg text-body-sm border border-transparent hover:border-surface-variant">🏁 Fim de Bimestre</button>
+</div>
+</div>
+</aside>
+</div>
+<!-- Footer -->
+<footer class="w-full py-md flex justify-between items-center mt-auto">
+<p class="text-label-sm font-label-sm text-on-surface-variant">Desenvolvido por Dhenison Carlos - 2026</p>
+<div class="flex items-center gap-md">
+<a class="text-label-sm font-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Termos de Uso</a>
+<a class="text-label-sm font-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Privacidade</a>
+</div>
+</footer>
+</main>
+<script>
+    // Função para abrir/fechar a Sidebar no Mobile
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebar-overlay');
+      if (sidebar.classList.contains('-translate-x-full')) {
+        sidebar.classList.remove('-translate-x-full');
+        overlay.classList.remove('hidden');
+      } else {
+        sidebar.classList.add('-translate-x-full');
+        overlay.classList.add('hidden');
+      }
+    }
+
+    // Destacar automaticamente o link do menu correspondente à página atual
+    document.addEventListener('DOMContentLoaded', () => {
+      const path = window.location.pathname;
+      const page = path.split('/').pop() || 'unificado.html';
+      
+      const menuMap = {
+        'dashboard.html': 'menu-dashboard',
+        'turmas.html': 'menu-turmas',
+        'fichadoaluno.html': 'menu-alunos',
+        'calendario.html': 'menu-calendario',
+        'agenda.html': 'menu-agenda',
+        'frequencia.html': 'menu-frequencia',
+        'ocorrencias.html': 'menu-ocorrencias',
+        'solicitacoes.html': 'menu-solicitacoes',
+        'whatsapp.html': 'menu-whatsapp',
+        'relatorios.html': 'menu-relatorios',
+        'boletins.html': 'menu-boletins',
+        'usuarios.html': 'menu-usuarios'
+      };
+      
+      const activeMenuId = menuMap[page];
+      if (activeMenuId) {
+        const activeLink = document.getElementById(activeMenuId);
+        if (activeLink) {
+          activeLink.classList.remove('text-on-surface-variant', 'hover:bg-surface-container-high', 'hover:scale-[1.02]');
+          activeLink.classList.add('bg-secondary-container', 'text-on-secondary-container', 'font-bold', 'scale-95', 'border-l-4', 'border-primary');
+        }
+      }
+    });
+  </script>
+</body></html>

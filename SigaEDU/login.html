@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SIGAEDU - Portal de Acesso</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-high": "#ebe7e6",
+                      "on-primary": "#ffffff",
+                      "inverse-surface": "#313030",
+                      "on-secondary-fixed-variant": "#544600",
+                      "surface-bright": "#fdf8f8",
+                      "surface-variant": "#e5e2e1",
+                      "secondary-fixed": "#ffe16d",
+                      "primary-container": "#1c1b1b",
+                      "on-secondary-container": "#6e5c00",
+                      "on-tertiary-fixed": "#191c1e",
+                      "inverse-on-surface": "#f4f0ef",
+                      "secondary": "#705d00",
+                      "on-background": "#1c1b1b",
+                      "surface-dim": "#ddd9d8",
+                      "tertiary-container": "#191c1e",
+                      "inverse-primary": "#c8c6c5",
+                      "on-tertiary": "#ffffff",
+                      "primary": "#000000",
+                      "tertiary-fixed-dim": "#c4c7ca",
+                      "surface": "#fdf8f8",
+                      "on-primary-fixed-variant": "#474746",
+                      "error": "#ba1a1a",
+                      "outline": "#747878",
+                      "surface-container-highest": "#e5e2e1",
+                      "primary-fixed-dim": "#c8c6c5",
+                      "surface-container-lowest": "#ffffff",
+                      "primary-fixed": "#e5e2e1",
+                      "secondary-fixed-dim": "#e9c400",
+                      "on-primary-fixed": "#1c1b1b",
+                      "on-secondary-fixed": "#221b00",
+                      "surface-container-low": "#f7f3f2",
+                      "surface-container": "#f1edec",
+                      "tertiary": "#000000",
+                      "on-error": "#ffffff",
+                      "on-tertiary-fixed-variant": "#44474a",
+                      "surface-tint": "#5f5e5e",
+                      "error-container": "#ffdad6",
+                      "on-primary-container": "#858383",
+                      "on-tertiary-container": "#818487",
+                      "secondary-container": "#fcd400",
+                      "outline-variant": "#c4c7c7",
+                      "background": "#fdf8f8",
+                      "on-surface-variant": "#444748",
+                      "on-secondary": "#ffffff",
+                      "on-error-container": "#93000a",
+                      "tertiary-fixed": "#e0e3e6",
+                      "on-surface": "#1c1b1b"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "base": "8px",
+                      "gutter": "24px",
+                      "md": "24px",
+                      "xl": "80px",
+                      "container-max": "1440px",
+                      "lg": "48px",
+                      "sm": "12px",
+                      "xs": "4px"
+              },
+              "fontFamily": {
+                      "headline-lg": ["Inter"],
+                      "headline-xl": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "label-sm": ["Inter"],
+                      "label-md": ["Inter"],
+                      "body-md": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "body-sm": ["Inter"]
+              },
+              "fontSize": {
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "headline-xl": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "label-sm": ["12px", {"lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "500"}],
+                      "label-md": ["14px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        .cristal-bg {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid #F0F2F5;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-ring:focus {
+            ring: 2px;
+            ring-color: #000000;
+            outline: none;
+        }
+        .shimmer {
+            background: linear-gradient(90deg, #F0F2F5 25%, #E5E7EB 50%, #F0F2F5 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+    </style>
+</head>
+<body class="bg-[#F8F9FA] text-on-surface min-h-screen flex flex-col font-body-md overflow-x-hidden">
+<!-- Top Bar Simulation (Minimalist) -->
+<header class="fixed top-0 left-0 right-0 h-16 z-50 flex items-center px-gutter cristal-bg">
+<div class="max-w-container-max mx-auto w-full flex justify-between items-center">
+<div class="text-label-md font-bold text-primary tracking-tighter uppercase">Sistema de Gestão Acadêmica</div>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors">help</span>
+</div>
+</div>
+</header>
+<main class="flex-grow flex items-center justify-center pt-16 px-4">
+<!-- Hero Background Decorative Elements -->
+<div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none -z-10">
+<div class="absolute -top-24 -right-24 w-96 h-96 bg-secondary-container opacity-20 rounded-full blur-3xl"></div>
+<div class="absolute bottom-1/4 -left-24 w-64 h-64 bg-primary opacity-5 rounded-full blur-3xl"></div>
+</div>
+<!-- Login Container -->
+<div class="w-full max-w-[440px] z-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
+<!-- Branding -->
+<div class="flex flex-col items-center mb-10 text-center">
+<div class="w-16 h-16 bg-primary rounded-xl flex items-center justify-center mb-6 shadow-lg">
+<span class="text-secondary-container font-black text-headline-md tracking-tighter">SE</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-primary tracking-tight">SIGAEDU</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-2">Plataforma Integrada de Gestão Educacional</p>
+</div>
+<!-- Card -->
+<div class="bg-white border border-[#F0F2F5] rounded-xl shadow-sm p-lg overflow-hidden relative">
+<form class="space-y-6" id="loginForm">
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-2" for="email">E-mail Institucional</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline-variant text-[20px]">alternate_email</span>
+<input class="w-full pl-12 pr-4 py-3 bg-[#F8F9FA] border border-[#F0F2F5] rounded-lg focus:border-primary focus:ring-0 transition-all text-body-md" id="email" placeholder="usuario@instituicao.edu.br" required="" type="email"/>
+</div>
+</div>
+<div>
+<div class="flex justify-between items-center mb-2">
+<label class="block font-label-md text-label-md text-on-surface" for="password">Senha</label>
+<button class="text-label-sm font-bold text-primary hover:underline transition-all" onclick="openModal()" type="button">Esqueceu Senha?</button>
+</div>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline-variant text-[20px]">lock</span>
+<input class="w-full pl-12 pr-4 py-3 bg-[#F8F9FA] border border-[#F0F2F5] rounded-lg focus:border-primary focus:ring-0 transition-all text-body-md" id="password" placeholder="••••••••" required="" type="password"/>
+</div>
+</div>
+<button class="w-full py-4 bg-secondary-container text-primary font-bold rounded-lg shadow-sm hover:brightness-95 active:scale-[0.98] transition-all flex items-center justify-center gap-2 group" type="submit">
+                        Acessar Portal
+                        <span class="material-symbols-outlined text-[20px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+</form>
+<div class="mt-8 pt-8 border-t border-[#F0F2F5] flex items-center justify-center gap-4">
+<img alt="BR Flag" class="w-5 h-4 object-cover rounded-sm grayscale opacity-50" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZZI5umX3uzOpayxs8CJHyHl0O15vwXxiOBMPSRvy0XxLwqaG9vmIVwWAi_k6QCbwB3w_NTqhJdeWCkwQIlt1bbdCjbxOyiFQt8rrWf_nRign4iYVwRkaFqrNKOSjq05z_5f7G9pWeRPIvMbEwyu6iOsuSd0_Bkf93-IgXNPCZb36lnxDHRcJ70sMVcIBVINtYqn2nU7CTKMi7OF0SrvSlmCkB278tAJcpwdyGoEa-whUUy3SUk6vGQBfKPsry40cQLUY_zcjNdio"/>
+<span class="text-label-sm font-medium text-on-surface-variant">Brasil - Gestão 2026</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full py-md px-gutter flex justify-center items-center mt-auto">
+<p class="font-body-sm text-body-sm text-on-surface-variant opacity-60">Desenvolvido por Dhenison Carlos - 2026</p>
+</footer>
+<!-- Modal Flow: Forgot Password -->
+<div class="fixed inset-0 z-[100] hidden items-center justify-center p-4" id="forgotPasswordModal">
+<div class="absolute inset-0 bg-primary/20 backdrop-blur-sm" onclick="closeModal()"></div>
+<div class="bg-white w-full max-w-[480px] rounded-xl shadow-xl z-10 overflow-hidden animate-in zoom-in-95 duration-200">
+<!-- Modal Header -->
+<div class="p-6 border-b border-[#F0F2F5] flex justify-between items-center">
+<h2 class="font-headline-md text-headline-md text-primary">Recuperar Acesso</h2>
+<button class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#F8F9FA] transition-colors" onclick="closeModal()">
+<span class="material-symbols-outlined text-on-surface-variant">close</span>
+</button>
+</div>
+<div class="p-8">
+<!-- Step 1: Selection -->
+<div class="space-y-6" id="step-selection">
+<p class="text-body-md text-on-surface-variant text-center mb-8">Para redefinir sua senha, precisamos primeiro identificar seu perfil institucional.</p>
+<div class="grid grid-cols-2 gap-4">
+<button class="group p-6 border-2 border-[#F0F2F5] rounded-xl hover:border-secondary-container hover:bg-secondary-container/5 transition-all text-center" onclick="goToForm('professor')">
+<div class="w-12 h-12 bg-[#F8F9FA] group-hover:bg-secondary-container rounded-full flex items-center justify-center mx-auto mb-4 transition-colors">
+<span class="material-symbols-outlined text-primary">school</span>
+</div>
+<span class="block font-bold text-primary">Professor</span>
+</button>
+<button class="group p-6 border-2 border-[#F0F2F5] rounded-xl hover:border-secondary-container hover:bg-secondary-container/5 transition-all text-center" onclick="goToForm('aluno')">
+<div class="w-12 h-12 bg-[#F8F9FA] group-hover:bg-secondary-container rounded-full flex items-center justify-center mx-auto mb-4 transition-colors">
+<span class="material-symbols-outlined text-primary">person</span>
+</div>
+<span class="block font-bold text-primary">Aluno</span>
+</button>
+</div>
+</div>
+<!-- Step 2: Form Professor -->
+<div class="hidden space-y-5" id="form-professor">
+<div class="flex items-center gap-2 mb-6 text-on-surface-variant">
+<button class="hover:text-primary" onclick="backToSelection()"><span class="material-symbols-outlined text-[18px]">arrow_back</span></button>
+<span class="text-label-md font-bold uppercase tracking-widest">Perfil Professor</span>
+</div>
+<div class="space-y-4">
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-1">Matrícula</label>
+<input class="w-full p-3 bg-[#F8F9FA] border border-[#F0F2F5] rounded-lg focus:border-primary focus:ring-0" placeholder="0000000" type="text"/>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-1">CPF</label>
+<input class="w-full p-3 bg-[#F8F9FA] border border-[#F0F2F5] rounded-lg focus:border-primary focus:ring-0" placeholder="000.000.000-00" type="text"/>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-1">Data de Nascimento</label>
+<input class="w-full p-3 bg-[#F8F9FA] border border-[#F0F2F5] rounded-lg focus:border-primary focus:ring-0" type="date"/>
+</div>
+</div>
+<button class="w-full py-4 bg-primary text-white font-bold rounded-lg mt-6 hover:brightness-125 transition-all" onclick="simulateSearch()">Localizar Cadastro</button>
+</div>
+<!-- Step 2: Form Aluno -->
+<div class="hidden space-y-5" id="form-aluno">
+<div class="flex items-center gap-2 mb-6 text-on-surface-variant">
+<button class="hover:text-primary" onclick="backToSelection()"><span class="material-symbols-outlined text-[18px]">arrow_back</span></button>
+<span class="text-label-md font-bold uppercase tracking-widest">Perfil Aluno</span>
+</div>
+<div class="space-y-4">
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-1">CPF</label>
+<input class="w-full p-3 bg-[#F8F9FA] border border-[#F0F2F5] rounded-lg focus:border-primary focus:ring-0" placeholder="000.000.000-00" type="text"/>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-1">Data de Nascimento</label>
+<input class="w-full p-3 bg-[#F8F9FA] border border-[#F0F2F5] rounded-lg focus:border-primary focus:ring-0" type="date"/>
+</div>
+</div>
+<button class="w-full py-4 bg-primary text-white font-bold rounded-lg mt-6 hover:brightness-125 transition-all" onclick="simulateSearch()">Localizar Cadastro</button>
+</div>
+<!-- Step 3: Loading / Search Result -->
+<div class="hidden flex flex-col items-center py-8" id="search-result">
+<div class="flex flex-col items-center" id="loader">
+<div class="w-12 h-12 border-4 border-[#F0F2F5] border-t-secondary-container rounded-full animate-spin mb-4"></div>
+<p class="text-label-md font-bold text-on-surface-variant">Consultando base de dados...</p>
+</div>
+<div class="hidden w-full space-y-6" id="result-content">
+<div class="bg-surface-container-low p-6 rounded-xl border border-secondary-container/20">
+<div class="flex items-center gap-4">
+<div class="w-14 h-14 rounded-full overflow-hidden border-2 border-white shadow-sm">
+<img alt="Profile Avatar" class="w-full h-full object-cover" data-alt="A clean, high-resolution portrait of a professional academic administrator in his 40s. He has a warm, confident expression and is wearing a crisp white dress shirt with a dark blazer. The lighting is soft and studio-quality, emphasizing a professional and trustworthy academic environment. The background is a soft, out-of-focus modern office space with subtle hints of corporate yellow and gray." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0H15MXEk5wwXHHtjR0_tQ3VbqenrRqKj5iHaSotRvy7A3xxq1ZVomH4vNA2DuR0ConsstGJ3p1FkAQjtQxtlJYH0TcxqJk8mUxDeTYMdpQ4M8UIFcnKmTk4esmSmijQi7BnhSDkjhfc9YZkynhb6F66u9gMAZB9AFVmtE9ACMvZqcZMGbM3nb2Z3ILM2iDdSyTipgwc8xy1ltgVnbPdn_rvHGurL5zMLM2bn-8Q7fZ5h7kRHjDX08Tlh_rUacSbwT9h7oeR4HfD0"/>
+</div>
+<div>
+<h4 class="font-bold text-primary">Carlos Alberto Mendes</h4>
+<p class="text-body-sm text-on-surface-variant">Matrícula: 2024.1009-8</p>
+</div>
+</div>
+</div>
+<p class="text-body-sm text-center px-4">Cadastro verificado com sucesso. Clique abaixo para preencher os dados de acesso automaticamente e prosseguir.</p>
+<button class="w-full py-4 bg-secondary-container text-primary font-extrabold rounded-lg shadow-sm hover:brightness-95 transition-all" onclick="autoFillAndClose()">PREENCHER E ACESSAR</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Notification Toast -->
+<div class="fixed bottom-8 right-8 cristal-bg px-6 py-4 rounded-xl shadow-lg border-l-4 border-secondary-container hidden flex items-center gap-3 animate-in slide-in-from-right-full" id="toast">
+<span class="material-symbols-outlined text-secondary">check_circle</span>
+<span class="text-label-md font-bold">Acesso autorizado com sucesso!</span>
+</div>
+<script>
+        const modal = document.getElementById('forgotPasswordModal');
+        const steps = {
+            selection: document.getElementById('step-selection'),
+            professor: document.getElementById('form-professor'),
+            aluno: document.getElementById('form-aluno'),
+            search: document.getElementById('search-result')
+        };
+
+        function openModal() {
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            backToSelection();
+        }
+
+        function closeModal() {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function backToSelection() {
+            Object.values(steps).forEach(s => s.classList.add('hidden'));
+            steps.selection.classList.remove('hidden');
+        }
+
+        function goToForm(type) {
+            steps.selection.classList.add('hidden');
+            steps[type].classList.remove('hidden');
+        }
+
+        function simulateSearch() {
+            Object.values(steps).forEach(s => s.classList.add('hidden'));
+            steps.search.classList.remove('hidden');
+            document.getElementById('loader').classList.remove('hidden');
+            document.getElementById('result-content').classList.add('hidden');
+
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+                document.getElementById('result-content').classList.remove('hidden');
+            }, 1800);
+        }
+
+        function autoFillAndClose() {
+            const emailInput = document.getElementById('email');
+            const passInput = document.getElementById('password');
+            const submitBtn = document.querySelector('button[type="submit"]');
+
+            closeModal();
+            
+            // Visual simulation of auto-fill
+            emailInput.value = "carlos.mendes@sigaedu.com.br";
+            passInput.value = "**********";
+            
+            emailInput.classList.add('ring-2', 'ring-secondary-container');
+            passInput.classList.add('ring-2', 'ring-secondary-container');
+
+            setTimeout(() => {
+                emailInput.classList.remove('ring-2', 'ring-secondary-container');
+                passInput.classList.remove('ring-2', 'ring-secondary-container');
+                
+                // Show toast
+                const toast = document.getElementById('toast');
+                toast.classList.remove('hidden');
+                toast.classList.add('flex');
+                
+                setTimeout(() => {
+                    toast.classList.add('hidden');
+                    toast.classList.remove('flex');
+                }, 3000);
+            }, 800);
+        }
+
+        document.getElementById('loginForm').onsubmit = (e) => {
+            e.preventDefault();
+            const toast = document.getElementById('toast');
+            toast.classList.remove('hidden');
+            toast.classList.add('flex');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+                toast.classList.remove('flex');
+            }, 2000);
+        };
+    </script>
+</body></html>

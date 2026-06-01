@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SIGAEDU - Módulo WhatsApp</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed-dim": "#c8c6c5",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-highest": "#e5e2e1",
+                        "on-primary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "outline-variant": "#c4c7c7",
+                        "on-primary-container": "#858383",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-high": "#ebe7e6",
+                        "on-surface-variant": "#444748",
+                        "inverse-primary": "#c8c6c5",
+                        "error": "#ba1a1a",
+                        "on-error-container": "#93000a",
+                        "tertiary": "#000000",
+                        "tertiary-container": "#191c1e",
+                        "primary-fixed": "#e5e2e1",
+                        "on-primary-fixed-variant": "#474746",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed-dim": "#e9c400",
+                        "outline": "#747878",
+                        "surface-dim": "#ddd9d8",
+                        "primary": "#000000",
+                        "on-primary-fixed": "#1c1b1b",
+                        "surface": "#fdf8f8",
+                        "primary-container": "#1c1b1b",
+                        "on-secondary-fixed": "#221b00",
+                        "surface-tint": "#5f5e5e",
+                        "on-tertiary-container": "#818487",
+                        "tertiary-fixed": "#e0e3e6",
+                        "inverse-surface": "#313030",
+                        "secondary-fixed": "#ffe16d",
+                        "on-tertiary-fixed": "#191c1e",
+                        "on-surface": "#1c1b1b",
+                        "on-secondary": "#ffffff",
+                        "surface-variant": "#e5e2e1",
+                        "on-secondary-container": "#6e5c00",
+                        "on-tertiary-fixed-variant": "#44474a",
+                        "on-secondary-fixed-variant": "#544600",
+                        "surface-container-low": "#f7f3f2",
+                        "secondary-container": "#fcd400",
+                        "secondary": "#705d00",
+                        "surface-container": "#f1edec",
+                        "surface-bright": "#fdf8f8",
+                        "inverse-on-surface": "#f4f0ef",
+                        "tertiary-fixed-dim": "#c4c7ca",
+                        "on-background": "#1c1b1b",
+                        "background": "#fdf8f8"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "base": "8px",
+                        "xs": "4px",
+                        "xl": "80px",
+                        "sm": "12px",
+                        "gutter": "24px",
+                        "container-max": "1440px",
+                        "md": "24px",
+                        "lg": "48px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "headline-xl": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "label-sm": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .cristalico {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #e5e2e1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #747878;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md overflow-x-hidden">
+<!-- SideNavBar Componente Unificado -->
+<aside id="sidebar" class="fixed left-0 top-0 bottom-0 z-50 flex flex-col p-sm pt-xl overflow-y-auto w-64 bg-white/70 backdrop-blur-xl border-r border-surface-variant dark:border-outline-variant shadow-md transition-transform duration-300 -translate-x-full md:translate-x-0">
+    <div class="px-sm mb-lg flex justify-between items-center">
+      <div class="flex items-center gap-sm">
+        <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-md">
+          <span class="material-symbols-outlined text-secondary-container" data-icon="school">school</span>
+        </div>
+        <div>
+          <h1 class="text-label-md font-bold text-primary tracking-tight leading-none">SIGAEDU</h1>
+          <p class="text-body-sm font-medium text-on-surface-variant">Gestão Acadêmica</p>
+        </div>
+      </div>
+      <button class="md:hidden p-1 text-on-surface hover:bg-surface-container-high rounded-full transition-colors" onclick="toggleSidebar()">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <nav class="flex-1 space-y-1">
+      <!-- Links Uniformes com Transições Suaves -->
+      <a id="menu-dashboard" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="dashboard.html">
+        <span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+        <span class="text-label-md font-label-md">Dashboard</span>
+      </a>
+      <a id="menu-turmas" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="turmas.html">
+        <span class="material-symbols-outlined" data-icon="groups">groups</span>
+        <span class="text-label-md font-label-md">Turmas</span>
+      </a>
+      <a id="menu-alunos" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="fichadoaluno.html">
+        <span class="material-symbols-outlined" data-icon="person">person</span>
+        <span class="text-label-md font-label-md">Alunos</span>
+      </a>
+      <a id="menu-calendario" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="calendario.html">
+        <span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+        <span class="text-label-md font-label-md">Calendário</span>
+      </a>
+      <a id="menu-agenda" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="agenda.html">
+        <span class="material-symbols-outlined" data-icon="event_note">event_note</span>
+        <span class="text-label-md font-label-md">Agenda</span>
+      </a>
+      <a id="menu-frequencia" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="frequencia.html">
+        <span class="material-symbols-outlined" data-icon="fact_check">fact_check</span>
+        <span class="text-label-md font-label-md">Frequência</span>
+      </a>
+      <a id="menu-ocorrencias" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="ocorrencias.html">
+        <span class="material-symbols-outlined" data-icon="report_problem">report_problem</span>
+        <span class="text-label-md font-label-md">Ocorrências</span>
+      </a>
+      <a id="menu-solicitacoes" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="solicitacoes.html">
+        <span class="material-symbols-outlined" data-icon="task">task</span>
+        <span class="text-label-md font-label-md">Solicitações</span>
+      </a>
+      <a id="menu-whatsapp" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="whatsapp.html">
+        <span class="material-symbols-outlined" data-icon="message">message</span>
+        <span class="text-label-md font-label-md">Whatsapp</span>
+      </a>
+      <a id="menu-relatorios" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="relatorios.html">
+        <span class="material-symbols-outlined" data-icon="description">description</span>
+        <span class="text-label-md font-label-md">Relatórios</span>
+      </a>
+      <a id="menu-boletins" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="boletins.html">
+        <span class="material-symbols-outlined" data-icon="assignment_ind">assignment_ind</span>
+        <span class="text-label-md font-label-md">Boletins</span>
+      </a>
+      <a id="menu-usuarios" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="usuarios.html">
+        <span class="material-symbols-outlined" data-icon="manage_accounts">manage_accounts</span>
+        <span class="text-label-md font-label-md">Usuários</span>
+      </a>
+    </nav>
+    <div class="mt-xl border-t border-surface-variant/30 pt-md space-y-1">
+      <a id="menu-suporte" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="#">
+        <span class="material-symbols-outlined" data-icon="contact_support">contact_support</span>
+        <span class="text-label-md font-label-md">Suporte</span>
+      </a>
+      <a id="menu-configuracoes" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="#">
+        <span class="material-symbols-outlined" data-icon="settings">settings</span>
+        <span class="text-label-md font-label-md">Configurações</span>
+      </a>
+    </div>
+  </aside>
+<!-- Overlay para Foco Mobile -->
+<div id="sidebar-overlay" class="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm hidden md:hidden" onclick="toggleSidebar()"></div>
+<!-- Main Content Area -->
+<main class="md:ml-64 min-h-screen flex flex-col transition-all duration-300">
+<!-- Top Header (TopNavBar Shared Component Unificado) -->
+<header class="fixed top-0 right-0 left-0 md:left-64 z-40 h-xl px-gutter flex justify-between items-center bg-white/70 backdrop-blur-xl dark:bg-surface-container/70 border-b border-surface-variant dark:border-outline-variant shadow-sm transition-all duration-300">
+      <div class="flex items-center gap-md">
+        <button class="md:hidden p-2 text-on-surface hover:bg-surface-container-high rounded-full transition-colors" onclick="toggleSidebar()">
+          <span class="material-symbols-outlined">menu</span>
+        </button>
+        <div class="hidden sm:flex items-center bg-surface-container-low rounded-full px-md py-2 w-96 border border-surface-variant/50 focus-within:border-primary transition-colors">
+          <span class="material-symbols-outlined text-on-surface-variant mr-sm">search</span>
+          <input class="bg-transparent border-none focus:ring-0 text-body-sm w-full p-0" placeholder="Pesquisar..." type="text"/>
+        </div>
+      </div>
+      <div class="flex items-center gap-md">
+        <div class="flex items-center gap-sm">
+          <button class="p-2 text-on-surface-variant hover:bg-surface-container-low transition-all duration-200 rounded-full relative hover:scale-105 active:scale-95">
+            <span class="material-symbols-outlined">notifications</span>
+            <span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full animate-pulse"></span>
+          </button>
+          <button class="p-2 text-on-surface-variant hover:bg-surface-container-low transition-all duration-200 rounded-full hover:scale-105 active:scale-95">
+            <span class="material-symbols-outlined">help</span>
+          </button>
+        </div>
+        <div class="h-8 w-[1px] bg-surface-variant hidden sm:block"></div>
+        <div class="flex items-center gap-sm pl-sm cursor-pointer hover:bg-surface-container-low p-xs rounded-xl transition-all duration-200">
+          <div class="text-right hidden sm:block">
+            <p class="text-label-md font-bold text-primary leading-none">Dhenison Carlos</p>
+            <p class="text-label-sm text-on-surface-variant">Administrador</p>
+          </div>
+          <img alt="Dhenison Carlos - Administrador" class="w-10 h-10 rounded-full object-cover border-2 border-secondary-container hover:scale-105 transition-transform duration-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRGSGbqGOo2dzNp40hZk4pp_0rVieA-Su6u1WdWdVVqvGIA6n7dJMIDQVg3vkTYKgYN5HRKv7SOzuV4CGLSmB4xKZHKFpq-2ab9UNYf9ye3MByCMdx_JIehrQjusuLvStYhxK5Qj2eZHDffXBfYxzFUFDsX7kk7oInOP0foJp972O4lAIpD8pOJMQ4ehoA3BKsZHDj0gIh6Fx7Dr-Uvdu89v6j1O2f_mCuy7lSXEnJdzNLXbaD9C36QemEJIA6ok8BwdRRm8oVmvA"/>
+        </div>
+      </div>
+    </header>
+<!-- Main Content Canvas -->
+<!-- Page Content -->
+<div class="mt-xl p-gutter flex-1 space-y-lg">
+<div class="max-w-container-max mx-auto">
+<!-- Header Section -->
+<div class="flex justify-between items-end">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-primary">Painel de Mensagens</h2>
+<p class="text-on-surface-variant mt-1">Gerencie disparos automáticos e comunicações individuais via WhatsApp.</p>
+</div>
+<div class="flex gap-3">
+<button class="bg-surface border border-surface-variant/50 px-4 py-2 rounded-lg font-label-md text-label-md flex items-center gap-2 hover:bg-surface-container-low transition-all">
+<span class="material-symbols-outlined">sync</span> Sincronizar QR Code
+                    </button>
+<button class="bg-secondary-container text-on-secondary-container px-6 py-2 rounded-lg font-label-md text-label-md flex items-center gap-2 shadow-sm hover:translate-y-[-1px] transition-all active:scale-95">
+<span class="material-symbols-outlined">rocket_launch</span> Novo Disparo Geral
+                    </button>
+</div>
+</div>
+<!-- Bento Grid - WhatsApp Modules -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Queue Control (Bento Card Large) -->
+<section class="col-span-12 lg:col-span-8 bg-white rounded-xl border border-surface-variant/20 p-8 shadow-sm flex flex-col gap-6">
+<div class="flex items-center justify-between border-b border-surface-variant/10 pb-4">
+<h3 class="font-headline-md text-headline-md text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">dynamic_feed</span>
+                            Filas de Automação
+                        </h3>
+<span class="bg-secondary-container/30 text-secondary font-bold text-[10px] px-2 py-1 rounded-full uppercase">Sistema Ativo</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<!-- Frequency/Entry -->
+<div class="bg-surface-container-low p-5 rounded-xl border border-transparent hover:border-secondary transition-all cursor-pointer group">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-white rounded-lg shadow-sm group-hover:bg-secondary-container transition-colors">
+<span class="material-symbols-outlined text-primary">login</span>
+</div>
+<span class="text-secondary font-bold text-headline-md leading-none">142</span>
+</div>
+<h4 class="font-label-md text-label-md text-primary mb-1">Frequência Entrada</h4>
+<p class="text-body-sm text-on-surface-variant">Mensagens de boas-vindas e registro matutino.</p>
+<div class="mt-4 flex items-center gap-2">
+<div class="flex-1 h-1 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-4/5"></div>
+</div>
+<span class="text-[10px] font-bold text-on-surface-variant">80%</span>
+</div>
+</div>
+<!-- Occurrences -->
+<div class="bg-surface-container-low p-5 rounded-xl border border-transparent hover:border-secondary transition-all cursor-pointer group">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-white rounded-lg shadow-sm group-hover:bg-secondary-container transition-colors">
+<span class="material-symbols-outlined text-primary">report_problem</span>
+</div>
+<span class="text-secondary font-bold text-headline-md leading-none">28</span>
+</div>
+<h4 class="font-label-md text-label-md text-primary mb-1">Ocorrências</h4>
+<p class="text-body-sm text-on-surface-variant">Comunicados disciplinares e pedagógicos.</p>
+<div class="mt-4 flex items-center gap-2">
+<div class="flex-1 h-1 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-1/3"></div>
+</div>
+<span class="text-[10px] font-bold text-on-surface-variant">33%</span>
+</div>
+</div>
+<!-- Exit -->
+<div class="bg-surface-container-low p-5 rounded-xl border border-transparent hover:border-secondary transition-all cursor-pointer group">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-white rounded-lg shadow-sm group-hover:bg-secondary-container transition-colors">
+<span class="material-symbols-outlined text-primary">logout</span>
+</div>
+<span class="text-secondary font-bold text-headline-md leading-none">0</span>
+</div>
+<h4 class="font-label-md text-label-md text-primary mb-1">Frequência Saída</h4>
+<p class="text-body-sm text-on-surface-variant">Confirmação de saída do aluno e avisos.</p>
+<div class="mt-4 flex items-center gap-2">
+<div class="flex-1 h-1 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-surface-container-highest w-0"></div>
+</div>
+<span class="text-[10px] font-bold text-on-surface-variant">0%</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Status & Progress (Bento Card Side) -->
+<aside class="col-span-12 lg:col-span-4 bg-primary text-white rounded-xl p-8 shadow-xl relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-secondary-container opacity-10 rounded-bl-full translate-x-12 -translate-y-12"></div>
+<h3 class="font-headline-md text-headline-md mb-6 flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary-container">hourglass_top</span>
+                        Status Geral
+                    </h3>
+<div class="space-y-6 relative z-10">
+<div>
+<div class="flex justify-between text-label-md mb-2">
+<span>Progresso de Envio</span>
+<span class="text-secondary-fixed">72%</span>
+</div>
+<div class="h-3 bg-white/10 rounded-full overflow-hidden border border-white/5">
+<div class="h-full bg-secondary-container transition-all duration-1000 shadow-[0_0_10px_rgba(252,212,0,0.5)]" id="global-progress" style="width: 72%;"></div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-white/5 p-4 rounded-lg border border-white/10">
+<p class="text-[10px] uppercase text-primary-fixed-dim font-bold">Sucesso</p>
+<p class="text-headline-md font-black">1.402</p>
+</div>
+<div class="bg-error/20 p-4 rounded-lg border border-error/30">
+<p class="text-[10px] uppercase text-error-container font-bold">Erros</p>
+<p class="text-headline-md font-black text-error-container">12</p>
+</div>
+</div>
+<div class="bg-white/5 p-4 rounded-lg border border-white/10 flex items-center gap-3 animate-pulse">
+<span class="material-symbols-outlined text-error-container">error</span>
+<div>
+<p class="text-body-sm font-bold">Notificação de Erro</p>
+<p class="text-[12px] text-primary-fixed-dim">3 números inválidos detectados na fila.</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Individual Messaging (Bento Card Medium) -->
+<section class="col-span-12 lg:col-span-7 bg-white rounded-xl border border-surface-variant/20 p-8 shadow-sm">
+<div class="flex items-center justify-between mb-8">
+<h3 class="font-headline-md text-headline-md text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">person_search</span>
+                            Mensagem Individual
+                        </h3>
+</div>
+<div class="space-y-6">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div>
+<label class="font-label-md text-label-md text-primary block mb-2">Filtrar Aluno</label>
+<select class="w-full bg-surface-container-low border border-surface-variant/30 rounded-lg p-3 text-body-md focus:ring-primary focus:border-primary transition-all">
+<option>Selecione o aluno...</option>
+<option>Gabriel Menezes - 3º Ano A</option>
+<option>Leticia Oliveira - 1º Ano B</option>
+<option>Rodrigo Santos - 2º Ano C</option>
+</select>
+</div>
+<div>
+<label class="font-label-md text-label-md text-primary block mb-2">Template</label>
+<select class="w-full bg-surface-container-low border border-surface-variant/30 rounded-lg p-3 text-body-md focus:ring-primary focus:border-primary transition-all">
+<option>Mensagem Padrão</option>
+<option>Lembrete de Mensalidade</option>
+<option>Convocação Reunião</option>
+</select>
+</div>
+</div>
+<div>
+<label class="font-label-md text-label-md text-primary block mb-2">Mensagem</label>
+<textarea class="w-full bg-surface-container-low border border-surface-variant/30 rounded-lg p-4 text-body-md focus:ring-primary focus:border-primary transition-all" placeholder="Digite sua mensagem aqui..." rows="4"></textarea>
+</div>
+<div class="flex justify-end">
+<button class="bg-primary text-white px-8 py-3 rounded-lg font-bold hover:bg-black/80 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined">send</span> Enviar Agora
+                            </button>
+</div>
+</div>
+</section>
+<!-- Bulk Send / Flyer Upload (Bento Card Medium) -->
+<section class="col-span-12 lg:col-span-5 bg-white rounded-xl border border-surface-variant/20 p-8 shadow-sm overflow-hidden flex flex-col">
+<h3 class="font-headline-md text-headline-md text-primary mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">upload_file</span>
+                        Disparo com Flyer
+                    </h3>
+<div class="flex-1 flex flex-col gap-4">
+<div class="border-2 border-dashed border-surface-variant/50 rounded-xl flex-1 flex flex-col items-center justify-center p-8 bg-surface-container-low hover:bg-secondary-container/5 hover:border-secondary transition-all cursor-pointer group">
+<span class="material-symbols-outlined text-4xl text-on-surface-variant group-hover:text-primary mb-4">cloud_upload</span>
+<p class="font-label-md text-label-md text-primary">Arraste seu Flyer ou clique aqui</p>
+<p class="text-[12px] text-on-surface-variant">PNG, JPG ou PDF (Máx 5MB)</p>
+</div>
+<div class="bg-surface-container-low p-4 rounded-lg flex items-center gap-3">
+<div class="w-12 h-12 rounded bg-white shadow-sm overflow-hidden flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">image</span>
+</div>
+<div class="flex-1">
+<p class="text-body-sm font-bold truncate">Flyer_Reuniao_Pais.png</p>
+<p class="text-[10px] text-on-surface-variant">842 KB</p>
+</div>
+<button class="text-error hover:bg-error-container p-1 rounded transition-colors">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+<button class="w-full bg-secondary-container text-on-secondary-container font-black py-4 rounded-xl shadow-lg hover:shadow-xl hover:translate-y-[-2px] transition-all flex items-center justify-center gap-3">
+<span class="material-symbols-outlined">campaign</span> Iniciar Campanha Geral
+                        </button>
+</div>
+</section>
+</div>
+<!-- Recent Logs Table -->
+<section class="bg-white rounded-xl border border-surface-variant/20 overflow-hidden shadow-sm">
+<div class="p-6 border-b border-surface-variant/10 flex justify-between items-center bg-surface-container-lowest">
+<h3 class="font-label-md text-label-md text-primary uppercase tracking-wider">Histórico Recente de Disparos</h3>
+<button class="text-on-surface-variant hover:text-primary transition-colors">Ver todos</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-surface-container-low text-on-surface-variant font-label-md text-[12px]">
+<tr>
+<th class="px-6 py-4">ALUNO / DESTINATÁRIO</th>
+<th class="px-6 py-4">TIPO</th>
+<th class="px-6 py-4">HORÁRIO</th>
+<th class="px-6 py-4">STATUS</th>
+<th class="px-6 py-4 text-right">AÇÕES</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-variant/10">
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center font-bold text-[12px]">GM</div>
+<div>
+<p class="font-label-md text-label-md text-primary">Gabriel Menezes</p>
+<p class="text-[11px] text-on-surface-variant">(11) 98765-4321</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="bg-surface-container-high px-3 py-1 rounded-full text-[11px] font-bold">Frequência Entrada</span>
+</td>
+<td class="px-6 py-4 text-body-sm text-on-surface-variant">Hoje, 07:42</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2 text-secondary font-bold text-[11px]">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">done_all</span> Entregue
+                                    </div>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined">more_vert</span></button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center font-bold text-[12px]">LO</div>
+<div>
+<p class="font-label-md text-label-md text-primary">Leticia Oliveira</p>
+<p class="text-[11px] text-on-surface-variant">(11) 91234-5678</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="bg-surface-container-high px-3 py-1 rounded-full text-[11px] font-bold">Ocorrência</span>
+</td>
+<td class="px-6 py-4 text-body-sm text-on-surface-variant">Hoje, 10:15</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2 text-error font-bold text-[11px]">
+<span class="material-symbols-outlined text-[16px]">error</span> Erro de Envio
+                                    </div>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined">more_vert</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div>
+<!-- Footer (Shared Component Footer) -->
+</div>
+</div>
+<!-- Footer (Footer Shared Component) -->
+<footer class="w-full py-md px-gutter flex justify-between items-center mt-auto bg-transparent">
+<div class="text-label-sm font-label-sm text-on-surface-variant">
+                Desenvolvido por Dhenison Carlos - 2026
+            </div>
+<div class="flex gap-md">
+<a class="text-label-sm font-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Termos de Uso</a>
+<a class="text-label-sm font-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Privacidade</a>
+</div>
+</footer>
+</main>
+<!-- Floating Atmosphere Elements -->
+<div class="fixed top-20 right-10 pointer-events-none opacity-20">
+<div class="w-64 h-64 bg-secondary-container rounded-full blur-[100px]"></div>
+</div>
+<div class="fixed bottom-10 left-80 pointer-events-none opacity-10">
+<div class="w-48 h-48 bg-primary rounded-full blur-[80px]"></div>
+</div>
+<script>
+    // Função para abrir/fechar a Sidebar no Mobile
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebar-overlay');
+      if (sidebar.classList.contains('-translate-x-full')) {
+        sidebar.classList.remove('-translate-x-full');
+        overlay.classList.remove('hidden');
+      } else {
+        sidebar.classList.add('-translate-x-full');
+        overlay.classList.add('hidden');
+      }
+    }
+
+    // Destacar automaticamente o link do menu correspondente à página atual
+    document.addEventListener('DOMContentLoaded', () => {
+      const path = window.location.pathname;
+      const page = path.split('/').pop() || 'unificado.html';
+      
+      const menuMap = {
+        'dashboard.html': 'menu-dashboard',
+        'turmas.html': 'menu-turmas',
+        'fichadoaluno.html': 'menu-alunos',
+        'calendario.html': 'menu-calendario',
+        'agenda.html': 'menu-agenda',
+        'frequencia.html': 'menu-frequencia',
+        'ocorrencias.html': 'menu-ocorrencias',
+        'solicitacoes.html': 'menu-solicitacoes',
+        'whatsapp.html': 'menu-whatsapp',
+        'relatorios.html': 'menu-relatorios',
+        'boletins.html': 'menu-boletins',
+        'usuarios.html': 'menu-usuarios'
+      };
+      
+      const activeMenuId = menuMap[page];
+      if (activeMenuId) {
+        const activeLink = document.getElementById(activeMenuId);
+        if (activeLink) {
+          activeLink.classList.remove('text-on-surface-variant', 'hover:bg-surface-container-high', 'hover:scale-[1.02]');
+          activeLink.classList.add('bg-secondary-container', 'text-on-secondary-container', 'font-bold', 'scale-95', 'border-l-4', 'border-primary');
+        }
+      }
+    });
+  </script>
+</body></html>
