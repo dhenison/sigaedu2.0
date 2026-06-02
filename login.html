@@ -125,6 +125,17 @@
             0% { background-position: 200% 0; }
             100% { background-position: -200% 0; }
         }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            75% { transform: translateX(6px); }
+        }
+        .animate-shake {
+            animation: shake 0.15s ease-in-out 0s 2;
+        }
+        .border-error {
+            border-color: #ba1a1a !important;
+        }
     </style>
 </head>
 <body class="bg-[#F8F9FA] text-on-surface min-h-screen flex flex-col font-body-md overflow-x-hidden">
@@ -160,8 +171,9 @@
 <label class="block font-label-md text-label-md text-on-surface mb-2" for="email">E-mail Institucional</label>
 <div class="relative">
 <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline-variant text-[20px]">alternate_email</span>
-<input class="w-full pl-12 pr-4 py-3 bg-[#F8F9FA] border border-[#F0F2F5] rounded-lg focus:border-primary focus:ring-0 transition-all text-body-md" id="email" placeholder="usuario@instituicao.edu.br" required="" type="email"/>
+<input class="w-full pl-12 pr-4 py-3 bg-[#F8F9FA] border border-[#F0F2F5] rounded-lg focus:border-primary focus:ring-0 transition-all text-body-md" id="email" placeholder="usuario@escola.seduc.pa.gov.br ou @aluno.seduc.pa.gov.br" required="" type="email"/>
 </div>
+<p id="email-error" class="text-[11px] text-error font-semibold mt-1.5 hidden"></p>
 </div>
 <div>
 <div class="flex justify-between items-center mb-2">
@@ -272,8 +284,8 @@
 <img alt="Profile Avatar" class="w-full h-full object-cover" data-alt="A clean, high-resolution portrait of a professional academic administrator in his 40s. He has a warm, confident expression and is wearing a crisp white dress shirt with a dark blazer. The lighting is soft and studio-quality, emphasizing a professional and trustworthy academic environment. The background is a soft, out-of-focus modern office space with subtle hints of corporate yellow and gray." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0H15MXEk5wwXHHtjR0_tQ3VbqenrRqKj5iHaSotRvy7A3xxq1ZVomH4vNA2DuR0ConsstGJ3p1FkAQjtQxtlJYH0TcxqJk8mUxDeTYMdpQ4M8UIFcnKmTk4esmSmijQi7BnhSDkjhfc9YZkynhb6F66u9gMAZB9AFVmtE9ACMvZqcZMGbM3nb2Z3ILM2iDdSyTipgwc8xy1ltgVnbPdn_rvHGurL5zMLM2bn-8Q7fZ5h7kRHjDX08Tlh_rUacSbwT9h7oeR4HfD0"/>
 </div>
 <div>
-<h4 class="font-bold text-primary">Carlos Alberto Mendes</h4>
-<p class="text-body-sm text-on-surface-variant">Matrícula: 2024.1009-8</p>
+<h4 class="font-bold text-primary">Dhenison Guimarães</h4>
+<p class="text-body-sm text-on-surface-variant">Matrícula: 2026.4178-9</p>
 </div>
 </div>
 </div>
@@ -334,13 +346,17 @@
         function autoFillAndClose() {
             const emailInput = document.getElementById('email');
             const passInput = document.getElementById('password');
-            const submitBtn = document.querySelector('button[type="submit"]');
+            const emailError = document.getElementById('email-error');
 
             closeModal();
             
-            // Visual simulation of auto-fill
-            emailInput.value = "carlos.mendes@sigaedu.com.br";
-            passInput.value = "**********";
+            // Limpa estados de erro prévios
+            emailInput.classList.remove('border-error');
+            emailError.classList.add('hidden');
+            
+            // Simulação visual de preenchimento automático com as credenciais do usuário
+            emailInput.value = "dhenison.guimaraes4178@escola.seduc.pa.gov.br";
+            passInput.value = "siga@EDU2026";
             
             emailInput.classList.add('ring-2', 'ring-secondary-container');
             passInput.classList.add('ring-2', 'ring-secondary-container');
@@ -349,26 +365,56 @@
                 emailInput.classList.remove('ring-2', 'ring-secondary-container');
                 passInput.classList.remove('ring-2', 'ring-secondary-container');
                 
-                // Show toast
+                // Exibe toast de preenchimento concluído
                 const toast = document.getElementById('toast');
+                const toastText = toast.querySelector('.text-label-md');
+                toastText.textContent = "Credenciais carregadas com sucesso! Clique em Acessar.";
                 toast.classList.remove('hidden');
                 toast.classList.add('flex');
                 
                 setTimeout(() => {
                     toast.classList.add('hidden');
                     toast.classList.remove('flex');
+                    toastText.textContent = "Acesso autorizado com sucesso!"; // Restaura texto original
                 }, 3000);
             }, 800);
         }
 
         document.getElementById('loginForm').onsubmit = (e) => {
             e.preventDefault();
+            const emailInput = document.getElementById('email');
+            const email = emailInput.value.trim().toLowerCase();
+            const emailError = document.getElementById('email-error');
+            
+            const allowedDomains = ['@escola.seduc.pa.gov.br', '@aluno.seduc.pa.gov.br'];
+            const isValidDomain = allowedDomains.some(domain => email.endsWith(domain));
+            
+            if (!isValidDomain) {
+                emailInput.classList.add('border-error');
+                emailError.textContent = "Acesso permitido apenas para e-mails institucionais da SEDUC Pará (@escola.seduc.pa.gov.br ou @aluno.seduc.pa.gov.br).";
+                emailError.classList.remove('hidden');
+                
+                // Efeito visual de tremor no campo (Premium UX)
+                emailInput.classList.add('animate-shake');
+                setTimeout(() => {
+                    emailInput.classList.remove('animate-shake');
+                }, 400);
+                return;
+            }
+            
+            // Limpa erros caso passe na validação
+            emailInput.classList.remove('border-error');
+            emailError.classList.add('hidden');
+            
             const toast = document.getElementById('toast');
             toast.classList.remove('hidden');
             toast.classList.add('flex');
+            
             setTimeout(() => {
                 toast.classList.add('hidden');
                 toast.classList.remove('flex');
+                // Redireciona para o painel principal após validação bem-sucedida
+                window.location.href = "dashboard.html";
             }, 2000);
         };
     </script>

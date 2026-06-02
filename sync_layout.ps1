@@ -107,6 +107,16 @@ foreach ($pagina in $paginas) {
     $newContent = [regex]::Replace($newContent, $headerRegex, $headerBlock)
     $newContent = [regex]::Replace($newContent, $scriptRegex, $scriptBlock)
 
+    # Substituir a fonte do Material Symbols para display=block e remover duplicatas consecutivas
+    $fontBlock = '  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet"/>'
+    $duplicateFontRegex = '(?is)(<link[^>]*Material\+Symbols\+Outlined[^>]*>\s*){1,}'
+    $newContent = [regex]::Replace($newContent, $duplicateFontRegex, $fontBlock + "`r`n")
+
+    # Corrigir a classe CSS do Material Symbols para evitar o flash
+    $cssRegex = '(?s)\.material-symbols-outlined\s*\{[^}]*\}'
+    $cssBlock = ".material-symbols-outlined {`n      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;`n      display: inline-block;`n      width: 24px;`n      height: 24px;`n      overflow: hidden;`n      text-rendering: optimizeLegibility;`n      -webkit-font-smoothing: antialiased;`n    }"
+    $newContent = [regex]::Replace($newContent, $cssRegex, $cssBlock)
+
     # Escrever de volta o arquivo com codificação UTF-8 pura (sem BOM, padrão web moderno)
     # [System.IO.File]::WriteAllText cuida disso perfeitamente
     $utf8NoBOM = New-Object System.Text.UTF8Encoding($false)

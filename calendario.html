@@ -6,13 +6,17 @@
 <title>Calendário Letivo 2026 - SIGAEDU</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+                            <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet"/>
 <style>
         .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-            vertical-align: middle;
-        }
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      overflow: hidden;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
         .cristalico {
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
@@ -263,26 +267,40 @@
 <div class="grid grid-cols-1 lg:grid-cols-12 gap-md items-start">
 <!-- Left Side: Interactive Calendar -->
 <section class="lg:col-span-8 bg-white border border-surface-variant rounded-xl p-md shadow-sm">
-<div class="flex items-center justify-between mb-md">
-<div class="flex items-center gap-md">
-<h3 class="text-headline-md font-headline-md text-primary">Agosto 2026</h3>
+<!-- Months Navigation (Clickable) -->
+<div class="flex gap-sm overflow-x-auto pb-sm no-scrollbar border-b border-surface-variant/30 mb-md" id="months-nav-container">
+  <!-- Os botões dos meses serão gerados dinamicamente por JavaScript -->
+</div>
+
+<div class="flex items-center justify-between mb-md flex-wrap gap-sm">
+<div class="flex items-center gap-md flex-wrap">
+<h3 class="text-headline-md font-headline-md text-primary" id="calendar-month-title">Agosto 2026</h3>
 <div class="flex items-center gap-xs bg-surface-container-low p-xs rounded-xl">
-<button class="p-xs hover:bg-surface-container-highest rounded-lg transition-colors">
+<button class="p-xs hover:bg-surface-container-highest rounded-lg transition-colors" onclick="prevMonth()">
 <span class="material-symbols-outlined">chevron_left</span>
 </button>
-<button class="p-xs hover:bg-surface-container-highest rounded-lg transition-colors">
+<button class="p-xs hover:bg-surface-container-highest rounded-lg transition-colors" onclick="nextMonth()">
 <span class="material-symbols-outlined">chevron_right</span>
 </button>
 </div>
+<div class="flex gap-xs">
+<button onclick="inicializarDiasUteis()" class="px-sm py-1.5 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded-lg text-body-sm font-bold border border-emerald-200 transition-colors flex items-center gap-1 shadow-sm">
+<span class="material-symbols-outlined text-[16px]">task_alt</span>
+Inicializar Dias Úteis
+</button>
+<button onclick="limparMesAtivo()" class="px-sm py-1.5 bg-red-50 text-red-700 hover:bg-red-100 rounded-lg text-body-sm font-bold border border-red-200 transition-colors flex items-center gap-1 shadow-sm">
+<span class="material-symbols-outlined text-[16px]">clear_all</span>
+Limpar Mês
+</button>
 </div>
-<div class="flex items-center gap-xs bg-surface-container-low p-xs rounded-xl">
-<button class="px-md py-xs bg-white shadow-sm rounded-lg text-label-md">Mês</button>
-<button class="px-md py-xs text-on-surface-variant text-label-md hover:bg-surface-container-highest rounded-lg transition-colors">Semestre</button>
-<button class="px-md py-xs text-on-surface-variant text-label-md hover:bg-surface-container-highest rounded-lg transition-colors">Ano</button>
+</div>
+<div class="text-label-md text-on-surface-variant font-bold">
+  Ano Letivo 2026
 </div>
 </div>
+
 <!-- Calendar Grid -->
-<div class="grid grid-cols-7 gap-xs border border-surface-variant rounded-xl overflow-hidden bg-surface-variant">
+<div class="grid grid-cols-7 gap-xs border border-surface-variant rounded-xl overflow-hidden bg-surface-variant" id="calendar-grid">
 <!-- Days of Week Header -->
 <div class="bg-surface-container py-sm text-center text-label-md text-on-surface-variant font-bold border-r border-surface-variant">DOM</div>
 <div class="bg-surface-container py-sm text-center text-label-md text-on-surface-variant font-bold border-r border-surface-variant">SEG</div>
@@ -291,131 +309,8 @@
 <div class="bg-surface-container py-sm text-center text-label-md text-on-surface-variant font-bold border-r border-surface-variant">QUI</div>
 <div class="bg-surface-container py-sm text-center text-label-md text-on-surface-variant font-bold border-r border-surface-variant">SEX</div>
 <div class="bg-surface-container py-sm text-center text-label-md text-on-surface-variant font-bold">SÁB</div>
-<!-- Week 1 -->
-<div class="day-cell min-h-[100px] bg-surface-container-low opacity-50 flex flex-col p-xs border-r border-b border-surface-variant pointer-events-none">
-<span class="text-label-sm font-label-sm">26</span>
-</div>
-<div class="day-cell min-h-[100px] bg-surface-container-low opacity-50 flex flex-col p-xs border-r border-b border-surface-variant pointer-events-none">
-<span class="text-label-sm font-label-sm">27</span>
-</div>
-<div class="day-cell min-h-[100px] bg-surface-container-low opacity-50 flex flex-col p-xs border-r border-b border-surface-variant pointer-events-none">
-<span class="text-label-sm font-label-sm">28</span>
-</div>
-<div class="day-cell min-h-[100px] bg-surface-container-low opacity-50 flex flex-col p-xs border-r border-b border-surface-variant pointer-events-none">
-<span class="text-label-sm font-label-sm">29</span>
-</div>
-<div class="day-cell min-h-[100px] bg-surface-container-low opacity-50 flex flex-col p-xs border-r border-b border-surface-variant pointer-events-none">
-<span class="text-label-sm font-label-sm">30</span>
-</div>
-<div class="day-cell min-h-[100px] bg-surface-container-low opacity-50 flex flex-col p-xs border-r border-b border-surface-variant pointer-events-none">
-<span class="text-label-sm font-label-sm">31</span>
-</div>
-<div class="day-cell min-h-[100px] bg-white cursor-pointer hover:bg-surface-container-lowest flex flex-col p-xs border-b border-surface-variant" onclick="cycleState(this)">
-<span class="text-label-sm font-bold">1</span>
-</div>
-<!-- Week 2 -->
-<div class="day-cell min-h-[100px] bg-surface-container opacity-30 flex flex-col p-xs border-r border-b border-surface-variant pointer-events-none">
-<span class="text-label-sm font-label-sm">2</span>
-</div>
-<div class="day-cell min-h-[100px] bg-white cursor-pointer hover:bg-surface-container-lowest flex flex-col p-xs border-r border-b border-surface-variant" onclick="cycleState(this)">
-<span class="text-label-sm font-bold">3</span>
-<div class="mt-auto day-indicator hidden h-1.5 w-full rounded-full"></div>
-</div>
-<div class="day-cell min-h-[100px] bg-white cursor-pointer hover:bg-surface-container-lowest flex flex-col p-xs border-r border-b border-surface-variant" onclick="cycleState(this)">
-<span class="text-label-sm font-bold">4</span>
-<div class="mt-auto day-indicator hidden h-1.5 w-full rounded-full"></div>
-</div>
-<div class="day-cell min-h-[100px] bg-white cursor-pointer hover:bg-surface-container-lowest flex flex-col p-xs border-r border-b border-surface-variant" onclick="cycleState(this)">
-<span class="text-label-sm font-bold">5</span>
-<div class="mt-auto day-indicator hidden h-1.5 w-full rounded-full"></div>
-</div>
-<div class="day-cell min-h-[100px] bg-white cursor-pointer hover:bg-surface-container-lowest flex flex-col p-xs border-r border-b border-surface-variant" onclick="cycleState(this)">
-<span class="text-label-sm font-bold">6</span>
-<div class="mt-auto day-indicator hidden h-1.5 w-full rounded-full"></div>
-</div>
-<div class="day-cell min-h-[100px] bg-white cursor-pointer hover:bg-surface-container-lowest flex flex-col p-xs border-r border-b border-surface-variant" onclick="cycleState(this)">
-<span class="text-label-sm font-bold">7</span>
-<div class="mt-auto day-indicator hidden h-1.5 w-full rounded-full"></div>
-</div>
-<div class="day-cell min-h-[100px] bg-white cursor-pointer hover:bg-surface-container-lowest flex flex-col p-xs border-b border-surface-variant" onclick="cycleState(this)">
-<span class="text-label-sm font-bold">8</span>
-</div>
-<!-- Week 3 -->
-<div class="day-cell min-h-[100px] bg-surface-container opacity-30 flex flex-col p-xs border-r border-b border-surface-variant pointer-events-none">
-<span class="text-label-sm font-label-sm">9</span>
-</div>
-<div class="day-cell min-h-[100px] bg-[#4ADE80] text-primary cursor-pointer flex flex-col p-xs border-r border-b border-surface-variant" data-state="1" onclick="cycleState(this)">
-<span class="text-label-sm font-bold">10</span>
-<span class="text-[10px] mt-xs uppercase font-bold opacity-70">Dia Letivo</span>
-</div>
-<div class="day-cell min-h-[100px] bg-[#4ADE80] text-primary cursor-pointer flex flex-col p-xs border-r border-b border-surface-variant" data-state="1" onclick="cycleState(this)">
-<span class="text-label-sm font-bold">11</span>
-<span class="text-[10px] mt-xs uppercase font-bold opacity-70">Dia Letivo</span>
-</div>
-<div class="day-cell min-h-[100px] bg-[#FCA5A5] text-primary cursor-pointer flex flex-col p-xs border-r border-b border-surface-variant" data-state="2" onclick="cycleState(this)">
-<span class="text-label-sm font-bold">12</span>
-<span class="text-[10px] mt-xs uppercase font-bold opacity-70 text-red-900">Feriado Municipal</span>
-</div>
-<div class="day-cell min-h-[100px] bg-[#D8B4FE] text-primary cursor-pointer flex flex-col p-xs border-r border-b border-surface-variant" data-state="3" onclick="cycleState(this)">
-<span class="text-label-sm font-bold">13</span>
-<span class="text-[10px] mt-xs uppercase font-bold opacity-70 text-purple-900">Evento: Reunião</span>
-</div>
-<div class="day-cell min-h-[100px] bg-[#4ADE80] text-primary cursor-pointer flex flex-col p-xs border-r border-b border-surface-variant" data-state="1" onclick="cycleState(this)">
-<span class="text-label-sm font-bold">14</span>
-<span class="text-[10px] mt-xs uppercase font-bold opacity-70">Dia Letivo</span>
-</div>
-<div class="day-cell min-h-[100px] bg-white cursor-pointer hover:bg-surface-container-lowest flex flex-col p-xs border-b border-surface-variant" onclick="cycleState(this)">
-<span class="text-label-sm font-bold">15</span>
-</div>
-<!-- Week 4 -->
-<div class="day-cell min-h-[100px] bg-surface-container opacity-30 flex flex-col p-xs border-r border-b border-surface-variant pointer-events-none">
-<span class="text-label-sm font-label-sm">16</span>
-</div>
-<div class="day-cell min-h-[100px] bg-[#FDBA74] text-primary cursor-pointer flex flex-col p-xs border-r border-b border-surface-variant" data-state="4" onclick="cycleState(this)">
-<span class="text-label-sm font-bold">17</span>
-<span class="text-[10px] mt-xs uppercase font-bold opacity-70">Férias Escolares</span>
-</div>
-<div class="day-cell min-h-[100px] bg-[#FDBA74] text-primary cursor-pointer flex flex-col p-xs border-r border-b border-surface-variant" data-state="4" onclick="cycleState(this)">
-<span class="text-label-sm font-bold">18</span>
-<span class="text-[10px] mt-xs uppercase font-bold opacity-70">Férias</span>
-</div>
-<div class="day-cell min-h-[100px] bg-[#FDBA74] text-primary cursor-pointer flex flex-col p-xs border-r border-b border-surface-variant" data-state="4" onclick="cycleState(this)">
-<span class="text-label-sm font-bold">19</span>
-<span class="text-[10px] mt-xs uppercase font-bold opacity-70">Férias</span>
-</div>
-<div class="day-cell min-h-[100px] bg-[#FDBA74] text-primary cursor-pointer flex flex-col p-xs border-r border-b border-surface-variant" data-state="4" onclick="cycleState(this)">
-<span class="text-label-sm font-bold">20</span>
-<span class="text-[10px] mt-xs uppercase font-bold opacity-70">Férias</span>
-</div>
-<div class="day-cell min-h-[100px] bg-[#FDBA74] text-primary cursor-pointer flex flex-col p-xs border-r border-b border-surface-variant" data-state="4" onclick="cycleState(this)">
-<span class="text-label-sm font-bold">21</span>
-<span class="text-[10px] mt-xs uppercase font-bold opacity-70">Férias</span>
-</div>
-<div class="day-cell min-h-[100px] bg-white cursor-pointer hover:bg-surface-container-lowest flex flex-col p-xs border-b border-surface-variant" onclick="cycleState(this)">
-<span class="text-label-sm font-bold">22</span>
-</div>
-<!-- Simplified rest of month for display -->
-<div class="day-cell min-h-[100px] bg-surface-container opacity-30 flex flex-col p-xs border-r border-surface-variant pointer-events-none">
-<span class="text-label-sm font-label-sm">23</span>
-</div>
-<div class="day-cell min-h-[100px] bg-white cursor-pointer hover:bg-surface-container-lowest flex flex-col p-xs border-r border-surface-variant" onclick="cycleState(this)">
-<span class="text-label-sm font-bold">24</span>
-</div>
-<div class="day-cell min-h-[100px] bg-white cursor-pointer hover:bg-surface-container-lowest flex flex-col p-xs border-r border-surface-variant" onclick="cycleState(this)">
-<span class="text-label-sm font-bold">25</span>
-</div>
-<div class="day-cell min-h-[100px] bg-white cursor-pointer hover:bg-surface-container-lowest flex flex-col p-xs border-r border-surface-variant" onclick="cycleState(this)">
-<span class="text-label-sm font-bold">26</span>
-</div>
-<div class="day-cell min-h-[100px] bg-white cursor-pointer hover:bg-surface-container-lowest flex flex-col p-xs border-r border-surface-variant" onclick="cycleState(this)">
-<span class="text-label-sm font-bold">27</span>
-</div>
-<div class="day-cell min-h-[100px] bg-white cursor-pointer hover:bg-surface-container-lowest flex flex-col p-xs border-r border-surface-variant" onclick="cycleState(this)">
-<span class="text-label-sm font-bold">28</span>
-</div>
-<div class="day-cell min-h-[100px] bg-white cursor-pointer hover:bg-surface-container-lowest flex flex-col p-xs" onclick="cycleState(this)">
-<span class="text-label-sm font-bold">29</span>
-</div>
+
+<!-- Os dias serão gerados dinamicamente via JS -->
 </div>
 </section>
 <!-- Right Side: Legend & Stats -->
@@ -509,12 +404,7 @@
 </div>
 </aside>
 </div>
-<!-- Footer -->
-<footer class="w-full py-md flex justify-between items-center mt-auto">
-<p class="text-label-sm font-label-sm text-on-surface-variant">Desenvolvido por Dhenison Carlos - 2026</p>
-<div class="flex items-center gap-md">
-<a class="text-label-sm font-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Termos de Uso</a>
-<a class="text-label-sm font-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Privacidade</a>
+      <a class="text-label-sm font-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Privacidade</a>
 </div>
 </footer>
 </main>
@@ -532,8 +422,8 @@
       }
     }
 
-    // Destacar automaticamente o link do menu correspondente à página atual
-    document.addEventListener('DOMContentLoaded', () => {
+    // Destacar automaticamente e imediatamente o link do menu ativo (sem esperar DOMContentLoaded)
+    (function() {
       const path = window.location.pathname;
       const page = path.split('/').pop() || 'unificado.html';
       
@@ -560,6 +450,454 @@
           activeLink.classList.add('bg-secondary-container', 'text-on-secondary-container', 'font-bold', 'scale-95', 'border-l-4', 'border-primary');
         }
       }
-    });
+    })();
+
+    // ==========================================================================
+    // SEGURANÇA E PROTEÇÃO DO CLIENTE (Anti-F12 / Anti-Inspect / Anti-Botão Direito)
+    // ==========================================================================
+    (function() {
+      // 1. Bloqueia o menu de contexto (clique com o botão direito)
+      document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+      });
+
+      // 2. Bloqueia teclas de atalho comuns de ferramentas do desenvolvedor
+      document.addEventListener('keydown', function(e) {
+        // F12 (123)
+        if (e.keyCode === 123) {
+          e.preventDefault();
+          return false;
+        }
+        // Ctrl+Shift+I (73)
+        if (e.ctrlKey && e.shiftKey && e.keyCode === 73) {
+          e.preventDefault();
+          return false;
+        }
+        // Ctrl+Shift+J (74)
+        if (e.ctrlKey && e.shiftKey && e.keyCode === 74) {
+          e.preventDefault();
+          return false;
+        }
+        // Ctrl+Shift+C (67)
+        if (e.ctrlKey && e.shiftKey && e.keyCode === 67) {
+          e.preventDefault();
+          return false;
+        }
+        // Ctrl+U (85)
+        if (e.ctrlKey && e.keyCode === 85) {
+          e.preventDefault();
+          return false;
+        }
+      });
+
+      // 3. Detecção activa de DevTools por debugger recursivo (trava se console estiver aberto)
+      setInterval(function() {
+        (function() {
+          const start = new Date();
+          debugger;
+          const end = new Date();
+          if (end - start > 100) {
+            // Se demorou muito por causa da pausa do debugger, limpa o console e avisa
+            console.clear();
+            document.body.innerHTML = `
+              <div class="fixed inset-0 bg-red-950 text-red-200 flex flex-col items-center justify-center p-md text-center z-[99999]">
+                <span class="material-symbols-outlined text-[64px] mb-md text-red-400">gavel</span>
+                <h1 class="text-headline-xl font-bold">Acesso Bloqueado</h1>
+                <p class="text-body-lg max-w-md mt-sm">O uso de Ferramentas de Desenvolvedor (F12) é estritamente proibido neste sistema para garantir a segurança dos dados escolares.</p>
+                <button onclick="window.location.reload()" class="mt-lg px-lg py-sm bg-red-600 text-white rounded-xl font-bold hover:bg-red-500 transition-colors">Recarregar Sistema</button>
+              </div>`;
+          }
+        })();
+      }, 1000);
+
+      // 4. Limpeza persistente do console
+      if (typeof console !== 'undefined') {
+        setInterval(function() {
+          console.clear();
+        }, 3000);
+      }
+    })();
+  </script>
+
+  <script>
+    // ==========================================================================
+    // LÓGICA DINÂMICA DO CALENDÁRIO LETIVO 2026
+    // ==========================================================================
+    (function() {
+      // Meses por extenso
+      const nomesMeses = [
+        "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+        "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+      ];
+
+      // Estado do mês ativo
+      let mesAtivo = 0; // Janeiro de 2026 (0-indexed: 0)
+
+      // Banco de dados em LocalStorage sigaedu_calendario_2026
+      let calendarioDb = {};
+      if (localStorage.getItem('sigaedu_calendario_2026')) {
+        try {
+          calendarioDb = JSON.parse(localStorage.getItem('sigaedu_calendario_2026'));
+        } catch(e) {
+          calendarioDb = {};
+        }
+      } else {
+        // Inicializa limpo/vazio como solicitado!
+        localStorage.setItem('sigaedu_calendario_2026', JSON.stringify(calendarioDb));
+      }
+
+      // DOM Elements
+      const monthsNavContainer = document.getElementById("months-nav-container");
+      const calendarMonthTitle = document.getElementById("calendar-month-title");
+      const calendarGrid = document.getElementById("calendar-grid");
+      
+      const statsMesVal = document.querySelector("aside .text-headline-md") || document.querySelectorAll("aside .bg-white\\/10 .text-headline-md")[0];
+      const statsBimestreVal = document.querySelectorAll("aside .bg-white\\/10 .text-headline-md")[1];
+      const statsAnualVal = document.querySelector("aside .bg-secondary-container .text-headline-md");
+      const metaText = document.querySelector("aside .flex.items-center.justify-between.mb-xs span.text-label-sm.font-bold");
+      const metaProgressBar = document.querySelector("aside .w-full.bg-white\\/10.h-2.rounded-full div");
+
+      // Adiciona IDs aos elementos de estatísticas para facilidade de atualização
+      if (statsMesVal) statsMesVal.id = "stats-mes-val";
+      if (statsBimestreVal) statsBimestreVal.id = "stats-bimestre-val";
+      if (statsAnualVal) statsAnualVal.id = "stats-anual-val";
+      if (metaText) metaText.id = "meta-status-text";
+      if (metaProgressBar) metaProgressBar.id = "meta-progress-bar";
+
+      // 1. Renderiza os botões de meses horizontais (clicáveis)
+      function renderMonthsNav() {
+        if (!monthsNavContainer) return;
+        monthsNavContainer.innerHTML = nomesMeses.map((nome, index) => {
+          const isActive = index === mesAtivo;
+          const activeClass = isActive 
+            ? "bg-primary text-white font-bold" 
+            : "bg-white border border-outline-variant text-primary font-bold hover:bg-surface-container-low";
+          return `
+            <button onclick="changeMonth(${index})" class="month-btn px-md py-sm rounded-xl whitespace-nowrap transition-all duration-200 ${activeClass}">
+              ${nome}
+            </button>
+          `;
+        }).join('');
+      }
+
+      window.changeMonth = function(index) {
+        mesAtivo = index;
+        renderMonthsNav();
+        renderCalendar();
+      };
+
+      window.prevMonth = function() {
+        if (mesAtivo > 0) {
+          changeMonth(mesAtivo - 1);
+        } else {
+          changeMonth(11);
+        }
+      };
+
+      window.nextMonth = function() {
+        if (mesAtivo < 11) {
+          changeMonth(mesAtivo + 1);
+        } else {
+          changeMonth(0);
+        }
+      };
+
+      // Helper para obter o dia da semana e total de dias de um mês em 2026
+      function getMonthDetails(year, month) {
+        const firstDayIndex = new Date(year, month, 1).getDay(); // 0 = Domingo, 1 = Segunda...
+        const totalDays = new Date(year, month + 1, 0).getDate();
+        return { firstDayIndex, totalDays };
+      }
+
+      // 2. Renderiza a grade de dias do mês selecionado
+      function renderCalendar() {
+        calendarMonthTitle.textContent = `${nomesMeses[mesAtivo]} 2026`;
+        
+        // Remove todos os dias anteriores mantendo os headers
+        const weekHeaders = Array.from(calendarGrid.children).slice(0, 7);
+        calendarGrid.innerHTML = "";
+        weekHeaders.forEach(header => calendarGrid.appendChild(header));
+
+        const { firstDayIndex, totalDays } = getMonthDetails(2026, mesAtivo);
+        
+        // Dias de offset do mês anterior (cinza e não clicável)
+        const prevMonthDays = new Date(2026, mesAtivo, 0).getDate();
+        for (let i = firstDayIndex - 1; i >= 0; i--) {
+          const dayCell = document.createElement("div");
+          dayCell.className = "day-cell min-h-[90px] bg-surface-container-low opacity-40 flex flex-col p-xs border-r border-b border-surface-variant pointer-events-none";
+          dayCell.innerHTML = `<span class="text-label-sm font-label-sm text-on-surface-variant">${prevMonthDays - i}</span>`;
+          calendarGrid.appendChild(dayCell);
+        }
+
+        // Dias do mês atual
+        for (let day = 1; day <= totalDays; day++) {
+          const dayStr = String(day).padStart(2, '0');
+          const monthStr = String(mesAtivo + 1).padStart(2, '0');
+          const dateKey = `2026-${monthStr}-${dayStr}`;
+          const dateObj = new Date(2026, mesAtivo, day);
+          const dayOfWeek = dateObj.getDay(); // 0 = Dom, 6 = Sáb
+          
+          // Estado inicial: totalmente limpo por padrão!
+          let state = 0;
+
+          if (dateKey in calendarioDb) {
+            state = calendarioDb[dateKey].state;
+          }
+
+          const dayCell = document.createElement("div");
+          dayCell.className = "day-cell min-h-[90px] cursor-pointer flex flex-col p-xs border-r border-b border-surface-variant transition-all hover:scale-[1.02] duration-150 text-left bg-white";
+          dayCell.id = `day-${dateKey}`;
+          dayCell.setAttribute("data-date", dateKey);
+          dayCell.setAttribute("data-state", state);
+          dayCell.setAttribute("data-weekday", dayOfWeek);
+
+          updateCellVisuals(dayCell, state, day, dayOfWeek);
+          
+          dayCell.onclick = function() {
+            cycleDayState(dayCell, dateKey, day, dayOfWeek);
+          };
+
+          calendarGrid.appendChild(dayCell);
+        }
+
+        // Completa as células vazias da última semana para preencher a grade esteticamente
+        const totalCells = firstDayIndex + totalDays;
+        const remainingCells = (7 - (totalCells % 7)) % 7;
+        for (let i = 1; i <= remainingCells; i++) {
+          const dayCell = document.createElement("div");
+          dayCell.className = "day-cell min-h-[90px] bg-surface-container-low opacity-40 flex flex-col p-xs border-b border-surface-variant pointer-events-none";
+          if (i === remainingCells) {
+             // última célula sem borda direita
+          } else {
+             dayCell.classList.add("border-r");
+          }
+          dayCell.innerHTML = `<span class="text-label-sm font-label-sm text-on-surface-variant">${i}</span>`;
+          calendarGrid.appendChild(dayCell);
+        }
+
+        updateStats();
+      }
+
+      // Auxiliar para atualizar as cores e textos das células
+      function updateCellVisuals(cell, state, dayNum, dayOfWeek) {
+        // Remove classes de background anteriores
+        cell.classList.remove("bg-[#4ADE80]", "bg-[#FCA5A5]", "bg-[#D8B4FE]", "bg-[#FDBA74]", "bg-white", "text-emerald-950", "text-red-950", "text-purple-950", "text-amber-950", "text-primary");
+        
+        let labelText = "";
+        
+        if (state === 1) {
+          // Dia Letivo
+          cell.classList.add("bg-[#4ADE80]", "text-primary");
+          labelText = dayOfWeek === 6 ? "Sábado Letivo" : "Dia Letivo";
+        } else if (state === 2) {
+          // Feriado / Recesso
+          cell.classList.add("bg-[#FCA5A5]", "text-primary");
+          labelText = "Feriado/Recesso";
+        } else if (state === 3) {
+          // Evento / Prova
+          cell.classList.add("bg-[#D8B4FE]", "text-primary");
+          labelText = "Evento/Prova";
+        } else if (state === 4) {
+          // Férias Escolares
+          cell.classList.add("bg-[#FDBA74]", "text-primary");
+          labelText = "Férias";
+        } else {
+          // Estado 0: Recesso normal / Sem aula
+          cell.classList.add("bg-white", "text-on-surface-variant");
+          labelText = (dayOfWeek === 0 || dayOfWeek === 6) ? "Fim de Semana" : "Sem Aula";
+        }
+
+        cell.innerHTML = `
+          <span class="text-label-sm font-bold text-primary">${dayNum}</span>
+          <span class="text-[10px] mt-xs uppercase font-extrabold tracking-tight opacity-75 select-none">${labelText}</span>
+        `;
+      }
+
+      // 3. Lógica de Ciclo de Estados ao clicar no dia
+      function cycleDayState(cell, dateKey, dayNum, dayOfWeek) {
+        let currentState = parseInt(cell.getAttribute("data-state"));
+        let nextState = 1;
+
+        if (dayOfWeek === 0) {
+          // Domingo: recesso (0) -> letivo (1) -> feriado (2) -> evento (3) -> recesso (0)
+          if (currentState === 0) nextState = 1;
+          else if (currentState === 1) nextState = 2;
+          else if (currentState === 2) nextState = 3;
+          else nextState = 0;
+        } else if (dayOfWeek === 6) {
+          // Sábado: recesso (0) -> letivo (1) -> evento (3) -> recesso (0)
+          if (currentState === 0) nextState = 1;
+          else if (currentState === 1) nextState = 3;
+          else nextState = 0;
+        } else {
+          // Dias de semana: letivo (1) -> feriado (2) -> evento (3) -> férias (4) -> recesso/sem aula (0) -> letivo (1)
+          if (currentState === 1) nextState = 2;
+          else if (currentState === 2) nextState = 3;
+          else if (currentState === 3) nextState = 4;
+          else if (currentState === 4) nextState = 0;
+          else nextState = 1;
+        }
+
+        cell.setAttribute("data-state", nextState);
+        updateCellVisuals(cell, nextState, dayNum, dayOfWeek);
+
+        // Salva no banco local
+        calendarioDb[dateKey] = { state: nextState };
+        localStorage.setItem('sigaedu_calendario_2026', JSON.stringify(calendarioDb));
+
+        updateStats();
+      }
+
+      // 4. Salvar Alterações Explicitamente
+      // Helper global para Toasts Premium
+      function showToast(message, icon, colorHex) {
+        const toast = document.createElement("div");
+        toast.className = "fixed bottom-5 right-5 bg-primary text-white px-lg py-sm rounded-xl shadow-2xl flex items-center gap-sm animate-in fade-in slide-in-from-bottom-5 duration-300 z-[9999]";
+        toast.innerHTML = `
+          <span class="material-symbols-outlined" style="color: ${colorHex}">${icon}</span>
+          <span class="text-label-md font-bold">${message}</span>
+        `;
+        document.body.appendChild(toast);
+        setTimeout(() => {
+          toast.classList.add("animate-out", "fade-out", "slide-out-to-bottom-5");
+          setTimeout(() => toast.remove(), 300);
+        }, 2500);
+      }
+
+      // Inicializar Dias Úteis (Segunda a Sexta) do mês ativo como letivo (1)
+      window.inicializarDiasUteis = function() {
+        const { totalDays } = getMonthDetails(2026, mesAtivo);
+        const monthStr = String(mesAtivo + 1).padStart(2, '0');
+        
+        for (let d = 1; d <= totalDays; d++) {
+          const dateObj = new Date(2026, mesAtivo, d);
+          const dayOfWeek = dateObj.getDay();
+          
+          if (dayOfWeek >= 1 && dayOfWeek <= 5) {
+            const dayStr = String(d).padStart(2, '0');
+            const dateKey = `2026-${monthStr}-${dayStr}`;
+            calendarioDb[dateKey] = { state: 1 }; // Dia Letivo
+          }
+        }
+        
+        localStorage.setItem('sigaedu_calendario_2026', JSON.stringify(calendarioDb));
+        renderCalendar();
+        
+        showToast("Dias úteis inicializados como letivos!", "check_circle", "#4ADE80");
+      };
+
+      // Limpar todo o mês ativo (colocar todos como Sem Aula/0)
+      window.limparMesAtivo = function() {
+        const { totalDays } = getMonthDetails(2026, mesAtivo);
+        const monthStr = String(mesAtivo + 1).padStart(2, '0');
+        
+        for (let d = 1; d <= totalDays; d++) {
+          const dayStr = String(d).padStart(2, '0');
+          const dateKey = `2026-${monthStr}-${dayStr}`;
+          calendarioDb[dateKey] = { state: 0 }; // Sem Aula
+        }
+        
+        localStorage.setItem('sigaedu_calendario_2026', JSON.stringify(calendarioDb));
+        renderCalendar();
+        
+        showToast("Calendário do mês ativo limpo!", "delete_sweep", "#FCA5A5");
+      };
+
+      // 4. Salvar Alterações Explicitamente
+      window.salvarAlteracoesCalendario = function() {
+        localStorage.setItem('sigaedu_calendario_2026', JSON.stringify(calendarioDb));
+        showToast("Calendário Escolar 2026 Salvo com Sucesso!", "check_circle", "#4ADE80");
+      };
+
+      // 5. Cálculo Dinâmico de Estatísticas e Dias Letivos
+      function updateStats() {
+        // Função auxiliar para calcular dias letivos (estado 1 ou 3) em qualquer mês
+        function getLetivoDaysInMonth(monthIdx) {
+          const { firstDayIndex, totalDays } = getMonthDetails(2026, monthIdx);
+          let letivos = 0;
+          
+          for (let d = 1; d <= totalDays; d++) {
+            const dayStr = String(d).padStart(2, '0');
+            const monthStr = String(monthIdx + 1).padStart(2, '0');
+            const dateKey = `2026-${monthStr}-${dayStr}`;
+            
+            const dateObj = new Date(2026, monthIdx, d);
+            const dayOfWeek = dateObj.getDay();
+            
+            // Estado inicial: totalmente limpo por padrão!
+            let state = 0;
+            
+            if (dateKey in calendarioDb) {
+              state = calendarioDb[dateKey].state;
+            }
+            
+            if (state === 1 || state === 3) {
+              letivos++;
+            }
+          }
+          return letivos;
+        }
+
+        // Dias no Mês Ativo
+        const letivosMes = getLetivoDaysInMonth(mesAtivo);
+        const elMes = document.getElementById("stats-mes-val");
+        if (elMes) elMes.textContent = letivosMes;
+
+        // Dias no Bimestre
+        const bimIdx = Math.floor(mesAtivo / 3);
+        let letivosBimestre = 0;
+        for (let m = bimIdx * 3; m < (bimIdx + 1) * 3; m++) {
+          letivosBimestre += getLetivoDaysInMonth(m);
+        }
+        const elBim = document.getElementById("stats-bimestre-val");
+        if (elBim) {
+          elBim.textContent = letivosBimestre;
+          const titleBim = elBim.previousElementSibling;
+          if (titleBim) titleBim.textContent = `No ${bimIdx + 1}º Bimestre`;
+        }
+
+        // Total Anual
+        let letivosAnual = 0;
+        for (let m = 0; m < 12; m++) {
+          letivosAnual += getLetivoDaysInMonth(m);
+        }
+        const elAnual = document.getElementById("stats-anual-val");
+        if (elAnual) elAnual.textContent = letivosAnual;
+
+        // Meta MEC (Min. 200)
+        const elMetaText = document.getElementById("meta-status-text");
+        const elMetaBar = document.getElementById("meta-progress-bar");
+        
+        if (elMetaText) {
+          if (letivosAnual >= 200) {
+            elMetaText.textContent = "Atingida";
+            elMetaText.className = "text-label-sm font-bold text-[#4ADE80]";
+          } else {
+            elMetaText.textContent = "Pendente";
+            elMetaText.className = "text-label-sm font-bold text-error";
+          }
+        }
+        
+        if (elMetaBar) {
+          const percentage = Math.min(100, (letivosAnual / 200) * 100);
+          elMetaBar.style.width = `${percentage}%`;
+          if (letivosAnual >= 200) {
+             elMetaBar.className = "bg-[#4ADE80] h-full rounded-full";
+          } else {
+             elMetaBar.className = "bg-secondary-container h-full rounded-full";
+          }
+        }
+      }
+
+      // Inicialização
+      renderMonthsNav();
+      renderCalendar();
+
+      // Vincula a ação de salvar no cabeçalho
+      const btnSalvar = document.querySelector('header button[class*="bg-secondary-container"]');
+      if (btnSalvar) {
+        btnSalvar.onclick = salvarAlteracoesCalendario;
+      }
+    })();
   </script>
 </body></html>

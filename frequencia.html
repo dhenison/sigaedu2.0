@@ -1,0 +1,1492 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="light">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Frequência Consolidada - SIGAEDU</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+      <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-container": "#818487",
+                        "on-secondary-fixed": "#221b00",
+                        "on-secondary-fixed-variant": "#544600",
+                        "outline-variant": "#c4c7c7",
+                        "primary-container": "#1c1b1b",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed": "#e0e3e6",
+                        "primary": "#000000",
+                        "error-container": "#ffdad6",
+                        "surface-dim": "#ddd9d8",
+                        "on-surface": "#1c1b1b",
+                        "tertiary-fixed-dim": "#c4c7ca",
+                        "on-tertiary-fixed-variant": "#44474a",
+                        "on-primary": "#ffffff",
+                        "on-primary-container": "#858383",
+                        "primary-fixed-dim": "#c8c6c5",
+                        "surface-container": "#f1edec",
+                        "secondary-fixed": "#ffe16d",
+                        "inverse-primary": "#c8c6c5",
+                        "surface-tint": "#5f5e5e",
+                        "primary-fixed": "#e5e2e1",
+                        "surface-variant": "#e5e2e1",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary": "#705d00",
+                        "outline": "#747878",
+                        "on-background": "#1c1b1b",
+                        "secondary-fixed-dim": "#e9c400",
+                        "on-tertiary-fixed": "#191c1e",
+                        "on-secondary": "#ffffff",
+                        "inverse-surface": "#313030",
+                        "background": "#fdf8f8",
+                        "inverse-on-surface": "#f4f0ef",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed-variant": "#474746",
+                        "tertiary": "#000000",
+                        "surface-container-high": "#ebe7e6",
+                        "surface": "#fdf8f8",
+                        "surface-container-highest": "#e5e2e1",
+                        "surface-bright": "#fdf8f8",
+                        "on-primary-fixed": "#1c1b1b",
+                        "tertiary-container": "#191c1e",
+                        "secondary-container": "#fcd400",
+                        "on-surface-variant": "#444748",
+                        "on-secondary-container": "#6e5c00",
+                        "on-error": "#ffffff",
+                        "surface-container-low": "#f7f3f2",
+                        "on-error-container": "#93000a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "xl": "80px",
+                        "sm": "12px",
+                        "gutter": "24px",
+                        "container-max": "1440px",
+                        "base": "8px",
+                        "lg": "48px",
+                        "md": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-xl": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "label-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-xl": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-sm": ["12px", {"lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "500"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      overflow: hidden;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+        .cristalico {
+            backdrop-filter: blur(12px);
+        }
+        body {
+            background-color: #F8F9FA;
+            font-family: 'Inter', sans-serif;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #e5e2e1;
+            border-radius: 10px;
+        }
+        .day-cell {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+</head>
+<body class="text-on-surface">
+<!-- Top Header (TopNavBar Shared Component Unificado) -->
+<header class="fixed top-0 right-0 left-0 md:left-64 z-40 h-xl px-gutter flex justify-between items-center bg-white/70 backdrop-blur-xl dark:bg-surface-container/70 border-b border-surface-variant dark:border-outline-variant shadow-sm transition-all duration-300">
+      <div class="flex items-center gap-md">
+        <button class="md:hidden p-2 text-on-surface hover:bg-surface-container-high rounded-full transition-colors" onclick="toggleSidebar()">
+          <span class="material-symbols-outlined">menu</span>
+        </button>
+        <div class="hidden sm:flex items-center bg-surface-container-low rounded-full px-md py-2 w-96 border border-surface-variant/50 focus-within:border-primary transition-colors">
+          <span class="material-symbols-outlined text-on-surface-variant mr-sm">search</span>
+          <input class="bg-transparent border-none focus:ring-0 text-body-sm w-full p-0" placeholder="Pesquisar..." type="text"/>
+        </div>
+      </div>
+      <div class="flex items-center gap-md">
+        <div class="flex items-center gap-sm">
+          <button class="p-2 text-on-surface-variant hover:bg-surface-container-low transition-all duration-200 rounded-full relative hover:scale-105 active:scale-95">
+            <span class="material-symbols-outlined">notifications</span>
+            <span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full animate-pulse"></span>
+          </button>
+          <button class="p-2 text-on-surface-variant hover:bg-surface-container-low transition-all duration-200 rounded-full hover:scale-105 active:scale-95">
+            <span class="material-symbols-outlined">help</span>
+          </button>
+        </div>
+        <div class="h-8 w-[1px] bg-surface-variant hidden sm:block"></div>
+        <div class="flex items-center gap-sm pl-sm cursor-pointer hover:bg-surface-container-low p-xs rounded-xl transition-all duration-200">
+          <div class="text-right hidden sm:block">
+            <p class="text-label-md font-bold text-primary leading-none">Dhenison Carlos</p>
+            <p class="text-label-sm text-on-surface-variant">Administrador</p>
+          </div>
+          <img alt="Dhenison Carlos - Administrador" class="w-10 h-10 rounded-full object-cover border-2 border-secondary-container hover:scale-105 transition-transform duration-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRGSGbqGOo2dzNp40hZk4pp_0rVieA-Su6u1WdWdVVqvGIA6n7dJMIDQVg3vkTYKgYN5HRKv7SOzuV4CGLSmB4xKZHKFpq-2ab9UNYf9ye3MByCMdx_JIehrQjusuLvStYhxK5Qj2eZHDffXBfYxzFUFDsX7kk7oInOP0foJp972O4lAIpD8pOJMQ4ehoA3BKsZHDj0gIh6Fx7Dr-Uvdu89v6j1O2f_mCuy7lSXEnJdzNLXbaD9C36QemEJIA6ok8BwdRRm8oVmvA"/>
+        </div>
+      </div>
+    </header>
+<!-- SideNavBar Componente Unificado -->
+<aside id="sidebar" class="fixed left-0 top-0 bottom-0 z-50 flex flex-col p-sm pt-xl overflow-y-auto w-64 bg-white/70 backdrop-blur-xl border-r border-surface-variant dark:border-outline-variant shadow-md transition-transform duration-300 -translate-x-full md:translate-x-0">
+    <div class="px-sm mb-lg flex justify-between items-center">
+      <div class="flex items-center gap-sm">
+        <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-md">
+          <span class="material-symbols-outlined text-secondary-container" data-icon="school">school</span>
+        </div>
+        <div>
+          <h1 class="text-label-md font-bold text-primary tracking-tight leading-none">SIGAEDU</h1>
+          <p class="text-body-sm font-medium text-on-surface-variant">Gestão Acadêmica</p>
+        </div>
+      </div>
+      <button class="md:hidden p-1 text-on-surface hover:bg-surface-container-high rounded-full transition-colors" onclick="toggleSidebar()">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <nav class="flex-1 space-y-1">
+      <!-- Links Uniformes com Transições Suaves -->
+      <a id="menu-dashboard" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="dashboard.html">
+        <span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+        <span class="text-label-md font-label-md">Dashboard</span>
+      </a>
+      <a id="menu-turmas" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="turmas.html">
+        <span class="material-symbols-outlined" data-icon="groups">groups</span>
+        <span class="text-label-md font-label-md">Turmas</span>
+      </a>
+      <a id="menu-alunos" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="fichadoaluno.html">
+        <span class="material-symbols-outlined" data-icon="person">person</span>
+        <span class="text-label-md font-label-md">Alunos</span>
+      </a>
+      <a id="menu-calendario" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="calendario.html">
+        <span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+        <span class="text-label-md font-label-md">Calendário</span>
+      </a>
+      <a id="menu-agenda" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="agenda.html">
+        <span class="material-symbols-outlined" data-icon="event_note">event_note</span>
+        <span class="text-label-md font-label-md">Agenda</span>
+      </a>
+      <a id="menu-frequencia" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="frequencia.html">
+        <span class="material-symbols-outlined" data-icon="fact_check">fact_check</span>
+        <span class="text-label-md font-label-md">Frequência</span>
+      </a>
+      <a id="menu-ocorrencias" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="ocorrencias.html">
+        <span class="material-symbols-outlined" data-icon="report_problem">report_problem</span>
+        <span class="text-label-md font-label-md">Ocorrências</span>
+      </a>
+      <a id="menu-solicitacoes" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="solicitacoes.html">
+        <span class="material-symbols-outlined" data-icon="task">task</span>
+        <span class="text-label-md font-label-md">Solicitações</span>
+      </a>
+      <a id="menu-whatsapp" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="whatsapp.html">
+        <span class="material-symbols-outlined" data-icon="message">message</span>
+        <span class="text-label-md font-label-md">Whatsapp</span>
+      </a>
+      <a id="menu-relatorios" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="relatorios.html">
+        <span class="material-symbols-outlined" data-icon="description">description</span>
+        <span class="text-label-md font-label-md">Relatórios</span>
+      </a>
+      <a id="menu-boletins" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="boletins.html">
+        <span class="material-symbols-outlined" data-icon="assignment_ind">assignment_ind</span>
+        <span class="text-label-md font-label-md">Boletins</span>
+      </a>
+      <a id="menu-usuarios" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="usuarios.html">
+        <span class="material-symbols-outlined" data-icon="manage_accounts">manage_accounts</span>
+        <span class="text-label-md font-label-md">Usuários</span>
+      </a>
+    </nav>
+    <div class="mt-xl border-t border-surface-variant/30 pt-md space-y-1">
+      <a id="menu-suporte" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="#">
+        <span class="material-symbols-outlined" data-icon="contact_support">contact_support</span>
+        <span class="text-label-md font-label-md">Suporte</span>
+      </a>
+      <a id="menu-configuracoes" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="#">
+        <span class="material-symbols-outlined" data-icon="settings">settings</span>
+        <span class="text-label-md font-label-md">Configurações</span>
+      </a>
+    </div>
+  </aside>
+<!-- Overlay para Foco Mobile -->
+<div id="sidebar-overlay" class="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm hidden md:hidden" onclick="toggleSidebar()"></div>
+<!-- Main Content -->
+<main class="md:ml-64 ml-0 pt-xl min-h-screen flex flex-col transition-all duration-300">
+<div class="max-w-container-max mx-auto w-full px-gutter py-md">
+<!-- Page Header -->
+<header class="mb-lg flex justify-between items-end">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-primary tracking-tight">Frequência Consolidada</h1>
+<p class="text-body-md text-on-surface-variant">Gestão diária de presença e evasão escolar.</p>
+</div>
+<div class="flex gap-sm">
+<button class="px-md py-sm bg-white border border-surface-variant rounded-xl flex items-center gap-sm hover:bg-surface-container-low transition-all" onclick="window.print()">
+<span class="material-symbols-outlined text-[20px]">print</span>
+<span class="font-label-md">Imprimir Diário</span>
+</button>
+</div>
+</header>
+<!-- Filters Grid -->
+<section class="grid grid-cols-1 md:grid-cols-4 gap-md mb-lg p-md bg-white rounded-xl border border-surface-variant/30 shadow-sm items-end">
+<div>
+<label class="block text-label-md mb-xs">Data da Chamada</label>
+<div class="relative">
+<input id="data-chamada" class="w-full bg-surface-container-low border border-outline-variant focus:border-primary focus:ring-0 rounded-xl px-md py-sm text-body-sm" type="date" value="2026-06-01"/>
+</div>
+</div>
+<div>
+<label class="block text-label-md mb-xs">Turno</label>
+<select class="w-full bg-surface-container-low border border-outline-variant focus:border-primary focus:ring-0 rounded-xl px-md py-sm text-body-sm appearance-none" id="turno-select">
+<option value="Manhã">Manhã</option>
+<option value="Tarde">Tarde</option>
+<option value="Noite">Noite</option>
+</select>
+</div>
+<div>
+<label class="block text-label-md mb-xs">Turma</label>
+<select id="turma-select" class="w-full bg-surface-container-low border border-outline-variant focus:border-primary focus:ring-0 rounded-xl px-md py-sm text-body-sm appearance-none">
+</select>
+</div>
+<button id="btn-filtrar" class="bg-primary text-white font-label-md px-md py-sm rounded-xl h-[48px] hover:opacity-90 transition-opacity">
+                    Filtrar Resultados
+                </button>
+</section>
+
+<!-- Warning Non-Letivo Card (Hidden by Default) -->
+<div id="warning-non-letivo-card" class="hidden w-full bg-white border border-surface-variant rounded-xl p-lg text-center shadow-sm flex flex-col items-center justify-center min-h-[350px]">
+  <div class="w-16 h-16 bg-amber-50 rounded-full flex items-center justify-center mb-md border border-amber-100">
+    <span class="material-symbols-outlined text-amber-600 text-[36px]">event_busy</span>
+  </div>
+  <h3 class="text-headline-md font-bold text-primary mb-sm">Dia Não Letivo</h3>
+  <p class="text-body-lg text-on-surface-variant max-w-lg leading-relaxed">
+    A data selecionada (<span id="warning-date-str" class="font-bold text-primary">01/06/2026</span>) está configurada no <a href="calendario.html" class="underline font-semibold hover:text-primary">Calendário Escolar</a> como um dia sem atividade letiva (<span id="warning-reason-str">Sem Aula / Feriado / Férias</span>).
+  </p>
+  <p class="text-body-sm text-on-surface-variant mt-sm">Não é necessário realizar o registro de frequência para esta data.</p>
+</div>
+
+<!-- Status de Chamada das Turmas Panel -->
+<section id="status-chamada-painel" class="bg-white rounded-xl border border-surface-variant p-md shadow-sm mb-lg animate-in fade-in duration-300">
+  <div class="flex justify-between items-center mb-sm border-b border-surface-variant pb-xs select-none">
+    <h3 class="font-bold text-label-md text-primary uppercase tracking-widest flex items-center gap-sm">
+      <span class="material-symbols-outlined text-primary">fact_check</span>
+      Status de Chamada das Turmas
+    </h3>
+    <span class="text-body-sm text-on-surface-variant font-bold" id="status-panel-date">01/06/2026</span>
+  </div>
+  <div class="overflow-x-auto">
+    <table class="w-full text-left text-body-sm">
+      <thead>
+        <tr class="text-on-surface-variant text-label-sm border-b border-surface-variant/30 select-none">
+          <th class="py-sm font-semibold w-1/3">TURMA</th>
+          <th class="py-sm font-semibold text-center w-1/3">STATUS DE ENTRADA</th>
+          <th class="py-sm font-semibold text-center w-1/3">STATUS DE SAÍDA</th>
+        </tr>
+      </thead>
+      <tbody id="turmas-status-list">
+        <!-- Gerado dinamicamente -->
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div id="chamada-active-container">
+<!-- Summary Chips -->
+<section class="grid grid-cols-2 md:grid-cols-4 gap-md mb-lg">
+<div class="bg-white p-md rounded-xl border border-surface-variant shadow-sm flex items-center gap-md">
+<div class="w-12 h-12 bg-surface-container-low rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">groups</span>
+</div>
+<div>
+<p class="text-label-sm text-on-surface-variant uppercase tracking-wider">Total Alunos</p>
+<p class="text-headline-md font-bold" id="summary-total">0</p>
+</div>
+</div>
+<div class="bg-white p-md rounded-xl border border-surface-variant shadow-sm flex items-center gap-md">
+<div class="w-12 h-12 bg-emerald-50 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-emerald-600">check_circle</span>
+</div>
+<div>
+<p class="text-label-sm text-on-surface-variant uppercase tracking-wider">Presenças</p>
+<p class="text-headline-md font-bold text-emerald-600" id="summary-presenca">0</p>
+</div>
+</div>
+<div class="bg-white p-md rounded-xl border border-surface-variant shadow-sm flex items-center gap-md">
+<div class="w-12 h-12 bg-red-50 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-red-600">cancel</span>
+</div>
+<div>
+<p class="text-label-sm text-on-surface-variant uppercase tracking-wider">Faltas</p>
+<p class="text-headline-md font-bold text-red-600" id="summary-falta">0</p>
+</div>
+</div>
+<div class="bg-white p-md rounded-xl border border-surface-variant shadow-sm flex items-center gap-md">
+<div class="w-12 h-12 bg-amber-50 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-amber-600">hourglass_empty</span>
+</div>
+<div>
+<p class="text-label-sm text-on-surface-variant uppercase tracking-wider">Pendências</p>
+<p class="text-headline-md font-bold text-amber-600" id="summary-pendente">0</p>
+</div>
+</div>
+</section>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-md items-start">
+<!-- Entry Table (Chamada de Entrada) -->
+<div class="lg:col-span-12 xl:col-span-8 space-y-md">
+<div id="entrada-panel" class="bg-white rounded-xl border border-surface-variant overflow-hidden shadow-sm transition-all duration-300">
+<div class="p-md border-b border-surface-variant bg-surface-container-low flex justify-between items-center">
+<h3 class="font-bold text-label-md uppercase tracking-widest flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary">login</span>
+                                01. Chamada de Entrada (07:30)
+                            </h3>
+<div class="flex gap-xs">
+<button class="text-label-sm px-sm py-xs bg-emerald-50 text-emerald-700 rounded-full font-bold hover:bg-emerald-100 transition-colors" onclick="setAll('entrada', 'P')">Marcar Todas Presenças</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-surface-container-low text-on-surface-variant text-label-sm border-b border-surface-variant">
+<tr>
+<th class="px-sm py-sm font-semibold">ESTUDANTE</th>
+<th class="px-sm py-sm font-semibold text-center w-64">STATUS ENTRADA</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-variant" id="student-list">
+<!-- Dynamic rows via script -->
+</tbody>
+</table>
+</div>
+</div>
+<!-- Entry Confirmation Button -->
+<div class="flex justify-end pt-md mb-md" id="entrada-actions">
+<button class="px-xl py-md bg-secondary-container text-on-secondary-container font-bold rounded-xl shadow-lg hover:scale-[1.02] active:scale-95 transition-all flex items-center gap-md" onclick="consolidarEntrada()">
+                             CONSOLIDAR ENTRADA
+                             <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+<!-- Exit Table (Chamada de Saída) - HIDDEN BY DEFAULT -->
+<div class="bg-white rounded-xl border border-surface-variant overflow-hidden shadow-sm hidden opacity-0 transition-all duration-500 mb-md" id="saida-section">
+<div class="p-md border-b border-surface-variant bg-surface-container-low flex justify-between items-center">
+<h3 class="font-bold text-label-md uppercase tracking-widest flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary">logout</span>
+                                02. Chamada de Saída (11:45)
+                            </h3>
+<span class="text-label-sm bg-blue-50 text-blue-700 px-sm py-xs rounded-full font-bold">Entrada Consolidada ✓</span>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-surface-container-low text-on-surface-variant text-label-sm border-b border-surface-variant">
+<tr>
+<th class="px-sm py-sm font-semibold">ESTUDANTE</th>
+<th class="px-sm py-sm font-semibold text-center w-64">STATUS SAÍDA</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-variant" id="saida-list">
+<!-- Dynamic rows via script -->
+</tbody>
+</table>
+</div>
+<div class="p-md flex justify-end">
+<button class="px-xl py-md bg-primary text-on-primary font-bold rounded-xl shadow-lg hover:scale-[1.02] active:scale-95 transition-all flex items-center gap-md" onclick="consolidarSaida()">
+                                CONSOLIDAR SAÍDA
+                                <span class="material-symbols-outlined">verified</span>
+</button>
+</div>
+</div>
+
+<!-- Dynamic Summary Consolidated Table (Colapsado Inicialmente) -->
+<div id="resultado-consolidado-container" class="hidden bg-white border border-surface-variant rounded-xl shadow-sm overflow-hidden mb-md animate-in fade-in duration-300">
+  <div class="p-md border-b border-surface-variant bg-surface-container-low flex justify-between items-center flex-wrap gap-sm">
+    <h3 class="font-bold text-label-md text-primary uppercase tracking-widest flex items-center gap-sm">
+      <span class="material-symbols-outlined text-emerald-600">analytics</span>
+      Resultado Geral Consolidado do Dia
+    </h3>
+    <button onclick="reabrirChamadas()" class="px-sm py-1.5 bg-surface-container-low text-primary hover:bg-surface-container-high rounded-lg text-body-sm font-bold border border-outline-variant transition-all flex items-center gap-1 shadow-sm">
+      <span class="material-symbols-outlined text-[16px]">expand_more</span>
+      Visualizar Chamadas (Detalhado)
+    </button>
+  </div>
+  <div class="overflow-x-auto">
+    <table class="w-full text-left">
+      <thead class="bg-surface-container-low text-on-surface-variant text-label-sm border-b border-surface-variant">
+        <tr>
+          <th class="px-sm py-sm font-semibold">ESTUDANTE</th>
+          <th class="px-sm py-sm font-semibold text-center">FREQUÊNCIA ENTRADA</th>
+          <th class="px-sm py-sm font-semibold text-center">FREQUÊNCIA SAÍDA</th>
+          <th class="px-sm py-sm font-semibold text-center">RESULTADO DO DIA</th>
+        </tr>
+      </thead>
+      <tbody id="resultado-consolidado-list">
+        <!-- Dynamic Summary Roster -->
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
+
+<!-- Preview Logic & Alerts -->
+<div class="lg:col-span-12 xl:col-span-4 space-y-md">
+<!-- Daily Preview Card -->
+<div class="bg-white rounded-xl border-2 border-dashed border-surface-variant p-md text-center" id="final-result-card">
+<span class="material-symbols-outlined text-surface-variant text-[64px] mb-md">analytics</span>
+<h4 class="font-bold text-headline-md text-on-surface-variant mb-xs">Aguardando Consolidação</h4>
+<p class="text-body-sm text-on-surface-variant">O resumo final da frequência do dia aparecerá aqui após a consolidação da saída.</p>
+</div>
+<!-- Live Alerts -->
+<div class="hidden space-y-md" id="alerts-container">
+<h3 class="text-label-md font-bold uppercase text-red-600 flex items-center gap-sm">
+<span class="material-symbols-outlined">notification_important</span>
+                            Alertas de Evasão (Hoje)
+                        </h3>
+<div class="space-y-sm" id="evasion-list">
+<!-- Populated on exit consolidation -->
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Modal Justificativa FJ (Premium) -->
+<div id="modal-justificativa" class="fixed inset-0 z-[150] hidden flex items-center justify-center p-md bg-black/60 backdrop-blur-sm">
+  <div class="bg-white w-full max-w-sm rounded-xl shadow-2xl overflow-hidden text-center animate-in zoom-in-95 duration-200 border border-outline-variant">
+    <div class="p-md border-b border-surface-variant flex justify-between items-center bg-surface-container-low">
+      <h3 class="text-label-md font-bold text-primary flex items-center gap-sm select-none">
+        <span class="material-symbols-outlined text-amber-500">description</span>
+        Justificativa de Falta (FJ)
+      </h3>
+      <button class="text-on-surface-variant hover:text-primary" onclick="fecharModalJustificativa()">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <div class="p-md space-y-sm text-left">
+      <p class="text-body-sm text-on-surface-variant mb-md select-none">Selecione o tipo oficial de justificativa para esta falta:</p>
+      
+      <button onclick="selecionarTipoJustificativa('Atestado Médico')" class="w-full text-left px-md py-sm hover:bg-surface-container-low rounded-xl text-body-sm border border-outline-variant/50 hover:border-primary transition-all flex items-center gap-sm font-semibold text-primary">
+        <span class="material-symbols-outlined text-red-500">medical_services</span>
+        🏥 Atestado Médico
+      </button>
+      
+      <button onclick="selecionarTipoJustificativa('Liberação da Coordenação')" class="w-full text-left px-md py-sm hover:bg-surface-container-low rounded-xl text-body-sm border border-outline-variant/50 hover:border-primary transition-all flex items-center gap-sm font-semibold text-primary">
+        <span class="material-symbols-outlined text-blue-500">gavel</span>
+        🔑 Liberação da Coordenação
+      </button>
+      
+      <button onclick="selecionarTipoJustificativa('Liberação dos Responsáveis')" class="w-full text-left px-md py-sm hover:bg-surface-container-low rounded-xl text-body-sm border border-outline-variant/50 hover:border-primary transition-all flex items-center gap-sm font-semibold text-primary">
+        <span class="material-symbols-outlined text-emerald-500">groups</span>
+        👥 Liberação dos Responsáveis
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="w-full py-md px-gutter flex justify-between items-center mt-auto border-t border-surface-variant/30">
+<p class="text-body-sm font-body-sm text-on-surface-variant">Desenvolvido por Dhenison Carlos - 2026</p>
+<div class="flex gap-md">
+<a class="text-label-sm font-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Termos de Uso</a>
+<a class="text-label-sm font-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Privacidade</a>
+</div>
+</footer>
+</main>
+<script>
+    // Função para abrir/fechar a Sidebar no Mobile
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebar-overlay');
+      if (sidebar.classList.contains('-translate-x-full')) {
+        sidebar.classList.remove('-translate-x-full');
+        overlay.classList.remove('hidden');
+      } else {
+        sidebar.classList.add('-translate-x-full');
+        overlay.classList.add('hidden');
+      }
+    }
+
+    // Destacar automaticamente e imediatamente o link do menu ativo (sem esperar DOMContentLoaded)
+    (function() {
+      const path = window.location.pathname;
+      const page = path.split('/').pop() || 'unificado.html';
+      
+      const menuMap = {
+        'dashboard.html': 'menu-dashboard',
+        'turmas.html': 'menu-turmas',
+        'fichadoaluno.html': 'menu-alunos',
+        'calendario.html': 'menu-calendario',
+        'agenda.html': 'menu-agenda',
+        'frequencia.html': 'menu-frequencia',
+        'ocorrencias.html': 'menu-ocorrencias',
+        'solicitacoes.html': 'menu-solicitacoes',
+        'whatsapp.html': 'menu-whatsapp',
+        'relatorios.html': 'menu-relatorios',
+        'boletins.html': 'menu-boletins',
+        'usuarios.html': 'menu-usuarios'
+      };
+      
+      const activeMenuId = menuMap[page];
+      if (activeMenuId) {
+        const activeLink = document.getElementById(activeMenuId);
+        if (activeLink) {
+          activeLink.classList.remove('text-on-surface-variant', 'hover:bg-surface-container-high', 'hover:scale-[1.02]');
+          activeLink.classList.add('bg-secondary-container', 'text-on-secondary-container', 'font-bold', 'scale-95', 'border-l-4', 'border-primary');
+        }
+      }
+    })();
+
+    // ==========================================================================
+    // SEGURANÇA E PROTEÇÃO DO CLIENTE (Anti-F12 / Anti-Inspect / Anti-Botão Direito)
+    // ==========================================================================
+    (function() {
+      // 1. Bloqueia o menu de contexto (clique com o botão direito)
+      document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+      });
+
+      // 2. Bloqueia teclas de atalho comuns de ferramentas do desenvolvedor
+      document.addEventListener('keydown', function(e) {
+        // F12 (123)
+        if (e.keyCode === 123) {
+          e.preventDefault();
+          return false;
+        }
+        // Ctrl+Shift+I (73)
+        if (e.ctrlKey && e.shiftKey && e.keyCode === 73) {
+          e.preventDefault();
+          return false;
+        }
+        // Ctrl+Shift+J (74)
+        if (e.ctrlKey && e.shiftKey && e.keyCode === 74) {
+          e.preventDefault();
+          return false;
+        }
+        // Ctrl+Shift+C (67)
+        if (e.ctrlKey && e.shiftKey && e.keyCode === 67) {
+          e.preventDefault();
+          return false;
+        }
+        // Ctrl+U (85)
+        if (e.ctrlKey && e.keyCode === 85) {
+          e.preventDefault();
+          return false;
+        }
+      });
+
+      // 3. Detecção activa de DevTools por debugger recursivo (trava se console estiver aberto)
+      setInterval(function() {
+        (function() {
+          const start = new Date();
+          debugger;
+          const end = new Date();
+          if (end - start > 100) {
+            // Se demorou muito por causa da pausa do debugger, limpa o console e avisa
+            console.clear();
+            document.body.innerHTML = `
+              <div class="fixed inset-0 bg-red-950 text-red-200 flex flex-col items-center justify-center p-md text-center z-[99999]">
+                <span class="material-symbols-outlined text-[64px] mb-md text-red-400">gavel</span>
+                <h1 class="text-headline-xl font-bold">Acesso Bloqueado</h1>
+                <p class="text-body-lg max-w-md mt-sm">O uso de Ferramentas de Desenvolvedor (F12) é estritamente proibido neste sistema para garantir a segurança dos dados escolares.</p>
+                <button onclick="window.location.reload()" class="mt-lg px-lg py-sm bg-red-600 text-white rounded-xl font-bold hover:bg-red-500 transition-colors">Recarregar Sistema</button>
+              </div>`;
+          }
+        })();
+      }, 1000);
+
+      // 4. Limpeza persistente do console
+      if (typeof console !== 'undefined') {
+        setInterval(function() {
+          console.clear();
+        }, 3000);
+      }
+    })();
+  </script>
+
+  <script>
+    // ==========================================================================
+    // LÓGICA DE NEGÓCIO DA CHAMADA CONSOLIDADA E INTEGRAÇÃO DO CALENDÁRIO
+    // ==========================================================================
+    (function() {
+      // 1. Dados e Estruturas de Banco Local
+      let defaultTurmas = [
+        { id: 1, nome: "1º Ano A", turno: "Manhã", tipo: "Regular", vagas: 30, alunosAtivos: 28, frequencia: 92, classeTurno: "shift-morning" },
+        { id: 2, nome: "9º Ano C", turno: "Tarde", tipo: "Fluxo", vagas: 25, alunosAtivos: 22, frequencia: 91, classeTurno: "shift-afternoon" },
+        { id: 3, nome: "EJA Mod I", turno: "Noite", tipo: "EJA", vagas: 40, alunosAtivos: 35, frequencia: 81, classeTurno: "shift-night" }
+      ];
+
+      if (!localStorage.getItem('sigaedu_turmas')) {
+        localStorage.setItem('sigaedu_turmas', JSON.stringify(defaultTurmas));
+      }
+      let turmas = JSON.parse(localStorage.getItem('sigaedu_turmas'));
+      
+      let alunos = JSON.parse(localStorage.getItem('sigaedu_alunos')) || [];
+      let calendarioDb = JSON.parse(localStorage.getItem('sigaedu_calendario_2026')) || {};
+      let frequenciaDb = JSON.parse(localStorage.getItem('sigaedu_frequencia')) || {};
+
+      // DOM Elements
+      const dataChamadaInput = document.getElementById("data-chamada");
+      const turnoSelect = document.getElementById("turno-select");
+      const turmaSelect = document.getElementById("turma-select");
+      const btnFiltrar = document.getElementById("btn-filtrar");
+      
+      const chamadaActiveContainer = document.getElementById("chamada-active-container");
+      const warningNonLetivoCard = document.getElementById("warning-non-letivo-card");
+      const warningDateStr = document.getElementById("warning-date-str");
+      const warningReasonStr = document.getElementById("warning-reason-str");
+      const statusChamadaPainel = document.getElementById("status-chamada-painel");
+      const turmasStatusList = document.getElementById("turmas-status-list");
+      
+      const studentList = document.getElementById("student-list");
+      const saidaList = document.getElementById("saida-list");
+      const saidaSection = document.getElementById("saida-section");
+      const entradaPanel = document.getElementById("entrada-panel");
+      const entradaActions = document.getElementById("entrada-actions");
+      const resultadoConsolidadoContainer = document.getElementById("resultado-consolidado-container");
+      const resultadoConsolidadoList = document.getElementById("resultado-consolidado-list");
+      
+      const summaryTotal = document.getElementById("summary-total");
+      const summaryPresenca = document.getElementById("summary-presenca");
+      const summaryFalta = document.getElementById("summary-falta");
+      const summaryPendente = document.getElementById("summary-pendente");
+      
+      const alertsContainer = document.getElementById("alerts-container");
+      const evasionList = document.getElementById("evasion-list");
+      const finalResultCard = document.getElementById("final-result-card");
+
+      // State do Diário Ativo
+      let activeStudents = [];
+      let entradaStatus = {}; // cpf -> 'P' / 'F' / 'FJ'
+      let saidaStatus = {};   // cpf -> 'P' / 'F' / 'FJ'
+      let justificativaTipos = {}; // key (entrada_cpf ou saida_cpf) -> motivo
+      let entradaTrancada = false;
+      let activeFjContext = null; // { type, cpf }
+
+      // Helper global para Toasts Premium
+      function showToast(message, icon, colorHex) {
+        const toast = document.createElement("div");
+        toast.className = "fixed bottom-5 right-5 bg-primary text-white px-lg py-sm rounded-xl shadow-2xl flex items-center gap-sm animate-in fade-in slide-in-from-bottom-5 duration-300 z-[9999]";
+        toast.innerHTML = `
+          <span class="material-symbols-outlined" style="color: ${colorHex}">${icon}</span>
+          <span class="text-label-md font-bold">${message}</span>
+        `;
+        document.body.appendChild(toast);
+        setTimeout(() => {
+          toast.classList.add("animate-out", "fade-out", "slide-out-to-bottom-5");
+          setTimeout(() => toast.remove(), 300);
+        }, 2500);
+      }
+
+      // Popular Turmas a partir do Turno Selecionado
+      function populateTurmaSelector() {
+        const selectedTurno = turnoSelect.value;
+        const matching = turmas.filter(t => t.turno.toLowerCase() === selectedTurno.toLowerCase());
+        
+        turmaSelect.innerHTML = "";
+        if (matching.length > 0) {
+          matching.forEach(t => {
+            const opt = document.createElement("option");
+            opt.value = t.nome;
+            opt.textContent = `${t.nome} - ${t.tipo}`;
+            turmaSelect.appendChild(opt);
+          });
+        } else {
+          const opt = document.createElement("option");
+          opt.value = "";
+          opt.textContent = "Nenhuma turma cadastrada neste turno";
+          turmaSelect.appendChild(opt);
+        }
+      }
+
+      // Carregar e Validar Calendário Letivo
+      function checkDateLetivoState() {
+        // Recarregar DB mais recente para sincronização instantânea
+        calendarioDb = JSON.parse(localStorage.getItem('sigaedu_calendario_2026')) || {};
+        
+        const selectedDate = dataChamadaInput.value;
+        if (!selectedDate) return;
+        
+        const dateObj = new Date(selectedDate + "T00:00:00");
+        const dayOfWeek = dateObj.getDay(); // 0 = Dom, 6 = Sáb
+        const formattedDate = selectedDate.split("-").reverse().join("/");
+        
+        // Estado fallback inicial: 0 (recesso)
+        let state = 0;
+        if (selectedDate in calendarioDb) {
+          state = calendarioDb[selectedDate].state;
+        }
+
+        // São dias letivos aptos a chamada apenas letivo (1) e eventos/provas (3)
+        const isLetivo = (state === 1 || state === 3);
+
+        if (!isLetivo) {
+          // Ocultar painel de chamada e mostrar card de dia não letivo
+          chamadaActiveContainer.classList.add("hidden");
+          statusChamadaPainel.classList.add("hidden");
+          warningNonLetivoCard.classList.remove("hidden");
+          
+          warningDateStr.textContent = formattedDate;
+          
+          let reasonText = "Recesso Escolar / Sem Aula";
+          if (state === 2) reasonText = "Feriado / Recesso";
+          else if (state === 4) reasonText = "Período de Férias Escolares";
+          else if (state === 0) {
+            reasonText = (dayOfWeek === 0 || dayOfWeek === 6) ? "Fim de Semana" : "Sem Aula (Não Cadastrado no Calendário)";
+          }
+          warningReasonStr.textContent = reasonText;
+        } else {
+          chamadaActiveContainer.classList.remove("hidden");
+          statusChamadaPainel.classList.remove("hidden");
+          warningNonLetivoCard.classList.add("hidden");
+          
+          loadDailyAttendance();
+          renderTurmasStatusPanel();
+        }
+      }
+
+      // Renderizar Painel Geral de Status das Turmas
+      function renderTurmasStatusPanel() {
+        frequenciaDb = JSON.parse(localStorage.getItem('sigaedu_frequencia')) || {};
+        const selectedDate = dataChamadaInput.value;
+        const formattedDate = selectedDate.split("-").reverse().join("/");
+        document.getElementById("status-panel-date").textContent = formattedDate;
+        
+        turmasStatusList.innerHTML = "";
+        
+        const selectedTurno = turnoSelect.value;
+        const matchingTurmas = turmas.filter(t => t.turno.toLowerCase() === selectedTurno.toLowerCase());
+        
+        if (matchingTurmas.length === 0) {
+          turmasStatusList.innerHTML = `<tr><td colspan="3" class="py-md text-center italic text-on-surface-variant">Nenhuma turma cadastrada neste turno.</td></tr>`;
+          return;
+        }
+        
+        matchingTurmas.forEach(turma => {
+          const dbKey = `${selectedDate}_${turma.nome}`;
+          const savedRecord = frequenciaDb[dbKey];
+          
+          const hasEntrada = savedRecord && savedRecord.consolidadoEntrada;
+          const hasSaida = savedRecord && savedRecord.consolidadoSaida;
+          
+          const entClass = hasEntrada 
+            ? "bg-emerald-50 text-emerald-700 border border-emerald-200" 
+            : "bg-red-50 text-red-700 border border-red-200 animate-pulse";
+          const entText = hasEntrada ? "Realizada" : "Pendente";
+          
+          const saiClass = hasSaida 
+            ? "bg-emerald-50 text-emerald-700 border border-emerald-200" 
+            : "bg-red-50 text-red-700 border border-red-200 animate-pulse";
+          const saiText = hasSaida ? "Realizada" : "Pendente";
+          
+          const row = document.createElement("tr");
+          row.className = "border-b border-surface-variant/20 hover:bg-surface-container-lowest transition-colors";
+          row.innerHTML = `
+            <td class="py-sm font-bold text-primary">${turma.nome}</td>
+            <td class="py-sm text-center">
+              <span class="px-md py-1 rounded-full text-[12px] font-bold ${entClass} whitespace-nowrap">${entText}</span>
+            </td>
+            <td class="py-sm text-center">
+              <span class="px-md py-1 rounded-full text-[12px] font-bold ${saiClass} whitespace-nowrap">${saiText}</span>
+            </td>
+          `;
+          turmasStatusList.appendChild(row);
+        });
+      }
+
+      // Carregar Base de Chamadas do Dia
+      function loadDailyAttendance() {
+        alunos = JSON.parse(localStorage.getItem('sigaedu_alunos')) || [];
+        frequenciaDb = JSON.parse(localStorage.getItem('sigaedu_frequencia')) || {};
+        
+        const selectedDate = dataChamadaInput.value;
+        const selectedTurma = turmaSelect.value;
+
+        if (!selectedTurma) {
+          studentList.innerHTML = `<tr><td colspan="2" class="px-md py-lg text-center text-on-surface-variant italic">Nenhuma turma selecionada ou cadastrada.</td></tr>`;
+          return;
+        }
+
+        activeStudents = alunos.filter(a => a.turma === selectedTurma);
+
+        if (activeStudents.length === 0) {
+          studentList.innerHTML = `
+            <tr>
+              <td colspan="2" class="px-md py-lg text-center text-on-surface-variant italic">
+                Nenhum aluno cadastrado nesta turma. 
+                <br>
+                <a href="fichadoaluno.html" class="text-primary font-bold underline hover:opacity-80 inline-block mt-sm">Ir para Cadastro/Importação de Alunos</a>
+              </td>
+            </tr>`;
+          resetSummary(0);
+          saidaSection.classList.add("hidden");
+          saidaSection.style.opacity = 0;
+          return;
+        }
+
+        const dbKey = `${selectedDate}_${selectedTurma}`;
+        const savedRecord = frequenciaDb[dbKey];
+
+        if (savedRecord) {
+          entradaStatus = savedRecord.entrada || {};
+          saidaStatus = savedRecord.saida || {};
+          justificativaTipos = savedRecord.justificativaTipos || {};
+          entradaTrancada = savedRecord.entradaTrancada !== undefined ? savedRecord.entradaTrancada : true;
+          
+          renderRoster('entrada');
+          
+          if (savedRecord.consolidadoEntrada) {
+            saidaSection.classList.remove("hidden");
+            saidaSection.style.opacity = 1;
+            renderRoster('saida');
+          } else {
+            saidaSection.classList.add("hidden");
+            saidaSection.style.opacity = 0;
+          }
+
+          if (savedRecord.consolidadoSaida) {
+            renderConsolidatedSummary();
+          } else {
+            entradaPanel.classList.remove("hidden");
+            if (savedRecord.consolidadoEntrada) {
+              saidaSection.classList.remove("hidden");
+            }
+            resultadoConsolidadoContainer.classList.add("hidden");
+            updateLiveCounters();
+          }
+        } else {
+          // Inicializar diário novo limpo
+          entradaStatus = {};
+          saidaStatus = {};
+          justificativaTipos = {};
+          entradaTrancada = false;
+          
+          activeStudents.forEach(s => {
+            entradaStatus[s.cpf] = 'Pendente';
+            saidaStatus[s.cpf] = 'Pendente';
+          });
+
+          renderRoster('entrada');
+          saidaSection.classList.add("hidden");
+          saidaSection.style.opacity = 0;
+          
+          updateLiveCounters();
+          resetSummary(activeStudents.length);
+        }
+      }
+
+      // Renderizar Roster Geral
+      function renderRoster(type) {
+        const targetBody = type === 'entrada' ? studentList : saidaList;
+        targetBody.innerHTML = "";
+
+        if (type === 'entrada') {
+          const bulkButtonContainer = document.querySelector("#entrada-panel .p-md.border-b.border-surface-variant .flex.gap-xs");
+          if (entradaTrancada) {
+            bulkButtonContainer.innerHTML = `
+              <button onclick="destrancarEntrada()" class="px-sm py-1.5 bg-red-50 text-red-700 border border-red-200 rounded-lg text-body-sm font-bold hover:bg-red-100 flex items-center gap-1 transition-all shadow-sm">
+                <span class="material-symbols-outlined text-[16px]">lock_open</span>
+                Destrancar Entrada (Admin)
+              </button>
+            `;
+            entradaActions.classList.add("hidden");
+          } else {
+            bulkButtonContainer.innerHTML = `
+              <button class="text-label-sm px-sm py-xs bg-emerald-50 text-emerald-700 rounded-full font-bold hover:bg-emerald-100 transition-colors" onclick="setAll('entrada', 'P')">Marcar Todas Presenças</button>
+            `;
+            entradaActions.classList.remove("hidden");
+          }
+        }
+
+        activeStudents.forEach(student => {
+          const id = student.cpf;
+          const statusMap = type === 'entrada' ? entradaStatus : saidaStatus;
+          const current = statusMap[id] || 'Pendente';
+          const motiveKey = `${type}_${id}`;
+          const motive = justificativaTipos[motiveKey];
+
+          // Text do botão FJ
+          let fjText = "FJ";
+          if (current === 'FJ' && motive) {
+            const word = motive.split(" ").pop();
+            fjText = `FJ (${word})`;
+          }
+
+          const btnPClass = current === 'P'
+            ? "bg-emerald-500 text-white font-bold"
+            : "bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high";
+          const btnFClass = current === 'F'
+            ? "bg-red-500 text-white font-bold"
+            : "bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high";
+          const btnFJClass = current === 'FJ'
+            ? "bg-amber-500 text-white font-bold"
+            : "bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high";
+
+          const isSaidaDisabled = type === 'saida' && (entradaStatus[id] === 'F' || entradaStatus[id] === 'FJ');
+          
+          let controlHtml = "";
+          
+          if (type === 'entrada' && entradaTrancada) {
+            controlHtml = `
+              <div class="flex justify-center gap-xs opacity-75 cursor-not-allowed">
+                <button type="button" disabled class="px-md py-xs rounded-lg text-body-sm font-bold ${current === 'P' ? btnPClass : 'bg-surface-container-low text-on-surface-variant'} cursor-not-allowed">P</button>
+                <button type="button" disabled class="px-md py-xs rounded-lg text-body-sm font-bold ${current === 'F' ? btnFClass : 'bg-surface-container-low text-on-surface-variant'} cursor-not-allowed">F</button>
+                <button type="button" disabled class="px-md py-xs rounded-lg text-body-sm font-bold ${current === 'FJ' ? btnFJClass : 'bg-surface-container-low text-on-surface-variant'} cursor-not-allowed">${fjText}</button>
+              </div>`;
+          } else if (isSaidaDisabled) {
+            const badgeText = entradaStatus[id] === 'F' ? 'Falta na Entrada' : 'Justificado';
+            const badgeColor = entradaStatus[id] === 'F' ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700';
+            controlHtml = `
+              <div class="flex justify-center">
+                <span class="${badgeColor} px-md py-sm rounded-full text-label-sm font-bold shadow-sm select-none">${badgeText}</span>
+              </div>`;
+          } else {
+            controlHtml = `
+              <div class="flex justify-center gap-xs">
+                <button type="button" onclick="selectStudentStatus('${type}', '${id}', 'P')" class="day-cell px-md py-xs rounded-lg text-body-sm font-bold transition-all ${btnPClass}">P</button>
+                <button type="button" onclick="selectStudentStatus('${type}', '${id}', 'F')" class="day-cell px-md py-xs rounded-lg text-body-sm font-bold transition-all ${btnFClass}">F</button>
+                <button type="button" onclick="selectStudentStatus('${type}', '${id}', 'FJ')" class="day-cell px-md py-xs rounded-lg text-body-sm font-bold transition-all ${btnFJClass}">${fjText}</button>
+              </div>`;
+          }
+
+          const row = document.createElement("tr");
+          row.className = "hover:bg-surface-container-lowest transition-colors border-b border-surface-variant/30";
+          row.innerHTML = `
+            <td class="px-sm py-sm flex items-center gap-sm">
+              <div class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center font-bold text-primary overflow-hidden shadow-inner border border-outline-variant">
+                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRGSGbqGOo2dzNp40hZk4pp_0rVieA-Su6u1WdWdVVqvGIA6n7dJMIDQVg3vkTYKgYN5HRKv7SOzuV4CGLSmB4xKZHKFpq-2ab9UNYf9ye3MByCMdx_JIehrQjusuLvStYhxK5Qj2eZHDffXBfYxzFUFDsX7kk7oInOP0foJp972O4lAIpD8pOJMQ4ehoA3BKsZHDj0gIh6Fx7Dr-Uvdu89v6j1O2f_mCuy7lSXEnJdzNLXbaD9C36QemEJIA6ok8BwdRRm8oVmvA" alt="${student.nome}" class="w-full h-full object-cover"/>
+              </div>
+              <div>
+                <p class="text-label-md font-bold text-primary leading-none mb-1">${student.nome}</p>
+                <p class="text-[12px] text-on-surface-variant">CPF: ${student.cpf}</p>
+              </div>
+            </td>
+            <td class="px-sm py-sm">
+              ${controlHtml}
+            </td>`;
+          targetBody.appendChild(row);
+        });
+      }
+
+      // Definir Status Individual
+      window.selectStudentStatus = function(type, cpf, value) {
+        if (value === 'FJ') {
+          activeFjContext = { type, cpf };
+          abrirModalJustificativa();
+          return;
+        }
+
+        const statusMap = type === 'entrada' ? entradaStatus : saidaStatus;
+        statusMap[cpf] = value;
+        
+        delete justificativaTipos[`${type}_${cpf}`];
+        
+        renderRoster(type);
+        updateLiveCounters();
+      };
+
+      // Modal FJ Helpers
+      window.abrirModalJustificativa = function() {
+        document.getElementById("modal-justificativa").classList.remove("hidden");
+      };
+
+      window.fecharModalJustificativa = function() {
+        document.getElementById("modal-justificativa").classList.add("hidden");
+        activeFjContext = null;
+      };
+
+      window.selecionarTipoJustificativa = function(motive) {
+        if (!activeFjContext) return;
+
+        const { type, cpf } = activeFjContext;
+        const statusMap = type === 'entrada' ? entradaStatus : saidaStatus;
+        statusMap[cpf] = 'FJ';
+
+        justificativaTipos[`${type}_${cpf}`] = motive;
+
+        // Atualizar DB imediatamente
+        const selectedDate = dataChamadaInput.value;
+        const selectedTurma = turmaSelect.value;
+        const dbKey = `${selectedDate}_${selectedTurma}`;
+        if (frequenciaDb[dbKey]) {
+          frequenciaDb[dbKey].justificativaTipos = justificativaTipos;
+          localStorage.setItem('sigaedu_frequencia', JSON.stringify(frequenciaDb));
+        }
+
+        fecharModalJustificativa();
+        renderRoster(type);
+        updateLiveCounters();
+
+        showToast(`Justificativa registrada: ${motive}`, "description", "#F59E0B");
+      };
+
+      // Destrancar Entrada com Senha Admin
+      window.destrancarEntrada = function() {
+        const password = prompt("Digite a senha do Administrador para destravar e editar a chamada de Entrada:");
+        if (password === null) return;
+
+        if (password === "siga@EDU2026excluir") {
+          entradaTrancada = false;
+
+          const selectedDate = dataChamadaInput.value;
+          const selectedTurma = turmaSelect.value;
+          const dbKey = `${selectedDate}_${selectedTurma}`;
+
+          if (frequenciaDb[dbKey]) {
+            frequenciaDb[dbKey].entradaTrancada = false;
+            frequenciaDb[dbKey].consolidadoEntrada = false; // reverte status de consolidado
+            localStorage.setItem('sigaedu_frequencia', JSON.stringify(frequenciaDb));
+          }
+
+          renderRoster('entrada');
+          renderTurmasStatusPanel(); // Atualiza painel geral de status!
+          showToast("Entrada destrancada para edições acadêmicas!", "lock_open", "#4ADE80");
+        } else {
+          alert("Senha incorreta! Não foi possível destravar a chamada.");
+        }
+      };
+
+      // Bulk de Presenças
+      window.setAll = function(type, value) {
+        activeStudents.forEach(student => {
+          const id = student.cpf;
+          const isSaidaDisabled = type === 'saida' && (entradaStatus[id] === 'F' || entradaStatus[id] === 'FJ');
+          if (!isSaidaDisabled) {
+            const statusMap = type === 'entrada' ? entradaStatus : saidaStatus;
+            statusMap[id] = value;
+            delete justificativaTipos[`${type}_${id}`];
+          }
+        });
+        
+        renderRoster(type);
+        updateLiveCounters();
+      };
+
+      // Atualizar Contadores da Sessão Ativa
+      function updateLiveCounters() {
+        let total = activeStudents.length;
+        let presencas = 0;
+        let faltas = 0;
+        let pendentes = 0;
+
+        activeStudents.forEach(s => {
+          const ent = entradaStatus[s.cpf];
+          if (ent === 'Pendente') {
+            pendentes++;
+          } else if (ent === 'P' || ent === 'FJ') {
+            presencas++;
+          } else {
+            faltas++;
+          }
+        });
+
+        summaryTotal.textContent = total;
+        summaryPresenca.textContent = presencas;
+        summaryFalta.textContent = faltas;
+        summaryPendente.textContent = pendentes;
+      }
+
+      // Resetar Bento Card de Resumo
+      function resetSummary(count) {
+        summaryTotal.textContent = count;
+        summaryPresenca.textContent = 0;
+        summaryFalta.textContent = 0;
+        summaryPendente.textContent = count;
+
+        entradaPanel.classList.remove("hidden");
+        resultadoConsolidadoContainer.classList.add("hidden");
+
+        finalResultCard.innerHTML = `
+          <span class="material-symbols-outlined text-surface-variant text-[64px] mb-md">analytics</span>
+          <h4 class="font-bold text-headline-md text-on-surface-variant mb-xs">Aguardando Consolidação</h4>
+          <p class="text-body-sm text-on-surface-variant">O resumo final da frequência do dia aparecerá aqui após a consolidação da saída.</p>`;
+        finalResultCard.className = "bg-white rounded-xl border-2 border-dashed border-surface-variant p-md text-center";
+        
+        alertsContainer.classList.add("hidden");
+        evasionList.innerHTML = "";
+      }
+
+      // Consolidar Entrada (Etapa 1)
+      window.consolidarEntrada = function() {
+        const pendentes = activeStudents.filter(s => entradaStatus[s.cpf] === 'Pendente');
+        if (pendentes.length > 0) {
+          if (!confirm(`Atenção: Existem ${pendentes.length} alunos com chamada pendente na Entrada. Deseja marcar o restante como PRESENÇA e prosseguir?`)) {
+            return;
+          }
+          pendentes.forEach(s => entradaStatus[s.cpf] = 'P');
+          renderRoster('entrada');
+          updateLiveCounters();
+        }
+
+        // Espelhar na saída os alunos EXATAMENTE como ficou a entrada (P->P, F->F, FJ->FJ)
+        activeStudents.forEach(s => {
+          const id = s.cpf;
+          saidaStatus[id] = entradaStatus[id];
+          
+          if (entradaStatus[id] === 'FJ') {
+            justificativaTipos[`saida_${id}`] = justificativaTipos[`entrada_${id}`];
+          }
+        });
+
+        entradaTrancada = true;
+
+        const selectedDate = dataChamadaInput.value;
+        const selectedTurma = turmaSelect.value;
+        const dbKey = `${selectedDate}_${selectedTurma}`;
+
+        frequenciaDb[dbKey] = {
+          entrada: entradaStatus,
+          saida: saidaStatus,
+          justificativaTipos: justificativaTipos,
+          entradaTrancada: true,
+          consolidadoEntrada: true,
+          consolidadoSaida: false
+        };
+
+        localStorage.setItem('sigaedu_frequencia', JSON.stringify(frequenciaDb));
+
+        renderRoster('entrada');
+        renderTurmasStatusPanel(); // Atualiza painel geral de status!
+        
+        saidaSection.classList.remove("hidden");
+        setTimeout(() => {
+          saidaSection.style.opacity = 1;
+        }, 50);
+
+        renderRoster('saida');
+        saidaSection.scrollIntoView({ behavior: 'smooth' });
+
+        showToast("Entrada trancada! Realize a Chamada de Saída.", "lock", "#F59E0B");
+      };
+
+      // Consolidar Saída (Etapa 2 e Final)
+      window.consolidarSaida = function() {
+        const pendentes = activeStudents.filter(s => saidaStatus[s.cpf] === 'Pendente');
+        if (pendentes.length > 0) {
+          if (!confirm(`Atenção: Existem ${pendentes.length} alunos pendentes na chamada de saída. Deseja marcar como PRESENÇA e consolidar?`)) {
+            return;
+          }
+          pendentes.forEach(s => {
+            saidaStatus[s.cpf] = 'P';
+            delete justificativaTipos[`saida_${s.cpf}`];
+          });
+          renderRoster('saida');
+        }
+
+        const selectedDate = dataChamadaInput.value;
+        const selectedTurma = turmaSelect.value;
+        const dbKey = `${selectedDate}_${selectedTurma}`;
+
+        frequenciaDb[dbKey].saida = saidaStatus;
+        frequenciaDb[dbKey].justificativaTipos = justificativaTipos;
+        frequenciaDb[dbKey].consolidadoSaida = true;
+
+        localStorage.setItem('sigaedu_frequencia', JSON.stringify(frequenciaDb));
+
+        renderConsolidatedSummary();
+        renderTurmasStatusPanel(); // Atualiza painel geral de status!
+        showToast("Chamada Diária Fechada com Sucesso!", "verified", "#4ADE80");
+      };
+
+      // Renderizar o Resumo de Consolidação Completo e Minimizar/Colapsar Frequências
+      function renderConsolidatedSummary() {
+        let presencas = 0;
+        let faltas = 0;
+        let evasoes = 0;
+        let evasaoAlunos = [];
+
+        activeStudents.forEach(student => {
+          const id = student.cpf;
+          const ent = entradaStatus[id];
+          const sai = saidaStatus[id];
+
+          if (ent === 'P' && sai === 'F') {
+            evasoes++;
+            evasaoAlunos.push(student);
+            faltas++; // Evadido conta como ausência no diário geral
+          } else if (ent === 'F') {
+            faltas++;
+          } else if (ent === 'FJ') {
+            presencas++; // Falta justificada conta como presença pedagógica
+          } else {
+            presencas++;
+          }
+        });
+
+        // Registrar automaticamente na aba Ocorrências
+        if (evasaoAlunos.length > 0) {
+          const selectedDate = dataChamadaInput.value;
+          const selectedTurma = turmaSelect.value;
+          const selectedTurno = turnoSelect.value;
+          
+          let occurrencesDb = JSON.parse(localStorage.getItem('sigaedu_ocorrencias')) || [];
+          let alunosDb = JSON.parse(localStorage.getItem('sigaedu_alunos')) || [];
+          const formattedDate = selectedDate.split("-").reverse().join("/");
+          let updatedAlunos = false;
+          let updatedOccurrences = false;
+
+          evasaoAlunos.forEach(student => {
+            let exists = occurrencesDb.some(oco => 
+              oco.tipo === "Evasão" && 
+              oco.dataOcorrencia === selectedDate && 
+              oco.turma === selectedTurma && 
+              oco.alunosEnvolvidos.some(a => a.cpf === student.cpf)
+            );
+
+            if (!exists) {
+              const newOco = {
+                id: "oco_" + Date.now() + "_" + Math.floor(Math.random() * 1000),
+                tipo: "Evasão",
+                turno: selectedTurno,
+                turma: selectedTurma,
+                alunosEnvolvidos: [{ cpf: student.cpf, nome: student.nome }],
+                dataOcorrencia: selectedDate,
+                dataRegistro: new Date().toISOString().split('T')[0],
+                relato: `Evasão detectada automaticamente pelo diário de classe na chamada consolidada do dia ${formattedDate}. O(A) aluno(a) obteve PRESENÇA na chamada de Entrada, mas obteve FALTA na chamada de Saída sem justificativa cadastrada.`,
+                autor: "Sistema (SIGAEDU)",
+                status: "Pendente",
+                resposta: "",
+                arquivoAssinado: null,
+                evidencia: null
+              };
+              
+              occurrencesDb.unshift(newOco);
+              updatedOccurrences = true;
+
+              // Propagar para a ficha individual do aluno
+              let studentRecord = alunosDb.find(a => a.cpf === student.cpf);
+              if (studentRecord) {
+                if (!studentRecord.ocorrencias) {
+                  studentRecord.ocorrencias = [];
+                }
+                studentRecord.ocorrencias.unshift({
+                  id: newOco.id,
+                  titulo: "Evasão (Automática)",
+                  data: formattedDate,
+                  desc: newOco.relato,
+                  tipo: "Pendente"
+                });
+                updatedAlunos = true;
+              }
+            }
+          });
+
+          if (updatedOccurrences) {
+            localStorage.setItem('sigaedu_ocorrencias', JSON.stringify(occurrencesDb));
+          }
+          if (updatedAlunos) {
+            localStorage.setItem('sigaedu_alunos', JSON.stringify(alunosDb));
+          }
+        }
+
+        summaryTotal.textContent = activeStudents.length;
+        summaryPresenca.textContent = presencas;
+        summaryFalta.textContent = faltas;
+        summaryPendente.textContent = 0;
+
+        // Minimizar/Esconder painéis de Entrada e Saída
+        entradaPanel.classList.add("hidden");
+        entradaActions.classList.add("hidden");
+        saidaSection.classList.add("hidden");
+
+        // Exibir painel e tabela analítica de Resultado do Dia
+        resultadoConsolidadoContainer.classList.remove("hidden");
+        renderConsolidatedTable();
+
+        // Render success preview card
+        if (evasoes > 0) {
+          finalResultCard.innerHTML = `
+            <div class="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mb-md border border-red-100 mx-auto">
+              <span class="material-symbols-outlined text-red-600 text-[36px]">crisis_alert</span>
+            </div>
+            <h4 class="font-bold text-headline-md text-red-600 mb-xs">Frequência Fechada</h4>
+            <p class="text-body-sm text-on-surface-variant mb-md">Diário de classe trancado. Alertas de evasão gerados.</p>
+            <div class="p-sm bg-red-50 rounded-lg text-left text-red-800 text-body-sm space-y-1">
+              <p class="font-bold">⚠️ Alertas de Evasão Detectados: ${evasoes}</p>
+              <p class="text-[12px] opacity-80">Notificações enviadas aos pais via SIGA@WhatsApp.</p>
+            </div>`;
+          finalResultCard.className = "bg-white rounded-xl border-2 border-red-300 p-md text-center shadow-lg animate-in zoom-in-95";
+        } else {
+          finalResultCard.innerHTML = `
+            <div class="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center mb-md border border-emerald-100 mx-auto">
+              <span class="material-symbols-outlined text-emerald-600 text-[36px]">verified</span>
+            </div>
+            <h4 class="font-bold text-headline-md text-emerald-600 mb-xs">Diário Homologado</h4>
+            <p class="text-body-sm text-on-surface-variant mb-md">Aproveitamento letivo pleno registrado com sucesso.</p>
+            <div class="p-sm bg-emerald-50 rounded-lg text-left text-emerald-800 text-body-sm space-y-1">
+              <p class="font-bold">✅ Evasão Escolar: 0%</p>
+              <p class="text-[12px] opacity-80">Nenhum registro de abandono escolar detectado hoje.</p>
+            </div>`;
+          finalResultCard.className = "bg-white rounded-xl border-2 border-emerald-300 p-md text-center shadow-lg animate-in zoom-in-95";
+        }
+
+        // Renderizar Alertas de Evasão
+        if (evasoes > 0) {
+          alertsContainer.classList.remove("hidden");
+          evasionList.innerHTML = evasaoAlunos.map(student => `
+            <div class="flex items-center justify-between p-sm bg-red-50 border border-red-200 rounded-xl flex-wrap gap-sm">
+              <div class="flex items-center gap-sm min-w-0">
+                <div class="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center font-bold text-red-700 overflow-hidden border shrink-0">
+                  <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRGSGbqGOo2dzNp40hZk4pp_0rVieA-Su6u1WdWdVVqvGIA6n7dJMIDQVg3vkTYKgYN5HRKv7SOzuV4CGLSmB4xKZHKFpq-2ab9UNYf9ye3MByCMdx_JIehrQjusuLvStYhxK5Qj2eZHDffXBfYxzFUFDsX7kk7oInOP0foJp972O4lAIpD8pOJMQ4ehoA3BKsZHDj0gIh6Fx7Dr-Uvdu89v6j1O2f_mCuy7lSXEnJdzNLXbaD9C36QemEJIA6ok8BwdRRm8oVmvA" class="w-full h-full object-cover"/>
+                </div>
+                <div class="min-w-0">
+                  <p class="text-body-sm font-bold text-red-950 truncate">${student.nome}</p>
+                  <p class="text-[12px] text-red-700">Evadido na Saída</p>
+                </div>
+              </div>
+              <button onclick="dispararWhatsapp('${student.cpf}')" class="px-sm py-1 bg-red-600 text-white font-bold rounded-lg text-[11px] hover:bg-red-500 flex items-center gap-1 transition-colors shrink-0">
+                <span class="material-symbols-outlined text-[12px]">send</span>
+                WhatsApp
+              </button>
+            </div>`).join('');
+        } else {
+          alertsContainer.classList.add("hidden");
+          evasionList.innerHTML = "";
+        }
+      }
+
+      // Reabrir painéis detalhados de chamadas (Minimizadas / Expandidas)
+      window.reabrirChamadas = function() {
+        if (entradaPanel.classList.contains("hidden")) {
+          entradaPanel.classList.remove("hidden");
+          saidaSection.classList.remove("hidden");
+          document.querySelector("#resultado-consolidado-container button").innerHTML = `
+            <span class="material-symbols-outlined text-[16px]">expand_less</span>
+            Ocultar Chamadas
+          `;
+        } else {
+          entradaPanel.classList.add("hidden");
+          saidaSection.classList.add("hidden");
+          document.querySelector("#resultado-consolidado-container button").innerHTML = `
+            <span class="material-symbols-outlined text-[16px]">expand_more</span>
+            Visualizar Chamadas (Detalhado)
+          `;
+        }
+      };
+
+      // Tabela Analítica Consolidadora
+      function renderConsolidatedTable() {
+        resultadoConsolidadoList.innerHTML = "";
+
+        activeStudents.forEach(student => {
+          const id = student.cpf;
+          const ent = entradaStatus[id];
+          const sai = saidaStatus[id];
+
+          let entText = "Presença";
+          let entBadge = "bg-emerald-50 text-emerald-700 border border-emerald-200";
+          if (ent === 'F') {
+            entText = "Falta";
+            entBadge = "bg-red-50 text-red-700 border border-red-200";
+          } else if (ent === 'FJ') {
+            const motive = justificativaTipos[`entrada_${id}`] || 'Motivo Não Informado';
+            entText = `Justificada (${motive.split(" ").pop()})`;
+            entBadge = "bg-amber-50 text-amber-700 border border-amber-200";
+          }
+
+          let saiText = "Presença";
+          let saiBadge = "bg-emerald-50 text-emerald-700 border border-emerald-200";
+          if (sai === 'F') {
+            saiText = "Falta";
+            saiBadge = "bg-red-50 text-red-700 border border-red-200";
+          } else if (sai === 'FJ') {
+            const motive = justificativaTipos[`saida_${id}`] || 'Motivo Não Informado';
+            saiText = `Justificada (${motive.split(" ").pop()})`;
+            saiBadge = "bg-amber-50 text-amber-700 border border-amber-200";
+          }
+
+          // Resultado Geral do Aluno
+          let resText = "Presença Plena (P)";
+          let resBadge = "bg-emerald-100 text-emerald-800 border border-emerald-300 font-extrabold";
+
+          if (ent === 'P' && sai === 'F') {
+            resText = "Evasão (F*)";
+            resBadge = "bg-red-100 text-red-800 border border-red-300 font-extrabold";
+          } else if (ent === 'F') {
+            resText = "Falta Geral (F)";
+            resBadge = "bg-red-100 text-red-800 border border-red-300 font-extrabold";
+          } else if (ent === 'FJ') {
+            resText = "Confirmada (FJ)";
+            resBadge = "bg-emerald-100 text-emerald-800 border border-emerald-300 font-extrabold";
+          }
+
+          const row = document.createElement("tr");
+          row.className = "hover:bg-surface-container-lowest transition-colors border-b border-surface-variant/30";
+          row.innerHTML = `
+            <td class="px-sm py-sm flex items-center gap-sm">
+              <div class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center font-bold text-primary overflow-hidden shadow-inner border border-outline-variant">
+                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRGSGbqGOo2dzNp40hZk4pp_0rVieA-Su6u1WdWdVVqvGIA6n7dJMIDQVg3vkTYKgYN5HRKv7SOzuV4CGLSmB4xKZHKFpq-2ab9UNYf9ye3MByCMdx_JIehrQjusuLvStYhxK5Qj2eZHDffXBfYxzFUFDsX7kk7oInOP0foJp972O4lAIpD8pOJMQ4ehoA3BKsZHDj0gIh6Fx7Dr-Uvdu89v6j1O2f_mCuy7lSXEnJdzNLXbaD9C36QemEJIA6ok8BwdRRm8oVmvA" alt="${student.nome}" class="w-full h-full object-cover"/>
+              </div>
+              <div>
+                <p class="text-label-md font-bold text-primary leading-none mb-1">${student.nome}</p>
+                <p class="text-[12px] text-on-surface-variant">CPF: ${student.cpf}</p>
+              </div>
+            </td>
+            <td class="px-sm py-sm text-center">
+              <span class="px-sm py-1 rounded-full text-[11px] font-bold ${entBadge} whitespace-nowrap">${entText}</span>
+            </td>
+            <td class="px-sm py-sm text-center">
+              <span class="px-sm py-1 rounded-full text-[11px] font-bold ${saiBadge} whitespace-nowrap">${saiText}</span>
+            </td>
+            <td class="px-sm py-sm text-center">
+              <span class="px-sm py-1 rounded-full text-[12px] font-bold ${resBadge} whitespace-nowrap">${resText}</span>
+            </td>`;
+          resultadoConsolidadoList.appendChild(row);
+        });
+      }
+
+      // Notificação simulada via WhatsApp
+      window.dispararWhatsapp = function(cpf) {
+        const student = activeStudents.find(s => s.cpf === cpf);
+        if (!student) return;
+
+        showToast(`Alerta de evasão do(a) aluno(a) ${student.nome} enviado para ${student.nomeResponsavel} no WhatsApp!`, "chat", "#25D366");
+      };
+
+      // Inicialização Geral
+      populateTurmaSelector();
+      checkDateLetivoState();
+
+      // Bind Event Listeners
+      turnoSelect.addEventListener("change", () => {
+        populateTurmaSelector();
+        checkDateLetivoState();
+      });
+      turmaSelect.addEventListener("change", checkDateLetivoState);
+      dataChamadaInput.addEventListener("change", checkDateLetivoState);
+      btnFiltrar.addEventListener("click", checkDateLetivoState);
+
+    })();
+  </script>
+</body>
+</html>

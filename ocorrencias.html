@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SIGAEDU - Ocorrências Escolares</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+                            <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      overflow: hidden;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+        .cristal-blur {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #e5e2e1;
+            border-radius: 10px;
+        }
+        .modal-active {
+            display: flex !important;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed-dim": "#c8c6c5",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-highest": "#e5e2e1",
+                        "on-primary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "outline-variant": "#c4c7c7",
+                        "on-primary-container": "#858383",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-high": "#ebe7e6",
+                        "on-surface-variant": "#444748",
+                        "inverse-primary": "#c8c6c5",
+                        "error": "#ba1a1a",
+                        "on-error-container": "#93000a",
+                        "tertiary": "#000000",
+                        "tertiary-container": "#191c1e",
+                        "primary-fixed": "#e5e2e1",
+                        "on-primary-fixed-variant": "#474746",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed-dim": "#e9c400",
+                        "outline": "#747878",
+                        "surface-dim": "#ddd9d8",
+                        "primary": "#000000",
+                        "on-primary-fixed": "#1c1b1b",
+                        "surface": "#fdf8f8",
+                        "primary-container": "#1c1b1b",
+                        "on-secondary-fixed": "#221b00",
+                        "surface-tint": "#5f5e5e",
+                        "on-tertiary-container": "#818487",
+                        "tertiary-fixed": "#e0e3e6",
+                        "inverse-surface": "#313030",
+                        "secondary-fixed": "#ffe16d",
+                        "on-tertiary-fixed": "#191c1e",
+                        "on-surface": "#1c1b1b",
+                        "on-secondary": "#ffffff",
+                        "surface-variant": "#e5e2e1",
+                        "on-secondary-container": "#6e5c00",
+                        "on-tertiary-fixed-variant": "#44474a",
+                        "on-secondary-fixed-variant": "#544600",
+                        "surface-container-low": "#f7f3f2",
+                        "secondary-container": "#fcd400",
+                        "secondary": "#705d00",
+                        "surface-container": "#f1edec",
+                        "surface-bright": "#fdf8f8",
+                        "inverse-on-surface": "#f4f0ef",
+                        "tertiary-fixed-dim": "#c4c7ca",
+                        "on-background": "#1c1b1b",
+                        "background": "#fdf8f8"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "base": "8px",
+                        "xs": "4px",
+                        "xl": "80px",
+                        "sm": "12px",
+                        "gutter": "24px",
+                        "container-max": "1440px",
+                        "md": "24px",
+                        "lg": "48px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "headline-xl": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "label-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-xl": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "label-md": ["14px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "500"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body-md overflow-x-hidden">
+<!-- SideNavBar Componente Unificado -->
+<aside id="sidebar" class="fixed left-0 top-0 bottom-0 z-50 flex flex-col p-sm pt-xl overflow-y-auto w-64 bg-white/70 backdrop-blur-xl border-r border-surface-variant dark:border-outline-variant shadow-md transition-transform duration-300 -translate-x-full md:translate-x-0">
+    <div class="px-sm mb-lg flex justify-between items-center">
+      <div class="flex items-center gap-sm">
+        <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-md">
+          <span class="material-symbols-outlined text-secondary-container" data-icon="school">school</span>
+        </div>
+        <div>
+          <h1 class="text-label-md font-bold text-primary tracking-tight leading-none">SIGAEDU</h1>
+          <p class="text-body-sm font-medium text-on-surface-variant">Gestão Acadêmica</p>
+        </div>
+      </div>
+      <button class="md:hidden p-1 text-on-surface hover:bg-surface-container-high rounded-full transition-colors" onclick="toggleSidebar()">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <nav class="flex-1 space-y-1">
+      <!-- Links Uniformes com Transições Suaves -->
+      <a id="menu-dashboard" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="dashboard.html">
+        <span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+        <span class="text-label-md font-label-md">Dashboard</span>
+      </a>
+      <a id="menu-turmas" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="turmas.html">
+        <span class="material-symbols-outlined" data-icon="groups">groups</span>
+        <span class="text-label-md font-label-md">Turmas</span>
+      </a>
+      <a id="menu-alunos" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="fichadoaluno.html">
+        <span class="material-symbols-outlined" data-icon="person">person</span>
+        <span class="text-label-md font-label-md">Alunos</span>
+      </a>
+      <a id="menu-calendario" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="calendario.html">
+        <span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+        <span class="text-label-md font-label-md">Calendário</span>
+      </a>
+      <a id="menu-agenda" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="agenda.html">
+        <span class="material-symbols-outlined" data-icon="event_note">event_note</span>
+        <span class="text-label-md font-label-md">Agenda</span>
+      </a>
+      <a id="menu-frequencia" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="frequencia.html">
+        <span class="material-symbols-outlined" data-icon="fact_check">fact_check</span>
+        <span class="text-label-md font-label-md">Frequência</span>
+      </a>
+      <a id="menu-ocorrencias" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="ocorrencias.html">
+        <span class="material-symbols-outlined" data-icon="report_problem">report_problem</span>
+        <span class="text-label-md font-label-md">Ocorrências</span>
+      </a>
+      <a id="menu-solicitacoes" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="solicitacoes.html">
+        <span class="material-symbols-outlined" data-icon="task">task</span>
+        <span class="text-label-md font-label-md">Solicitações</span>
+      </a>
+      <a id="menu-whatsapp" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="whatsapp.html">
+        <span class="material-symbols-outlined" data-icon="message">message</span>
+        <span class="text-label-md font-label-md">Whatsapp</span>
+      </a>
+      <a id="menu-relatorios" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="relatorios.html">
+        <span class="material-symbols-outlined" data-icon="description">description</span>
+        <span class="text-label-md font-label-md">Relatórios</span>
+      </a>
+      <a id="menu-boletins" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="boletins.html">
+        <span class="material-symbols-outlined" data-icon="assignment_ind">assignment_ind</span>
+        <span class="text-label-md font-label-md">Boletins</span>
+      </a>
+      <a id="menu-usuarios" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="usuarios.html">
+        <span class="material-symbols-outlined" data-icon="manage_accounts">manage_accounts</span>
+        <span class="text-label-md font-label-md">Usuários</span>
+      </a>
+    </nav>
+    <div class="mt-xl border-t border-surface-variant/30 pt-md space-y-1">
+      <a id="menu-suporte" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="#">
+        <span class="material-symbols-outlined" data-icon="contact_support">contact_support</span>
+        <span class="text-label-md font-label-md">Suporte</span>
+      </a>
+      <a id="menu-configuracoes" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="#">
+        <span class="material-symbols-outlined" data-icon="settings">settings</span>
+        <span class="text-label-md font-label-md">Configurações</span>
+      </a>
+    </div>
+  </aside>
+<!-- Overlay para Foco Mobile -->
+<div id="sidebar-overlay" class="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm hidden md:hidden" onclick="toggleSidebar()"></div>
+<!-- Main Content Area -->
+<main class="md:ml-64 min-h-screen flex flex-col transition-all duration-300">
+<!-- Top Header (TopNavBar Shared Component Unificado) -->
+<header class="fixed top-0 right-0 left-0 md:left-64 z-40 h-xl px-gutter flex justify-between items-center bg-white/70 backdrop-blur-xl dark:bg-surface-container/70 border-b border-surface-variant dark:border-outline-variant shadow-sm transition-all duration-300">
+      <div class="flex items-center gap-md">
+        <button class="md:hidden p-2 text-on-surface hover:bg-surface-container-high rounded-full transition-colors" onclick="toggleSidebar()">
+          <span class="material-symbols-outlined">menu</span>
+        </button>
+        <div class="hidden sm:flex items-center bg-surface-container-low rounded-full px-md py-2 w-96 border border-surface-variant/50 focus-within:border-primary transition-colors">
+          <span class="material-symbols-outlined text-on-surface-variant mr-sm">search</span>
+          <input class="bg-transparent border-none focus:ring-0 text-body-sm w-full p-0" placeholder="Pesquisar..." type="text"/>
+        </div>
+      </div>
+      <div class="flex items-center gap-md">
+        <div class="flex items-center gap-sm">
+          <button class="p-2 text-on-surface-variant hover:bg-surface-container-low transition-all duration-200 rounded-full relative hover:scale-105 active:scale-95">
+            <span class="material-symbols-outlined">notifications</span>
+            <span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full animate-pulse"></span>
+          </button>
+          <button class="p-2 text-on-surface-variant hover:bg-surface-container-low transition-all duration-200 rounded-full hover:scale-105 active:scale-95">
+            <span class="material-symbols-outlined">help</span>
+          </button>
+        </div>
+        <div class="h-8 w-[1px] bg-surface-variant hidden sm:block"></div>
+        <div class="flex items-center gap-sm pl-sm cursor-pointer hover:bg-surface-container-low p-xs rounded-xl transition-all duration-200">
+          <div class="text-right hidden sm:block">
+            <p class="text-label-md font-bold text-primary leading-none">Dhenison Carlos</p>
+            <p class="text-label-sm text-on-surface-variant">Administrador</p>
+          </div>
+          <img alt="Dhenison Carlos - Administrador" class="w-10 h-10 rounded-full object-cover border-2 border-secondary-container hover:scale-105 transition-transform duration-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRGSGbqGOo2dzNp40hZk4pp_0rVieA-Su6u1WdWdVVqvGIA6n7dJMIDQVg3vkTYKgYN5HRKv7SOzuV4CGLSmB4xKZHKFpq-2ab9UNYf9ye3MByCMdx_JIehrQjusuLvStYhxK5Qj2eZHDffXBfYxzFUFDsX7kk7oInOP0foJp972O4lAIpD8pOJMQ4ehoA3BKsZHDj0gIh6Fx7Dr-Uvdu89v6j1O2f_mCuy7lSXEnJdzNLXbaD9C36QemEJIA6ok8BwdRRm8oVmvA"/>
+        </div>
+      </div>
+    </header>
+<!-- Main Content Canvas -->
+<!-- Page Content -->
+<div class="mt-xl p-gutter flex-1 space-y-lg">
+<div class="max-w-container-max mx-auto">
+<!-- Header Action Row -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-lg">
+<div>
+<h1 class="font-headline-xl text-headline-xl text-primary mb-1">Módulo de Ocorrências</h1>
+<p class="text-on-surface-variant font-body-md">Gerencie e acompanhe registros disciplinares e acadêmicos.</p>
+</div>
+<button class="bg-secondary-container text-on-secondary-container px-6 py-3 rounded-xl font-bold flex items-center gap-2 hover:shadow-lg transition-all active:scale-95" onclick="toggleModal('modal-new-occurrence')">
+<span class="material-symbols-outlined">add</span> Nova Ocorrência
+                </button>
+</div>
+<!-- Dashboard Stats (Bento Style) -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter mb-lg">
+  <div class="bg-white p-6 rounded-lg border border-surface-variant/30 shadow-sm transition-all duration-300 hover:shadow-md">
+    <div class="flex items-center gap-3 mb-2">
+      <span class="material-symbols-outlined text-primary bg-surface-container-low p-2 rounded-lg">list_alt</span>
+      <span class="font-label-md text-label-md text-on-surface-variant">Total Mensal</span>
+    </div>
+    <div class="text-headline-lg font-headline-lg" id="stats-total">0</div>
+    <div class="text-label-sm text-on-surface-variant">Ocorrências registradas</div>
+  </div>
+  <div class="bg-white p-6 rounded-lg border border-surface-variant/30 shadow-sm transition-all duration-300 hover:shadow-md">
+    <div class="flex items-center gap-3 mb-2">
+      <span class="material-symbols-outlined text-error bg-error-container/30 p-2 rounded-lg">pending_actions</span>
+      <span class="font-label-md text-label-md text-on-surface-variant">Pendentes</span>
+    </div>
+    <div class="text-headline-lg font-headline-lg text-error animate-pulse" id="stats-pendentes">0</div>
+    <div class="text-label-sm text-on-surface-variant">Aguardando tratamento</div>
+  </div>
+  <div class="bg-white p-6 rounded-lg border border-surface-variant/30 shadow-sm transition-all duration-300 hover:shadow-md">
+    <div class="flex items-center gap-3 mb-2">
+      <span class="material-symbols-outlined text-emerald-600 bg-emerald-50 p-2 rounded-lg">task_alt</span>
+      <span class="font-label-md text-label-md text-on-surface-variant">Tratadas</span>
+    </div>
+    <div class="text-headline-lg font-headline-lg text-emerald-600" id="stats-tratadas">0</div>
+    <div class="text-label-sm text-on-surface-variant">Casos arquivados</div>
+  </div>
+  <div class="bg-primary text-on-primary p-6 rounded-lg shadow-sm transition-all duration-300 hover:shadow-md">
+    <div class="flex items-center gap-3 mb-2">
+      <span class="material-symbols-outlined text-secondary-container bg-white/10 p-2 rounded-lg">warning</span>
+      <span class="font-label-md text-label-md text-primary-fixed-dim">Maior Incidência</span>
+    </div>
+    <div class="text-headline-md font-headline-md tracking-tight truncate" id="stats-incidencia">Nenhuma</div>
+    <div class="text-label-sm text-primary-fixed-dim" id="stats-incidencia-sub">Sem registros ativos</div>
+  </div>
+</div>
+
+<!-- Table Section -->
+<div class="bg-white rounded-lg border border-surface-variant/30 overflow-hidden shadow-sm">
+  <div class="p-6 border-b border-surface-variant/30 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+    <h3 class="font-label-md text-label-md text-primary uppercase tracking-wider">Registros de Ocorrências</h3>
+    <div class="flex gap-2 items-center w-full sm:w-auto">
+      <div class="flex items-center bg-surface-container-low rounded-lg px-3 py-2 border border-surface-variant/50 focus-within:border-primary w-full sm:w-64">
+        <span class="material-symbols-outlined text-on-surface-variant mr-1 text-[20px]">search</span>
+        <input type="text" id="search-occurrences" oninput="renderOccurrencesTable()" class="bg-transparent border-none focus:ring-0 text-body-sm w-full p-0" placeholder="Buscar aluno ou tipo..."/>
+      </div>
+    </div>
+  </div>
+  <div class="overflow-x-auto">
+    <table class="w-full text-left border-collapse">
+      <thead>
+        <tr class="bg-surface text-on-surface-variant font-label-md text-label-md uppercase tracking-wider border-b border-surface-variant/30 select-none">
+          <th class="px-6 py-4 font-semibold">Aluno / Turma</th>
+          <th class="px-6 py-4 font-semibold">Tipo</th>
+          <th class="px-6 py-4 font-semibold">Data / Autor</th>
+          <th class="px-6 py-4 font-semibold">Status</th>
+          <th class="px-6 py-4 font-semibold text-right">Ações</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-surface-variant/20" id="occurrences-table-body">
+        <!-- Dynamic rows via script -->
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- Footer (Footer Shared Component) -->
+<footer class="w-full py-md px-gutter flex justify-between items-center mt-auto bg-transparent border-t border-surface-variant/30">
+  <div class="text-label-sm font-label-sm text-on-surface-variant">
+    Desenvolvido por Dhenison Carlos - 2026
+  </div>
+  <div class="flex gap-md">
+    <a class="text-label-sm font-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Termos de Uso</a>
+    <a class="text-label-sm font-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Privacidade</a>
+  </div>
+</footer>
+</main>
+
+<!-- Modal: Nova Ocorrência (Premium Multi-Seletor) -->
+<div class="fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4" id="modal-new-occurrence">
+  <div class="bg-white w-full max-w-2xl rounded-xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200 border border-outline-variant">
+    <div class="p-6 border-b border-surface-variant/30 flex justify-between items-center bg-surface-container-low">
+      <h2 class="font-headline-md text-headline-md text-primary">Registrar Nova Ocorrência</h2>
+      <button class="material-symbols-outlined hover:bg-surface-container-high p-2 rounded-full transition-colors" onclick="toggleModal('modal-new-occurrence')">close</button>
+    </div>
+    <div class="p-8 max-h-[70vh] overflow-y-auto">
+      <form class="grid grid-cols-1 md:grid-cols-2 gap-6" id="form-new-occurrence" onsubmit="saveNewOccurrence(event)">
+        <div class="col-span-1">
+          <label class="block font-label-md text-label-md text-on-surface-variant mb-2">Tipo de Ocorrência</label>
+          <select id="new-oco-tipo" class="w-full border-surface-variant/30 rounded-lg focus:ring-primary focus:border-primary bg-surface-container-low" required>
+            <option value="Indisciplina">Indisciplina</option>
+            <option value="Uso indevido do Celular">Uso indevido do Celular</option>
+            <option value="Agressão Verbal">Agressão Verbal</option>
+            <option value="Agressão Física">Agressão Física</option>
+            <option value="Evasão">Evasão</option>
+            <option value="Bullying">Bullying</option>
+            <option value="Uso de Vaper">Uso de Vaper</option>
+            <option value="Uso de Bebida Alcoólica">Uso de Bebida Alcoólica</option>
+            <option value="Uso de Entorpecentes">Uso de Entorpecentes</option>
+          </select>
+        </div>
+        <div class="col-span-1">
+          <label class="block font-label-md text-label-md text-on-surface-variant mb-2">Turno</label>
+          <select id="new-oco-turno" onchange="populateTurmaDropdown()" class="w-full border-surface-variant/30 rounded-lg focus:ring-primary focus:border-primary bg-surface-container-low" required>
+            <option value="Manhã">Manhã</option>
+            <option value="Tarde">Tarde</option>
+            <option value="Noite">Noite</option>
+          </select>
+        </div>
+        <div class="col-span-1">
+          <label class="block font-label-md text-label-md text-on-surface-variant mb-2">Turma</label>
+          <select id="new-oco-turma" onchange="filterStudentsForOccurrence()" class="w-full border-surface-variant/30 rounded-lg focus:ring-primary focus:border-primary bg-surface-container-low" required>
+            <!-- Carregado Dinamicamente -->
+          </select>
+        </div>
+        <div class="col-span-1">
+          <label class="block font-label-md text-label-md text-on-surface-variant mb-2">Data da Ocorrência</label>
+          <input id="new-oco-data" class="w-full border-surface-variant/30 rounded-lg focus:ring-primary focus:border-primary bg-surface-container-low" type="date" required/>
+        </div>
+        <div class="col-span-1">
+          <label class="block font-label-md text-label-md text-on-surface-variant mb-2">Data do Registro</label>
+          <input id="new-oco-data-registro" class="w-full border-surface-variant/30 rounded-lg bg-surface-container-high text-on-surface-variant cursor-not-allowed" type="date" readonly disabled/>
+        </div>
+        
+        <!-- Premium Class Student List Selector Panel -->
+        <div class="col-span-2 space-y-2 text-left">
+          <label class="block font-label-md text-label-md text-on-surface-variant">Alunos Envolvidos da Turma</label>
+          
+          <div id="new-oco-student-selector-panel" class="hidden border border-surface-variant/30 rounded-xl bg-surface-container-low overflow-hidden animate-in fade-in duration-200">
+            <div class="p-sm border-b border-surface-variant/20 bg-white flex items-center gap-xs">
+              <span class="material-symbols-outlined text-on-surface-variant text-[18px]">search</span>
+              <input type="text" id="new-oco-student-filter-input" oninput="filterClassStudentsList()" class="bg-transparent border-none focus:ring-0 text-body-sm w-full p-0" placeholder="Filtrar aluno da turma por nome..."/>
+            </div>
+            <div id="new-oco-students-list-container" class="max-h-48 overflow-y-auto p-2 grid grid-cols-1 sm:grid-cols-2 gap-2 select-none">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+          
+          <!-- Tags showing selected students -->
+          <div id="new-oco-envolvidos-tags" class="flex flex-wrap gap-xs py-1 border border-dashed border-surface-variant/50 rounded-xl p-3 min-h-[48px]">
+            <span class="text-body-sm text-on-surface-variant italic select-none" id="no-students-placeholder">Selecione Turno e Turma acima para listar os alunos.</span>
+          </div>
+        </div>
+
+        <div class="col-span-2 text-left space-y-sm">
+          <label class="block font-label-md text-label-md text-on-surface-variant">Evidência / Imagem do Ocorrido (Opcional)</label>
+          <input type="file" id="new-oco-imagem" class="hidden" accept="image/*" onchange="handleNewOcoImageUpload(this)"/>
+          <div onclick="document.getElementById('new-oco-imagem').click()" class="border-2 border-dashed border-surface-variant/50 rounded-xl p-6 flex flex-col items-center justify-center bg-surface hover:bg-surface-container-low transition-colors cursor-pointer" id="new-oco-imagem-dropzone">
+            <span class="material-symbols-outlined text-primary mb-1 text-[32px]" id="new-oco-imagem-icon">photo_camera</span>
+            <p class="text-body-sm font-bold text-primary" id="new-oco-imagem-status">Clique para carregar uma imagem disciplinar / evidência</p>
+            <p class="text-[11px] text-on-surface-variant" id="new-oco-imagem-subtext">PNG ou JPG de foto do caso até 5MB</p>
+          </div>
+          
+          <!-- Image Preview -->
+          <div id="new-oco-imagem-preview-container" class="hidden p-sm bg-surface-container-low rounded-xl border border-surface-variant/30 flex items-center justify-between">
+            <div class="flex items-center gap-sm">
+              <img id="new-oco-imagem-preview" src="" class="w-16 h-16 rounded-lg object-cover border border-outline-variant bg-white"/>
+              <div>
+                <p class="text-body-sm font-bold text-primary" id="new-oco-imagem-filename">imagem.jpg</p>
+                <p class="text-[11px] text-on-surface-variant" id="new-oco-imagem-filesize">0 KB</p>
+              </div>
+            </div>
+            <button type="button" onclick="clearNewOcoImage()" class="p-xs text-on-surface-variant hover:text-error transition-colors">
+              <span class="material-symbols-outlined">delete</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="col-span-2">
+          <label class="block font-label-md text-label-md text-on-surface-variant mb-2">Relato da Ocorrência</label>
+          <textarea id="new-oco-relato" class="w-full border-surface-variant/30 rounded-lg focus:ring-primary focus:border-primary bg-surface-container-low h-32" placeholder="Relate o ocorrido detalhadamente e com clareza acadêmica..." required></textarea>
+        </div>
+      </form>
+    </div>
+    <div class="p-6 border-t border-surface-variant/30 flex justify-end gap-3 bg-white">
+      <button class="px-6 py-2 rounded-lg font-bold text-primary hover:bg-surface-container-low transition-colors" onclick="toggleModal('modal-new-occurrence')">Cancelar</button>
+      <button type="submit" form="form-new-occurrence" class="px-8 py-2 rounded-lg bg-primary text-on-primary font-bold hover:bg-zinc-800 transition-colors">Salvar Registro</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Tratar / Editar Ocorrência (Premium Ações de Acompanhamento) -->
+<div class="fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4" id="modal-handle-occurrence">
+  <div class="bg-white w-full max-w-xl rounded-xl shadow-2xl overflow-hidden animate-in slide-in-from-bottom duration-300 border border-outline-variant">
+    <div class="p-6 border-b border-surface-variant/30 bg-primary text-on-primary">
+      <h2 class="font-headline-md text-headline-md">Tratar / Resolver Ocorrência</h2>
+      <p class="text-primary-fixed-dim text-body-sm">Ajuste de medidas disciplinares e arquivamento formal</p>
+    </div>
+    <div class="p-8 space-y-md max-h-[60vh] overflow-y-auto">
+      <div class="p-4 bg-surface-container-low rounded-lg border border-surface-variant/30 space-y-sm text-left select-none">
+        <p class="text-label-sm text-on-surface-variant uppercase font-bold">Resumo do Caso</p>
+        <p class="text-body-md font-bold text-primary" id="handle-oco-resumo-titulo"></p>
+        <div class="grid grid-cols-2 gap-sm text-[13px] text-on-surface-variant border-t border-surface-variant/20 pt-sm">
+          <p><strong>Data:</strong> <span id="handle-oco-data"></span></p>
+          <p><strong>Autor:</strong> <span id="handle-oco-autor"></span></p>
+          <p class="col-span-2"><strong>Alunos Envolvidos:</strong> <span id="handle-oco-alunos"></span></p>
+        </div>
+        <div class="border-t border-surface-variant/20 pt-sm">
+          <p class="text-label-sm text-on-surface-variant font-bold">Relato:</p>
+          <p class="text-body-sm text-on-surface-variant italic mt-1 mb-3" id="handle-oco-relato"></p>
+        </div>
+        <!-- Uploaded Evidence Preview in Treatment modal -->
+        <div class="border-t border-surface-variant/20 pt-sm hidden" id="handle-oco-evidencia-container">
+          <p class="text-label-sm text-on-surface-variant font-bold mb-xs">Evidência Anexada:</p>
+          <div class="flex items-center gap-sm bg-white p-2 rounded-xl border border-surface-variant/30">
+            <a id="handle-oco-evidencia-link" href="#" target="_blank" class="block w-20 h-20 rounded-lg overflow-hidden border border-outline-variant shrink-0 bg-surface-container-low">
+              <img id="handle-oco-evidencia-img" src="" class="w-full h-full object-cover"/>
+            </a>
+            <span class="text-[11px] text-on-surface-variant italic leading-relaxed">Imagem anexada ao criar o registro.<br>Clique no quadro para abrir em tamanho real.</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="text-left space-y-sm">
+        <label class="block font-label-md text-label-md text-on-surface-variant">Medida Aplicada / Resposta</label>
+        <textarea id="handle-oco-resposta" class="w-full border-surface-variant/30 rounded-lg focus:ring-primary focus:border-primary h-24 bg-surface-container-low" placeholder="Descreva as medidas corretivas aplicadas (ex: Advertência disciplinar, contato com responsáveis...)"></textarea>
+      </div>
+
+      <!-- Signed Document Section -->
+      <div class="text-left space-y-sm">
+        <label class="block font-label-md text-label-md text-on-surface-variant">Upload do Termo Assinado</label>
+        <input type="file" id="signed-doc-upload" class="hidden" onchange="handleSignedDocUpload(this)"/>
+        <div onclick="document.getElementById('signed-doc-upload').click()" class="border-2 border-dashed border-surface-variant rounded-xl p-4 flex flex-col items-center justify-center bg-surface hover:bg-surface-container-low transition-colors cursor-pointer" id="signed-doc-dropzone">
+          <span class="material-symbols-outlined text-primary mb-1 text-[32px]" id="signed-doc-icon">upload_file</span>
+          <p class="text-body-sm font-bold text-primary" id="signed-doc-status">Anexar Documento Assinado (PDF ou Imagem)</p>
+          <p class="text-[11px] text-on-surface-variant" id="signed-doc-subtext">Clique para enviar o termo assinado digitalizado</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="p-6 border-t border-surface-variant/30 flex justify-between items-center bg-surface-container-low">
+      <!-- Left: IMPRIMIR -->
+      <button onclick="imprimirOcorrenciaAtiva()" class="px-md py-2 bg-white border border-surface-variant text-primary hover:bg-surface-container-high rounded-lg text-body-sm font-bold transition-all flex items-center gap-sm shadow-sm select-none">
+        <span class="material-symbols-outlined text-[18px]">print</span>
+        Imprimir Termo
+      </button>
+      
+      <div class="flex gap-2">
+        <button class="px-6 py-2 rounded-lg font-bold text-primary hover:bg-surface-container-low transition-colors" onclick="toggleModal('modal-handle-occurrence')">Cancelar</button>
+        <button onclick="finalizarTratamentoOcorrencia()" class="px-8 py-2 rounded-lg bg-green-600 text-white font-bold hover:bg-green-700 transition-colors flex items-center gap-2">
+          <span class="material-symbols-outlined">done_all</span> Finalizar Ocorrência
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    // Função para abrir/fechar a Sidebar no Mobile
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebar-overlay');
+      if (sidebar.classList.contains('-translate-x-full')) {
+        sidebar.classList.remove('-translate-x-full');
+        overlay.classList.remove('hidden');
+      } else {
+        sidebar.classList.add('-translate-x-full');
+        overlay.classList.add('hidden');
+      }
+    }
+
+    // Destacar automaticamente e imediatamente o link do menu ativo (sem esperar DOMContentLoaded)
+    (function() {
+      const path = window.location.pathname;
+      const page = path.split('/').pop() || 'unificado.html';
+      
+      const menuMap = {
+        'dashboard.html': 'menu-dashboard',
+        'turmas.html': 'menu-turmas',
+        'fichadoaluno.html': 'menu-alunos',
+        'calendario.html': 'menu-calendario',
+        'agenda.html': 'menu-agenda',
+        'frequencia.html': 'menu-frequencia',
+        'ocorrencias.html': 'menu-ocorrencias',
+        'solicitacoes.html': 'menu-solicitacoes',
+        'whatsapp.html': 'menu-whatsapp',
+        'relatorios.html': 'menu-relatorios',
+        'boletins.html': 'menu-boletins',
+        'usuarios.html': 'menu-usuarios'
+      };
+      
+      const activeMenuId = menuMap[page];
+      if (activeMenuId) {
+        const activeLink = document.getElementById(activeMenuId);
+        if (activeLink) {
+          activeLink.classList.remove('text-on-surface-variant', 'hover:bg-surface-container-high', 'hover:scale-[1.02]');
+          activeLink.classList.add('bg-secondary-container', 'text-on-secondary-container', 'font-bold', 'scale-95', 'border-l-4', 'border-primary');
+        }
+      }
+    })();
+
+    // Toggle Modal Helper
+    window.toggleModal = function(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        if (modal.classList.contains("hidden")) {
+          modal.classList.remove("hidden");
+          modal.classList.add("flex");
+          
+          if (modalId === "modal-new-occurrence") {
+            // Prefill today's dates
+            const todayStr = new Date().toISOString().split('T')[0];
+            document.getElementById("new-oco-data").value = todayStr;
+            document.getElementById("new-oco-data-registro").value = todayStr;
+            
+            populateTurmaDropdown();
+          }
+        } else {
+          modal.classList.add("hidden");
+          modal.classList.remove("flex");
+        }
+      }
+    };
+
+    // ==========================================================================
+    // SEGURANÇA E PROTEÇÃO DO CLIENTE (Anti-F12 / Anti-Inspect / Anti-Botão Direito)
+    // ==========================================================================
+    (function() {
+      // 1. Bloqueia o menu de contexto (clique com o botão direito)
+      document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+      });
+
+      // 2. Bloqueia teclas de atalho comuns de ferramentas do desenvolvedor
+      document.addEventListener('keydown', function(e) {
+        // F12 (123)
+        if (e.keyCode === 123) {
+          e.preventDefault();
+          return false;
+        }
+        // Ctrl+Shift+I (73)
+        if (e.ctrlKey && e.shiftKey && e.keyCode === 73) {
+          e.preventDefault();
+          return false;
+        }
+        // Ctrl+Shift+J (74)
+        if (e.ctrlKey && e.shiftKey && e.keyCode === 74) {
+          e.preventDefault();
+          return false;
+        }
+        // Ctrl+Shift+C (67)
+        if (e.ctrlKey && e.shiftKey && e.keyCode === 67) {
+          e.preventDefault();
+          return false;
+        }
+        // Ctrl+U (85)
+        if (e.ctrlKey && e.keyCode === 85) {
+          e.preventDefault();
+          return false;
+        }
+      });
+
+      // 3. Detecção activa de DevTools por debugger recursivo (trava se console estiver aberto)
+      setInterval(function() {
+        (function() {
+          const start = new Date();
+          debugger;
+          const end = new Date();
+          if (end - start > 100) {
+            // Se demorou muito por causa da pausa do debugger, limpa o console e avisa
+            console.clear();
+            document.body.innerHTML = `
+              <div class="fixed inset-0 bg-red-950 text-red-200 flex flex-col items-center justify-center p-md text-center z-[99999]">
+                <span class="material-symbols-outlined text-[64px] mb-md text-red-400">gavel</span>
+                <h1 class="text-headline-xl font-bold">Acesso Bloqueado</h1>
+                <p class="text-body-lg max-w-md mt-sm">O uso de Ferramentas de Desenvolvedor (F12) é estritamente proibido neste sistema para garantir a segurança dos dados escolares.</p>
+                <button onclick="window.location.reload()" class="mt-lg px-lg py-sm bg-red-600 text-white rounded-xl font-bold hover:bg-red-500 transition-colors">Recarregar Sistema</button>
+              </div>`;
+          }
+        })();
+      }, 1000);
+
+      // 4. Limpeza persistente do console
+      if (typeof console !== 'undefined') {
+        setInterval(function() {
+          console.clear();
+        }, 3000);
+      }
+    })();
+  </script>
+
+  <!-- LÓGICA DE GERENCIAMENTO DE OCORRÊNCIAS -->
+  <script>
+    (function() {
+      // Estado Geral
+      let occurrences = [];
+      let selectedInvolvedStudents = [];
+      let activeOccurrenceForTreatment = null;
+      let uploadedSignedDoc = null;
+      let uploadedEvidenceImage = null; // Nova variável para imagem de evidência
+
+      // Elementos do DOM
+      const occurrencesTableBody = document.getElementById("occurrences-table-body");
+      const searchOccurrencesInput = document.getElementById("search-occurrences");
+      
+      const statsTotal = document.getElementById("stats-total");
+      const statsPendentes = document.getElementById("stats-pendentes");
+      const statsTratadas = document.getElementById("stats-tratadas");
+      const statsIncidencia = document.getElementById("stats-incidencia");
+      const statsIncidenciaSub = document.getElementById("stats-incidencia-sub");
+
+      // Inicialização do Banco Local de Ocorrências
+      function loadOccurrencesDb() {
+        occurrences = JSON.parse(localStorage.getItem('sigaedu_ocorrencias')) || [];
+      }
+      
+      function saveOccurrencesDb() {
+        localStorage.setItem('sigaedu_ocorrencias', JSON.stringify(occurrences));
+      }
+
+      // Preencher turmas com base no Turno
+      window.populateTurmaDropdown = function() {
+        const turmaSelect = document.getElementById("new-oco-turma");
+        const turnoSelect = document.getElementById("new-oco-turno");
+        const selectedTurno = turnoSelect.value;
+        
+        const turmasDb = JSON.parse(localStorage.getItem('sigaedu_turmas')) || [];
+        const filtered = turmasDb.filter(t => t.turno.toLowerCase() === selectedTurno.toLowerCase());
+        
+        turmaSelect.innerHTML = "";
+        if (filtered.length === 0) {
+          const opt = document.createElement("option");
+          opt.value = "";
+          opt.textContent = "Nenhuma turma disponível";
+          turmaSelect.appendChild(opt);
+        } else {
+          filtered.forEach(t => {
+            const opt = document.createElement("option");
+            opt.value = t.nome;
+            opt.textContent = t.nome;
+            turmaSelect.appendChild(opt);
+          });
+        }
+        
+        // Re-filtrar alunos
+        filterStudentsForOccurrence();
+      };
+
+      // Controlar habilitação e renderização da lista de alunos daquela turma (Filtro Direto)
+      window.filterStudentsForOccurrence = function() {
+        const selectedTurno = document.getElementById("new-oco-turno").value;
+        const selectedTurma = document.getElementById("new-oco-turma").value;
+        const selectorPanel = document.getElementById("new-oco-student-selector-panel");
+        const listContainer = document.getElementById("new-oco-students-list-container");
+        
+        // Limpar lista de selecionados e filtro de busca caso altere turma/turno
+        selectedInvolvedStudents = [];
+        renderInvolvedTags();
+        document.getElementById("new-oco-student-filter-input").value = "";
+        
+        if (selectedTurma && selectedTurma !== "Nenhuma turma disponível" && selectedTurma !== "") {
+          selectorPanel.classList.remove("hidden");
+          
+          const alunosDb = JSON.parse(localStorage.getItem('sigaedu_alunos')) || [];
+          const classStudents = alunosDb.filter(a => 
+            a.turno.toLowerCase() === selectedTurno.toLowerCase() &&
+            a.turma.toLowerCase() === selectedTurma.toLowerCase()
+          );
+          
+          if (classStudents.length === 0) {
+            listContainer.innerHTML = `<div class="col-span-2 p-4 text-center text-body-sm text-on-surface-variant italic bg-white rounded-xl">Nenhum aluno cadastrado nesta turma</div>`;
+          } else {
+            renderStudentsListMarkup(classStudents);
+          }
+        } else {
+          selectorPanel.classList.add("hidden");
+        }
+      };
+
+      // Renderiza as linhas de estudantes no seletor da turma
+      function renderStudentsListMarkup(studentsList) {
+        const listContainer = document.getElementById("new-oco-students-list-container");
+        listContainer.innerHTML = studentsList.map(a => {
+          const isSelected = selectedInvolvedStudents.some(sel => sel.cpf === a.cpf);
+          const activeClass = isSelected 
+            ? "bg-primary text-white border-primary shadow-sm" 
+            : "bg-white text-on-surface border-surface-variant/30 hover:bg-surface-container-low hover:border-outline-variant";
+          const checkIcon = isSelected ? "check_box" : "check_box_outline_blank";
+          const activeTextClass = isSelected ? "text-white" : "text-primary";
+          
+          return `
+            <div onclick="toggleInvolvedStudent('${a.cpf}', '${a.nome}')" id="sel-student-${a.cpf}" class="p-2 border rounded-xl flex items-center justify-between cursor-pointer transition-all duration-200 gap-sm ${activeClass}">
+              <div class="flex items-center gap-sm min-w-0">
+                <img src="${a.avatar}" class="w-8 h-8 rounded-full object-cover border border-outline-variant shrink-0 bg-white"/>
+                <span class="text-[13px] font-bold truncate ${activeTextClass}">${a.nome}</span>
+              </div>
+              <span class="material-symbols-outlined text-[18px] shrink-0">${checkIcon}</span>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // Filtrar a lista reativamente pelo input de busca de nomes
+      window.filterClassStudentsList = function() {
+        const filterVal = document.getElementById("new-oco-student-filter-input").value.trim().toLowerCase();
+        const selectedTurno = document.getElementById("new-oco-turno").value;
+        const selectedTurma = document.getElementById("new-oco-turma").value;
+        const listContainer = document.getElementById("new-oco-students-list-container");
+        
+        const alunosDb = JSON.parse(localStorage.getItem('sigaedu_alunos')) || [];
+        const filtered = alunosDb.filter(a => 
+          a.turno.toLowerCase() === selectedTurno.toLowerCase() &&
+          a.turma.toLowerCase() === selectedTurma.toLowerCase() &&
+          a.nome.toLowerCase().includes(filterVal)
+        );
+        
+        if (filtered.length === 0) {
+          listContainer.innerHTML = `<div class="col-span-2 p-4 text-center text-body-sm text-on-surface-variant italic bg-white rounded-xl">Nenhum aluno correspondente</div>`;
+        } else {
+          renderStudentsListMarkup(filtered);
+        }
+      };
+
+      // Toggle Involved Student (adiciona/remove ao clicar)
+      window.toggleInvolvedStudent = function(cpf, nome) {
+        const isSelected = selectedInvolvedStudents.some(sel => sel.cpf === cpf);
+        if (isSelected) {
+          selectedInvolvedStudents = selectedInvolvedStudents.filter(sel => sel.cpf !== cpf);
+        } else {
+          selectedInvolvedStudents.push({ cpf, nome });
+        }
+        
+        // Re-renderizar marcas visuais no seletor
+        const selectedTurno = document.getElementById("new-oco-turno").value;
+        const selectedTurma = document.getElementById("new-oco-turma").value;
+        const filterVal = document.getElementById("new-oco-student-filter-input").value.trim().toLowerCase();
+        
+        const alunosDb = JSON.parse(localStorage.getItem('sigaedu_alunos')) || [];
+        const currentList = alunosDb.filter(a => 
+          a.turno.toLowerCase() === selectedTurno.toLowerCase() &&
+          a.turma.toLowerCase() === selectedTurma.toLowerCase() &&
+          a.nome.toLowerCase().includes(filterVal)
+        );
+        
+        renderStudentsListMarkup(currentList);
+        renderInvolvedTags();
+      };
+
+      // Remover envolvido da tag
+      window.removeInvolvedStudent = function(cpf) {
+        selectedInvolvedStudents = selectedInvolvedStudents.filter(s => s.cpf !== cpf);
+        
+        // Re-renderiza a listagem mantendo o estado
+        const selectedTurno = document.getElementById("new-oco-turno").value;
+        const selectedTurma = document.getElementById("new-oco-turma").value;
+        const filterVal = document.getElementById("new-oco-student-filter-input").value.trim().toLowerCase();
+        
+        const alunosDb = JSON.parse(localStorage.getItem('sigaedu_alunos')) || [];
+        const currentList = alunosDb.filter(a => 
+          a.turno.toLowerCase() === selectedTurno.toLowerCase() &&
+          a.turma.toLowerCase() === selectedTurma.toLowerCase() &&
+          a.nome.toLowerCase().includes(filterVal)
+        );
+        
+        renderStudentsListMarkup(currentList);
+        renderInvolvedTags();
+      };
+
+      // Renderizar tags de alunos selecionados
+      function renderInvolvedTags() {
+        const tagsContainer = document.getElementById("new-oco-envolvidos-tags");
+        
+        if (selectedInvolvedStudents.length === 0) {
+          tagsContainer.innerHTML = `<span class="text-body-sm text-on-surface-variant italic select-none" id="no-students-placeholder">Selecione Turno e Turma acima para listar os alunos.</span>`;
+        } else {
+          tagsContainer.innerHTML = selectedInvolvedStudents.map(student => `
+            <span class="bg-primary text-white px-3 py-1 rounded-full text-[12px] font-bold flex items-center gap-1 shrink-0 animate-in zoom-in-95 shadow-sm select-none">
+              ${student.nome}
+              <button type="button" onclick="removeInvolvedStudent('${student.cpf}')" class="material-symbols-outlined text-[14px] hover:text-red-300 font-bold shrink-0">close</button>
+            </span>
+          `).join('');
+        }
+      }
+
+      // Handler para Upload da Foto / Evidência da Ocorrência
+      window.handleNewOcoImageUpload = function(input) {
+        if (input.files && input.files[0]) {
+          const file = input.files[0];
+          const reader = new FileReader();
+          
+          reader.onload = function(e) {
+            uploadedEvidenceImage = {
+              name: file.name,
+              size: (file.size / 1024).toFixed(1) + " KB",
+              type: file.type,
+              data: e.target.result // Base64
+            };
+            
+            document.getElementById("new-oco-imagem-preview").src = e.target.result;
+            document.getElementById("new-oco-imagem-filename").textContent = file.name;
+            document.getElementById("new-oco-imagem-filesize").textContent = uploadedEvidenceImage.size;
+            
+            document.getElementById("new-oco-imagem-preview-container").classList.remove("hidden");
+            document.getElementById("new-oco-imagem-dropzone").classList.add("hidden");
+          };
+          
+          reader.readAsDataURL(file);
+        }
+      };
+
+      // Limpar Imagem
+      window.clearNewOcoImage = function() {
+        uploadedEvidenceImage = null;
+        document.getElementById("new-oco-imagem").value = "";
+        document.getElementById("new-oco-imagem-preview-container").classList.add("hidden");
+        document.getElementById("new-oco-imagem-dropzone").classList.remove("hidden");
+      };
+
+      // Salvar registro de nova ocorrência
+      window.saveNewOccurrence = function(event) {
+        event.preventDefault();
+        
+        const tipo = document.getElementById("new-oco-tipo").value;
+        const turno = document.getElementById("new-oco-turno").value;
+        const turma = document.getElementById("new-oco-turma").value;
+        const dataOcorrencia = document.getElementById("new-oco-data").value;
+        const relato = document.getElementById("new-oco-relato").value;
+        
+        if (selectedInvolvedStudents.length === 0) {
+          alert("Por favor, selecione pelo menos um aluno envolvido nesta ocorrência.");
+          return;
+        }
+        
+        const newOco = {
+          id: "oco_" + Date.now(),
+          tipo: tipo,
+          turno: turno,
+          turma: turma,
+          alunosEnvolvidos: selectedInvolvedStudents,
+          dataOcorrencia: dataOcorrencia,
+          dataRegistro: new Date().toISOString().split('T')[0],
+          relato: relato,
+          autor: "Dhenison Carlos", // Usuário logado
+          status: "Pendente",
+          resposta: "",
+          arquivoAssinado: null,
+          evidencia: uploadedEvidenceImage // Salva a foto/anexo
+        };
+        
+        // 1. Salvar na lista de ocorrências
+        occurrences.unshift(newOco);
+        saveOccurrencesDb();
+        
+        // 2. Propagar para a ficha individual do Aluno (sigaedu_alunos)
+        const alunosDb = JSON.parse(localStorage.getItem('sigaedu_alunos')) || [];
+        const formattedDate = dataOcorrencia.split("-").reverse().join("/");
+        
+        selectedInvolvedStudents.forEach(env => {
+          const student = alunosDb.find(a => a.cpf === env.cpf);
+          if (student) {
+            if (!student.ocorrencias) {
+              student.ocorrencias = [];
+            }
+            student.ocorrencias.unshift({
+              id: newOco.id,
+              titulo: newOco.tipo,
+              data: formattedDate,
+              desc: relato,
+              tipo: "Pendente"
+            });
+          }
+        });
+        localStorage.setItem('sigaedu_alunos', JSON.stringify(alunosDb));
+        
+        // Reset formulário e evidência
+        document.getElementById("form-new-occurrence").reset();
+        selectedInvolvedStudents = [];
+        renderInvolvedTags();
+        clearNewOcoImage();
+        toggleModal("modal-new-occurrence");
+        
+        // Atualizar listagem e métricas
+        renderOccurrencesTable();
+        renderOccurrenceStats();
+        
+        alert("Ocorrência criada com sucesso e vinculada diretamente à ficha individual de cada estudante envolvido!");
+      };
+
+      // Tratar Ocorrência (Solicitação sob Confirmação de Senha)
+      window.solicitarTratarOcorrencia = function(ocoId) {
+        const senha = prompt("Ação Restrita! Digite a senha do Administrador para tratar esta ocorrência:");
+        if (senha === null) return;
+        
+        if (senha === "siga@EDU2026" || senha === "siga@EDU2026excluir") {
+          abrirModalTratamento(ocoId);
+        } else {
+          alert("Senha incorreta! Ação não autorizada.");
+        }
+      };
+
+      // Abrir modal de tratamento
+      function abrirModalTratamento(ocoId) {
+        const oco = occurrences.find(o => o.id === ocoId);
+        if (!oco) return;
+        
+        activeOccurrenceForTreatment = oco;
+        uploadedSignedDoc = oco.arquivoAssinado || null;
+        
+        document.getElementById("handle-oco-resumo-titulo").textContent = `${oco.tipo} - ${oco.turma} (${oco.turno})`;
+        document.getElementById("handle-oco-data").textContent = oco.dataOcorrencia.split("-").reverse().join("/");
+        document.getElementById("handle-oco-autor").textContent = oco.autor;
+        document.getElementById("handle-oco-alunos").innerHTML = oco.alunosEnvolvidos.map(a => `<a href="fichadoaluno.html?cpf=${a.cpf}" class="hover:underline hover:text-primary transition-all text-primary font-bold" title="Ver ficha individual de ${a.nome}">${a.nome}</a>`).join(", ");
+        document.getElementById("handle-oco-relato").textContent = oco.relato;
+        document.getElementById("handle-oco-resposta").value = oco.resposta || "";
+        
+        // Exibir evidência se houver
+        const evidenceContainer = document.getElementById("handle-oco-evidencia-container");
+        if (oco.evidencia && oco.evidencia.data) {
+          document.getElementById("handle-oco-evidencia-img").src = oco.evidencia.data;
+          document.getElementById("handle-oco-evidencia-link").href = oco.evidencia.data;
+          evidenceContainer.classList.remove("hidden");
+        } else {
+          evidenceContainer.classList.add("hidden");
+        }
+        
+        // Reset Dropzone UI
+        const icon = document.getElementById("signed-doc-icon");
+        const status = document.getElementById("signed-doc-status");
+        const subtext = document.getElementById("signed-doc-subtext");
+        
+        if (oco.arquivoAssinado) {
+          icon.textContent = "check_circle";
+          icon.className = "material-symbols-outlined text-green-600 mb-1 text-[32px]";
+          status.textContent = "Documento Assinado Disponível ✓";
+          status.className = "text-body-sm font-bold text-green-600";
+          subtext.textContent = `${oco.arquivoAssinado.name} (${oco.arquivoAssinado.size})`;
+        } else {
+          icon.textContent = "upload_file";
+          icon.className = "material-symbols-outlined text-primary mb-1 text-[32px]";
+          status.textContent = "Anexar Documento Assinado (PDF ou Imagem)";
+          status.className = "text-body-sm font-bold text-primary";
+          subtext.textContent = "Clique para enviar o termo assinado digitalizado";
+        }
+        
+        toggleModal("modal-handle-occurrence");
+      }
+
+      // Imprimir Termo de Ocorrência Escolar Ativa com anexo de evidência
+      window.imprimirOcorrenciaAtiva = function() {
+        if (!activeOccurrenceForTreatment) return;
+        const oco = activeOccurrenceForTreatment;
+        const printWindow = window.open("", "_blank");
+        const formattedDate = oco.dataOcorrencia.split("-").reverse().join("/");
+        const formattedRegDate = oco.dataRegistro.split("-").reverse().join("/");
+        
+        const alunosStr = oco.alunosEnvolvidos.map(a => `${a.nome} (CPF: ${a.cpf})`).join(", ");
+        
+        // Se houver evidência anexada, renderiza no documento de impressão
+        let evidenceHtmlMarkup = "";
+        if (oco.evidencia && oco.evidencia.data) {
+          evidenceHtmlMarkup = `
+            <div class="section">
+              <div class="section-title">Anexo / Evidência da Ocorrência</div>
+              <div class="description-box" style="text-align: center; min-height: auto; padding: 15px 0;">
+                <img src="${oco.evidencia.data}" style="max-width: 450px; max-height: 250px; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0,0,0,0.05);"/>
+              </div>
+            </div>
+          `;
+        }
+        
+        const html = `
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>Termo de Ocorrência Disciplinar - SIGAEDU</title>
+            <style>
+              body {
+                font-family: 'Helvetica Neue', Arial, sans-serif;
+                color: #333;
+                margin: 40px;
+                line-height: 1.6;
+              }
+              .header {
+                text-align: center;
+                border-bottom: 2px solid #000;
+                padding-bottom: 15px;
+                margin-bottom: 25px;
+              }
+              .logo {
+                font-size: 26px;
+                font-weight: 900;
+                letter-spacing: -1px;
+                color: #000;
+              }
+              .sub-logo {
+                font-size: 13px;
+                color: #555;
+                text-transform: uppercase;
+                margin-top: 5px;
+              }
+              .title {
+                font-size: 18px;
+                font-weight: bold;
+                text-transform: uppercase;
+                margin-top: 15px;
+                text-align: center;
+                background: #f4f4f4;
+                padding: 10px;
+                border: 1px solid #ccc;
+                letter-spacing: 0.5px;
+              }
+              .section {
+                margin-bottom: 25px;
+              }
+              .section-title {
+                font-weight: bold;
+                font-size: 13px;
+                text-transform: uppercase;
+                border-bottom: 2px solid #ddd;
+                padding-bottom: 4px;
+                margin-bottom: 10px;
+              }
+              .grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 15px;
+                margin-bottom: 15px;
+              }
+              .field {
+                font-size: 13.5px;
+              }
+              .field strong {
+                color: #000;
+              }
+              .description-box {
+                border: 1px solid #ddd;
+                padding: 15px;
+                border-radius: 5px;
+                background: #fafafa;
+                min-height: 100px;
+                font-size: 13.5px;
+              }
+              .signatures {
+                margin-top: 60px;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 40px;
+                text-align: center;
+              }
+              .sig-line {
+                border-top: 1px solid #000;
+                margin-top: 45px;
+                padding-top: 5px;
+                font-size: 12px;
+              }
+              .footer {
+                margin-top: 70px;
+                text-align: center;
+                font-size: 10px;
+                color: #888;
+                border-top: 1px solid #eee;
+                padding-top: 10px;
+              }
+              @media print {
+                body { margin: 15px; }
+                button { display: none; }
+              }
+            </style>
+          </head>
+          <body>
+            <div class="header">
+              <div class="logo">SIGAEDU</div>
+              <div class="sub-logo">Sistema Integrado de Gestão Acadêmica Escolar</div>
+            </div>
+            
+            <div class="title">TERMO DE REGISTRO DE OCORRÊNCIA DISCIPLINAR</div>
+            
+            <div class="section" style="margin-top: 25px;">
+              <div class="section-title">Dados Gerais</div>
+              <div class="grid">
+                <div class="field"><strong>Protocolo:</strong> #${oco.id.replace("oco_", "")}</div>
+                <div class="field"><strong>Tipo da Ocorrência:</strong> ${oco.tipo}</div>
+                <div class="field"><strong>Data da Ocorrência:</strong> ${formattedDate}</div>
+                <div class="field"><strong>Data do Registro:</strong> ${formattedRegDate}</div>
+                <div class="field"><strong>Turma / Turno:</strong> ${oco.turma} (${oco.turno})</div>
+                <div class="field"><strong>Autor do Registro:</strong> ${oco.autor}</div>
+              </div>
+            </div>
+            
+            <div class="section">
+              <div class="section-title">Alunos Envolvidos</div>
+              <div class="field">
+                <strong>Estudantes:</strong> ${alunosStr}
+              </div>
+            </div>
+            
+            <div class="section">
+              <div class="section-title">Relato dos Fatos</div>
+              <div class="description-box">
+                ${oco.relato}
+              </div>
+            </div>
+            
+            ${evidenceHtmlMarkup}
+            
+            <div class="section">
+              <div class="section-title">Medidas Aplicadas e Acompanhamento</div>
+              <div class="description-box" style="min-height: 80px;">
+                ${oco.resposta || "Aguardando definição ou tratamento formal."}
+              </div>
+            </div>
+            
+            <div class="signatures">
+              <div>
+                <div class="sig-line">Assinatura do Autor / Servidor Responsável</div>
+              </div>
+              <div>
+                <div class="sig-line">Assinatura do(a) Aluno(a) / Responsável</div>
+              </div>
+            </div>
+            
+            <div class="footer">
+              Documento emitido eletronicamente pelo SIGAEDU em ${new Date().toLocaleDateString('pt-BR')} às ${new Date().toLocaleTimeString('pt-BR')}.
+            </div>
+            
+            <script>
+              window.onload = function() {
+                window.print();
+              };
+            <\/script>
+          </body>
+          </html>
+        `;
+        
+        printWindow.document.open();
+        printWindow.document.write(html);
+        printWindow.document.close();
+      };
+
+      // Upload Simulado de Arquivo Assinado
+      window.handleSignedDocUpload = function(input) {
+        if (input.files && input.files[0]) {
+          const file = input.files[0];
+          uploadedSignedDoc = {
+            name: file.name,
+            size: (file.size / 1024).toFixed(1) + " KB",
+            type: file.type
+          };
+          
+          // Atualizar UI do Dropzone
+          const icon = document.getElementById("signed-doc-icon");
+          icon.textContent = "check_circle";
+          icon.className = "material-symbols-outlined text-green-600 mb-1 text-[32px]";
+          
+          const status = document.getElementById("signed-doc-status");
+          status.textContent = "Termo Assinado Anexado ✓";
+          status.className = "text-body-sm font-bold text-green-600";
+          
+          const subtext = document.getElementById("signed-doc-subtext");
+          subtext.textContent = `${file.name} (${uploadedSignedDoc.size})`;
+          
+          alert(`Termo assinado "${file.name}" carregado com sucesso.`);
+        }
+      };
+
+      // Salvar Tratamento de Ocorrência
+      window.finalizarTratamentoOcorrencia = function() {
+        if (!activeOccurrenceForTreatment) return;
+        
+        const ocoId = activeOccurrenceForTreatment.id;
+        const resposta = document.getElementById("handle-oco-resposta").value.trim();
+        
+        if (!resposta) {
+          alert("Por favor, relate as medidas aplicadas e o tratamento tomado.");
+          return;
+        }
+        
+        // 1. Atualizar no banco de ocorrências
+        const oco = occurrences.find(o => o.id === ocoId);
+        if (oco) {
+          oco.resposta = resposta;
+          oco.status = "Tratada";
+          oco.arquivoAssinado = uploadedSignedDoc;
+        }
+        saveOccurrencesDb();
+        
+        // 2. Propagar para a Ficha individual do aluno
+        const alunosDb = JSON.parse(localStorage.getItem('sigaedu_alunos')) || [];
+        alunosDb.forEach(student => {
+          if (student.ocorrencias) {
+            const stOco = student.ocorrencias.find(o => o.id === ocoId);
+            if (stOco) {
+              stOco.tipo = "Concluído"; // muda badge para verde na ficha
+              stOco.desc = `${stOco.desc} | Acompanhamento: ${resposta} (Termo assinado anexado)`;
+            }
+          }
+        });
+        localStorage.setItem('sigaedu_alunos', JSON.stringify(alunosDb));
+        
+        toggleModal("modal-handle-occurrence");
+        activeOccurrenceForTreatment = null;
+        uploadedSignedDoc = null;
+        
+        renderOccurrencesTable();
+        renderOccurrenceStats();
+        
+        alert("Ocorrência tratada, homologada e arquivada com sucesso!");
+      };
+
+      // Exclusão de Ocorrência
+      window.solicitarExcluirOcorrencia = function(ocoId) {
+        const oco = occurrences.find(o => o.id === ocoId);
+        if (!oco) return;
+        
+        // Regra de Negócio: Excluir somente quem criou (Dhenison Carlos) ou o admin geral sob confirmação de senha
+        if (oco.autor === "Dhenison Carlos") {
+          if (confirm(`Tem certeza que deseja excluir permanentemente o registro de ocorrência de ${oco.alunosEnvolvidos.map(a => a.nome).join(', ')}?`)) {
+            excluirOcorrencia(ocoId);
+          }
+        } else {
+          const senha = prompt("Apenas o criador ou o Administrador com senha podem excluir ocorrências. Digite a senha:");
+          if (senha === null) return;
+          
+          if (senha === "siga@EDU2026" || senha === "siga@EDU2026excluir") {
+            if (confirm("Confirmar exclusão permanente do registro disciplina?")) {
+              excluirOcorrencia(ocoId);
+            }
+          } else {
+            alert("Senha incorreta! Exclusão cancelada.");
+          }
+        }
+      };
+
+      function excluirOcorrencia(ocoId) {
+        // 1. Remover do banco local de ocorrências
+        occurrences = occurrences.filter(o => o.id !== ocoId);
+        saveOccurrencesDb();
+        
+        // 2. Remover das fichas individuais de alunos
+        const alunosDb = JSON.parse(localStorage.getItem('sigaedu_alunos')) || [];
+        alunosDb.forEach(student => {
+          if (student.ocorrencias) {
+            student.ocorrencias = student.ocorrencias.filter(o => o.id !== ocoId);
+          }
+        });
+        localStorage.setItem('sigaedu_alunos', JSON.stringify(alunosDb));
+        
+        renderOccurrencesTable();
+        renderOccurrenceStats();
+        
+        alert("Ocorrência removida permanentemente do histórico e das fichas individuais de alunos.");
+      }
+
+      // Renderizar Ocorrências na Tabela
+      window.renderOccurrencesTable = function() {
+        const query = searchOccurrencesInput.value.trim().toLowerCase();
+        
+        const filtradas = occurrences.filter(o => {
+          const matchesQuery = o.tipo.toLowerCase().includes(query) || 
+                               o.relato.toLowerCase().includes(query) ||
+                               o.alunosEnvolvidos.some(a => a.nome.toLowerCase().includes(query));
+          return matchesQuery;
+        });
+        
+        occurrencesTableBody.innerHTML = "";
+        
+        if (filtradas.length === 0) {
+          occurrencesTableBody.innerHTML = `
+            <tr>
+              <td colspan="5" class="px-6 py-8 text-center text-on-surface-variant/80 italic font-medium">
+                Nenhuma ocorrência encontrada.
+              </td>
+            </tr>`;
+          return;
+        }
+        
+        filtradas.forEach(o => {
+          const formattedDate = o.dataOcorrencia.split("-").reverse().join("/");
+          const statusClass = o.status === "Pendente" 
+            ? "text-error font-bold" 
+            : "text-emerald-600 font-bold";
+          const dotClass = o.status === "Pendente" ? "bg-error animate-pulse" : "bg-emerald-600";
+          
+          const names = o.alunosEnvolvidos.map(a => a.nome).join(", ");
+          const displayLinks = o.alunosEnvolvidos.map(a => 
+            `<a href="fichadoaluno.html?cpf=${a.cpf}" class="hover:underline hover:text-primary transition-all text-primary" title="Ver ficha individual de ${a.nome}">${a.nome}</a>`
+          ).join(", ");
+          
+          const row = document.createElement("tr");
+          row.className = "hover:bg-surface-container-low/50 transition-colors";
+          row.innerHTML = `
+            <td class="px-6 py-4">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-secondary-container/20 flex items-center justify-center font-bold text-on-secondary-container select-none">
+                  ${o.alunosEnvolvidos[0].nome.substring(0, 2).toUpperCase()}
+                </div>
+                <div>
+                  <p class="font-bold text-primary truncate max-w-[200px]" title="${names}">${displayLinks}</p>
+                  <p class="text-body-sm text-on-surface-variant">${o.turma}</p>
+                </div>
+              </div>
+            </td>
+            <td class="px-6 py-4">
+              <span class="px-3 py-1 bg-surface-container-high rounded-full text-label-sm font-semibold text-primary">${o.tipo}</span>
+            </td>
+            <td class="px-6 py-4">
+              <p class="font-medium">${formattedDate}</p>
+              <p class="text-body-sm text-on-surface-variant">Autor: ${o.autor}</p>
+            </td>
+            <td class="px-6 py-4">
+              <span class="flex items-center gap-1.5 ${statusClass} text-label-sm uppercase select-none">
+                <span class="w-2.5 h-2.5 rounded-full ${dotClass}"></span> ${o.status}
+              </span>
+            </td>
+            <td class="px-6 py-4 text-right">
+              <div class="flex justify-end items-center gap-2">
+                <button class="text-primary hover:bg-secondary-container px-4 py-2 rounded-lg font-bold text-label-sm transition-all" onclick="solicitarTratarOcorrencia('${o.id}')">Tratar</button>
+                <button class="text-on-surface-variant hover:text-error p-2 transition-colors" onclick="solicitarExcluirOcorrencia('${o.id}')" title="Excluir Ocorrência">
+                  <span class="material-symbols-outlined text-[20px]">delete</span>
+                </button>
+              </div>
+            </td>
+          `;
+          occurrencesTableBody.appendChild(row);
+        });
+      };
+
+      // Atualizar estatísticas de ocorrências
+      function renderOccurrenceStats() {
+        const total = occurrences.length;
+        const pendentes = occurrences.filter(o => o.status === "Pendente").length;
+        const tratadas = occurrences.filter(o => o.status === "Tratada").length;
+        
+        statsTotal.textContent = total;
+        statsPendentes.textContent = pendentes;
+        statsTratadas.textContent = tratadas;
+        
+        // Maior incidência
+        if (occurrences.length === 0) {
+          statsIncidencia.textContent = "Nenhuma";
+          statsIncidenciaSub.textContent = "Sem registros ativos";
+          return;
+        }
+        
+        const counts = {};
+        let maxCount = 0;
+        let maxType = "";
+        
+        occurrences.forEach(o => {
+          counts[o.tipo] = (counts[o.tipo] || 0) + 1;
+          if (counts[o.tipo] > maxCount) {
+            maxCount = counts[o.tipo];
+            maxType = o.tipo;
+          }
+        });
+        
+        statsIncidencia.textContent = maxType;
+        statsIncidenciaSub.textContent = `${maxCount} incidência(s) registrada(s)`;
+      }
+
+      // Inicialização Geral
+      loadOccurrencesDb();
+      renderOccurrencesTable();
+      renderOccurrenceStats();
+
+    })();
+  </script>
+</body>
+</html>

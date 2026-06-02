@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>SIGAEDU - Agenda Escolar</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#000000",
+                        "on-tertiary-fixed-variant": "#44474a",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed-dim": "#c4c7ca",
+                        "surface": "#fdf8f8",
+                        "on-surface-variant": "#444748",
+                        "on-secondary-container": "#6e5c00",
+                        "on-primary-fixed-variant": "#474746",
+                        "outline": "#747878",
+                        "on-tertiary-fixed": "#191c1e",
+                        "on-tertiary": "#ffffff",
+                        "on-surface": "#1c1b1b",
+                        "on-secondary-fixed-variant": "#544600",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed-dim": "#e9c400",
+                        "on-secondary": "#ffffff",
+                        "secondary-container": "#fcd400",
+                        "inverse-primary": "#c8c6c5",
+                        "surface-tint": "#5f5e5e",
+                        "surface-container-highest": "#e5e2e1",
+                        "surface-container-high": "#ebe7e6",
+                        "secondary-fixed": "#ffe16d",
+                        "on-primary-container": "#858383",
+                        "inverse-surface": "#313030",
+                        "surface-container": "#f1edec",
+                        "on-background": "#1c1b1b",
+                        "on-tertiary-container": "#818487",
+                        "primary-container": "#1c1b1b",
+                        "inverse-on-surface": "#f4f0ef",
+                        "surface-bright": "#fdf8f8",
+                        "tertiary-container": "#191c1e",
+                        "tertiary": "#000000",
+                        "background": "#fdf8f8",
+                        "surface-container-low": "#f7f3f2",
+                        "on-primary-fixed": "#1c1b1b",
+                        "primary-fixed": "#e5e2e1",
+                        "surface-dim": "#ddd9d8",
+                        "on-primary": "#ffffff",
+                        "surface-variant": "#e5e2e1",
+                        "on-secondary-fixed": "#221b00",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed": "#e0e3e6",
+                        "primary-fixed-dim": "#c8c6c5",
+                        "error-container": "#ffdad6",
+                        "on-error": "#ffffff",
+                        "secondary": "#705d00",
+                        "outline-variant": "#c4c7c7"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "container-max": "1440px",
+                        "base": "8px",
+                        "xl": "80px",
+                        "sm": "12px",
+                        "md": "24px",
+                        "gutter": "24px",
+                        "xs": "4px",
+                        "lg": "48px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Inter"],
+                        "headline-xl": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", {"lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "500"}],
+                        "headline-xl": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-md": ["14px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            overflow: hidden;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #e5e2e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #d1cfce;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen flex">
+
+<!-- SideNavBar Componente Unificado -->
+<aside id="sidebar" class="fixed left-0 top-0 bottom-0 z-50 flex flex-col p-sm pt-xl overflow-y-auto w-64 bg-white/70 backdrop-blur-xl border-r border-surface-variant dark:border-outline-variant shadow-md transition-transform duration-300 -translate-x-full md:translate-x-0">
+    <div class="px-sm mb-lg flex justify-between items-center">
+        <div class="flex items-center gap-sm">
+            <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-md">
+                <span class="material-symbols-outlined text-secondary-container" data-icon="school">school</span>
+            </div>
+            <div>
+                <h1 class="text-label-md font-bold text-primary tracking-tight leading-none">SIGAEDU</h1>
+                <p class="text-body-sm font-medium text-on-surface-variant">Gestão Acadêmica</p>
+            </div>
+        </div>
+        <button class="md:hidden p-1 text-on-surface hover:bg-surface-container-high rounded-full transition-colors" onclick="toggleSidebar()">
+            <span class="material-symbols-outlined">close</span>
+        </button>
+    </div>
+    <nav class="flex-1 space-y-1">
+        <!-- Links Uniformes com Transições Suaves -->
+        <a id="menu-dashboard" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="dashboard.html">
+            <span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+            <span class="text-label-md font-label-md">Dashboard</span>
+        </a>
+        <a id="menu-turmas" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="turmas.html">
+            <span class="material-symbols-outlined" data-icon="groups">groups</span>
+            <span class="text-label-md font-label-md">Turmas</span>
+        </a>
+        <a id="menu-alunos" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="fichadoaluno.html">
+            <span class="material-symbols-outlined" data-icon="person">person</span>
+            <span class="text-label-md font-label-md">Alunos</span>
+        </a>
+        <a id="menu-calendario" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="calendario.html">
+            <span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+            <span class="text-label-md font-label-md">Calendário</span>
+        </a>
+        <a id="menu-agenda" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="agenda.html">
+            <span class="material-symbols-outlined" data-icon="event_note">event_note</span>
+            <span class="text-label-md font-label-md">Agenda</span>
+        </a>
+        <a id="menu-frequencia" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="frequencia.html">
+            <span class="material-symbols-outlined" data-icon="fact_check">fact_check</span>
+            <span class="text-label-md font-label-md">Frequência</span>
+        </a>
+        <a id="menu-ocorrencias" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="ocorrencias.html">
+            <span class="material-symbols-outlined" data-icon="report_problem">report_problem</span>
+            <span class="text-label-md font-label-md">Ocorrências</span>
+        </a>
+        <a id="menu-solicitacoes" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="solicitacoes.html">
+            <span class="material-symbols-outlined" data-icon="task">task</span>
+            <span class="text-label-md font-label-md">Solicitações</span>
+        </a>
+        <a id="menu-whatsapp" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="whatsapp.html">
+            <span class="material-symbols-outlined" data-icon="message">message</span>
+            <span class="text-label-md font-label-md">Whatsapp</span>
+        </a>
+        <a id="menu-relatorios" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="relatorios.html">
+            <span class="material-symbols-outlined" data-icon="description">description</span>
+            <span class="text-label-md font-label-md">Relatórios</span>
+        </a>
+        <a id="menu-boletins" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="boletins.html">
+            <span class="material-symbols-outlined" data-icon="assignment_ind">assignment_ind</span>
+            <span class="text-label-md font-label-md">Boletins</span>
+        </a>
+        <a id="menu-usuarios" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="usuarios.html">
+            <span class="material-symbols-outlined" data-icon="manage_accounts">manage_accounts</span>
+            <span class="text-label-md font-label-md">Usuários</span>
+        </a>
+    </nav>
+    <div class="mt-xl border-t border-surface-variant/30 pt-md space-y-1">
+        <a id="menu-suporte" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="#">
+            <span class="material-symbols-outlined" data-icon="contact_support">contact_support</span>
+            <span class="text-label-md font-label-md">Suporte</span>
+        </a>
+        <a id="menu-configuracoes" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="#">
+            <span class="material-symbols-outlined" data-icon="settings">settings</span>
+            <span class="text-label-md font-label-md">Configurações</span>
+        </a>
+    </div>
+</aside>
+
+<!-- Overlay para Foco Mobile -->
+<div id="sidebar-overlay" class="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm hidden md:hidden" onclick="toggleSidebar()"></div>
+
+<!-- Main Content Area -->
+<main class="flex-grow md:ml-64 ml-0 min-h-screen flex flex-col relative transition-all duration-300">
+    <!-- Top Header -->
+    <header class="fixed top-0 right-0 left-0 md:left-64 z-40 h-xl px-gutter flex justify-between items-center bg-white/70 backdrop-blur-xl dark:bg-surface-container/70 border-b border-surface-variant dark:border-outline-variant shadow-sm transition-all duration-300">
+        <div class="flex items-center gap-md">
+            <button class="md:hidden p-2 text-on-surface hover:bg-surface-container-high rounded-full transition-colors" onclick="toggleSidebar()">
+                <span class="material-symbols-outlined">menu</span>
+            </button>
+            <div class="hidden sm:flex items-center bg-surface-container-low rounded-full px-md py-2 w-96 border border-surface-variant/50 focus-within:border-primary transition-colors">
+                <span class="material-symbols-outlined text-on-surface-variant mr-sm">search</span>
+                <input class="bg-transparent border-none focus:ring-0 text-body-sm w-full p-0" id="global-search" placeholder="Pesquisar evento..." type="text"/>
+            </div>
+        </div>
+        <div class="flex items-center gap-md">
+            <div class="flex items-center gap-sm">
+                <button class="p-2 text-on-surface-variant hover:bg-surface-container-low transition-all duration-200 rounded-full relative hover:scale-105 active:scale-95">
+                    <span class="material-symbols-outlined">notifications</span>
+                    <span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full animate-pulse"></span>
+                </button>
+                <button class="p-2 text-on-surface-variant hover:bg-surface-container-low transition-all duration-200 rounded-full hover:scale-105 active:scale-95">
+                    <span class="material-symbols-outlined">help</span>
+                </button>
+            </div>
+            <div class="h-8 w-[1px] bg-surface-variant hidden sm:block"></div>
+            <div class="flex items-center gap-sm pl-sm cursor-pointer hover:bg-surface-container-low p-xs rounded-xl transition-all duration-200">
+                <div class="text-right hidden sm:block">
+                    <p class="text-label-md font-bold text-primary leading-none">Dhenison Carlos</p>
+                    <p class="text-label-sm text-on-surface-variant">Administrador</p>
+                </div>
+                <img alt="Dhenison Carlos - Administrador" class="w-10 h-10 rounded-full object-cover border-2 border-secondary-container hover:scale-105 transition-transform duration-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRGSGbqGOo2dzNp40hZk4pp_0rVieA-Su6u1WdWdVVqvGIA6n7dJMIDQVg3vkTYKgYN5HRKv7SOzuV4CGLSmB4xKZHKFpq-2ab9UNYf9ye3MByCMdx_JIehrQjusuLvStYhxK5Qj2eZHDffXBfYxzFUFDsX7kk7oInOP0foJp972O4lAIpD8pOJMQ4ehoA3BKsZHDj0gIh6Fx7Dr-Uvdu89v6j1O2f_mCuy7lSXEnJdzNLXbaD9C36QemEJIA6ok8BwdRRm8oVmvA"/>
+            </div>
+        </div>
+    </header>
+
+    <!-- Canvas Container -->
+    <div class="mt-xl p-gutter max-w-container-max mx-auto w-full flex-1 flex flex-col gap-lg">
+        <!-- Page Header -->
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-md">
+            <div>
+                <h2 class="text-headline-lg font-headline-lg text-primary">Agenda Escolar</h2>
+                <p class="text-body-md text-on-surface-variant">Gerencie eventos, avaliações e atividades institucionais.</p>
+            </div>
+            <button class="bg-secondary-container text-on-secondary-container font-bold px-md py-sm rounded-xl flex items-center gap-sm hover:opacity-90 active:scale-95 transition-all shadow-sm" onclick="openNewEventModal()">
+                <span class="material-symbols-outlined" data-icon="add">add</span>
+                Novo Agendamento
+            </button>
+        </div>
+
+        <!-- Filters & Toggles -->
+        <div class="bg-white rounded-xl border border-surface-variant p-md shadow-sm flex flex-col lg:flex-row gap-md items-center justify-between">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-md w-full lg:w-auto">
+                <div class="flex flex-col gap-xs">
+                    <label class="text-label-sm font-label-sm text-on-surface-variant font-medium">Turno</label>
+                    <select class="border border-outline-variant rounded-lg p-2 text-body-sm focus:border-primary focus:ring-0" id="filter-turno">
+                        <option value="Todos">Todos</option>
+                        <option value="Matutino">Matutino</option>
+                        <option value="Vespertino">Vespertino</option>
+                        <option value="Noturno">Noturno</option>
+                    </select>
+                </div>
+                <div class="flex flex-col gap-xs">
+                    <label class="text-label-sm font-label-sm text-on-surface-variant font-medium">Filtrar por Turma</label>
+                    <select class="border border-outline-variant rounded-lg p-2 text-body-sm focus:border-primary focus:ring-0" id="filter-turma">
+                        <!-- Carregado dinamicamente -->
+                    </select>
+                </div>
+            </div>
+            <div class="flex items-center bg-surface-container-low p-1 rounded-xl shrink-0" id="agenda-scope-toggle">
+                <button class="px-md py-xs text-label-md font-bold bg-white shadow-sm rounded-lg transition-all" id="btn-scope-all">Agenda Geral</button>
+                <button class="px-md py-xs text-label-md font-medium text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all" id="btn-scope-turma">Por Minhas Turmas</button>
+            </div>
+        </div>
+
+        <!-- Bento Grid - Upcoming Highlights -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-md">
+            <!-- Dynamic Highlight Box -->
+            <div id="highlight-card-container" class="md:col-span-2 bg-primary text-white p-lg rounded-xl relative overflow-hidden flex flex-col justify-between min-h-[240px] shadow-md transition-all duration-300">
+                <!-- Carregado Dinamicamente -->
+            </div>
+
+            <!-- Resumo da Semana -->
+            <div class="bg-white border border-surface-variant p-lg rounded-xl flex flex-col gap-md shadow-sm">
+                <h4 class="text-label-md font-bold text-on-surface-variant uppercase tracking-widest text-[11px]">Resumo das Próximas 2 Semanas</h4>
+                <div class="space-y-md">
+                    <div class="flex items-center gap-md">
+                        <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+                            <span class="material-symbols-outlined" data-icon="quiz">quiz</span>
+                        </div>
+                        <div>
+                            <p class="text-label-md font-bold" id="counter-tests">0 Testes</p>
+                            <p class="text-body-sm text-on-surface-variant">Previstos no calendário</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-md">
+                        <div class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center text-orange-600">
+                            <span class="material-symbols-outlined" data-icon="groups">groups</span>
+                        </div>
+                        <div>
+                            <p class="text-label-md font-bold" id="counter-meetings">0 Reuniões</p>
+                            <p class="text-body-sm text-on-surface-variant">Agendadas e homologadas</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-md">
+                        <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600">
+                            <span class="material-symbols-outlined" data-icon="celebration">celebration</span>
+                        </div>
+                        <div>
+                            <p class="text-label-md font-bold" id="counter-projects">0 Projetos</p>
+                            <p class="text-body-sm text-on-surface-variant">Feiras ou mostras de arte</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Events List -->
+        <div class="space-y-md">
+            <div class="flex items-center justify-between select-none">
+                <h3 class="text-label-md font-bold text-on-surface-variant tracking-wider uppercase text-[11px]" id="feed-title">Próximos Agendamentos</h3>
+                <div class="flex gap-2">
+                    <span class="text-body-sm text-on-surface-variant font-bold bg-surface-container-low px-3 py-1 rounded-full border border-outline-variant/30" id="total-events-badge">0 Eventos</span>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 gap-sm" id="agenda-feed">
+                <!-- Dynamic cards generated via JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="w-full py-md px-gutter flex justify-between items-center mt-auto bg-transparent border-t border-surface-variant/30">
+        <p class="text-body-sm text-on-surface-variant">Desenvolvido por Dhenison Carlos - 2026</p>
+        <div class="flex gap-md">
+            <a class="text-label-sm font-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Termos de Uso</a>
+            <a class="text-label-sm font-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Privacidade</a>
+        </div>
+    </footer>
+</main>
+
+<!-- Modal: Novo / Editar Agendamento -->
+<div class="fixed inset-0 z-[150] bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-md" id="modal-agenda">
+    <div class="bg-white w-full max-w-2xl rounded-xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200 border border-outline-variant">
+        <div class="p-md border-b border-surface-variant flex justify-between items-center bg-surface-container-low">
+            <h3 class="text-headline-md font-bold text-primary" id="modal-agenda-title">Novo Agendamento</h3>
+            <button class="p-xs hover:bg-surface-container-high rounded-full transition-colors" onclick="closeEventModal()">
+                <span class="material-symbols-outlined" data-icon="close">close</span>
+            </button>
+        </div>
+        <form class="p-lg grid grid-cols-1 md:grid-cols-2 gap-md max-h-[70vh] overflow-y-auto" id="form-agenda" onsubmit="saveAgendaEvent(event)">
+            <input type="hidden" id="event-edit-id" value=""/>
+            
+            <div class="flex flex-col gap-xs col-span-1">
+                <label class="text-label-md font-label-md text-primary font-bold">Título do Evento</label>
+                <input class="border border-outline-variant rounded-lg p-sm text-body-sm focus:border-primary focus:ring-1 focus:ring-primary" id="event-title" placeholder="Ex: Prova Mensal de História" type="text" required/>
+            </div>
+            
+            <div class="flex flex-col gap-xs col-span-1">
+                <label class="text-label-md font-label-md text-primary font-bold">Tipo de Evento</label>
+                <select class="border border-outline-variant rounded-lg p-sm text-body-sm focus:border-primary focus:ring-0 bg-white" id="event-tipo" required>
+                    <option value="">Selecione o tipo</option>
+                    <option value="Prova">Prova</option>
+                    <option value="Teste">Teste</option>
+                    <option value="Atividades">Atividades</option>
+                    <option value="Projeto">Projeto</option>
+                    <option value="Olimpíada">Olimpíada</option>
+                    <option value="Reunião">Reunião</option>
+                    <option value="Aulão">Aulão</option>
+                    <option value="Palestra">Palestra</option>
+                    <option value="Jogos">Jogos</option>
+                </select>
+            </div>
+            
+            <div class="flex flex-col gap-xs col-span-1">
+                <label class="text-label-md font-label-md text-primary font-bold">Data Agendada</label>
+                <input class="border border-outline-variant rounded-lg p-sm text-body-sm focus:border-primary focus:ring-0" id="event-data" type="date" required/>
+            </div>
+            
+            <div class="flex flex-col gap-xs col-span-1">
+                <label class="text-label-md font-label-md text-primary font-bold">Turno</label>
+                <select class="border border-outline-variant rounded-lg p-sm text-body-sm focus:border-primary focus:ring-0 bg-white" id="event-turno" required>
+                    <option value="Matutino">Matutino</option>
+                    <option value="Vespertino">Vespertino</option>
+                    <option value="Noturno">Noturno</option>
+                </select>
+            </div>
+            
+            <div class="flex flex-col gap-xs col-span-1">
+                <label class="text-label-md font-label-md text-primary font-bold">Horário de Início / Término (Opcional)</label>
+                <input class="border border-outline-variant rounded-lg p-sm text-body-sm focus:border-primary focus:ring-0" id="event-horario" placeholder="Ex: 07:30 - 09:10 ou Todo o dia" type="text"/>
+            </div>
+
+            <div class="flex flex-col gap-xs col-span-1">
+                <label class="text-label-md font-label-md text-primary font-bold">Professor / Responsável</label>
+                <input class="border border-outline-variant rounded-lg p-sm text-body-sm focus:border-primary focus:ring-0" id="event-professor" placeholder="Ex: Prof. Ana Paula" type="text"/>
+            </div>
+            
+            <!-- Multi-Class checklist (Replaces simple multi-select as requested) -->
+            <div class="flex flex-col gap-xs md:col-span-2">
+                <label class="text-label-md font-label-md text-primary font-bold">Turmas Vinculadas (Escolha uma ou mais)</label>
+                <div id="event-turmas-checklist" class="border border-outline-variant rounded-lg p-sm max-h-40 overflow-y-auto space-y-2 bg-surface-container-low select-none">
+                    <!-- Checkboxes de turmas injetados dinamicamente -->
+                </div>
+                <span class="text-[10px] text-on-surface-variant">Selecione todas as turmas que participarão do evento.</span>
+            </div>
+
+            <!-- Upload Cover Image -->
+            <div class="flex flex-col gap-xs md:col-span-2">
+                <label class="text-label-md font-label-md text-primary font-bold">Imagem de Destaque / Fundo do Card (Opcional)</label>
+                <input type="file" id="event-imagem" class="hidden" accept="image/*" onchange="handleEventImageUpload(this)"/>
+                
+                <div onclick="document.getElementById('event-imagem').click()" class="border-2 border-dashed border-outline-variant rounded-xl p-md flex flex-col items-center gap-xs hover:bg-surface-container-low transition-colors cursor-pointer text-center" id="event-image-dropzone">
+                    <span class="material-symbols-outlined text-on-surface-variant text-headline-md" id="event-image-icon">upload_file</span>
+                    <p class="text-label-sm font-bold text-primary" id="event-image-status">Clique para carregar uma imagem para o card</p>
+                    <p class="text-[10px] text-on-surface-variant">Formato PNG, JPG ou WEBP até 5MB</p>
+                </div>
+                
+                <!-- Preview Thumbnail -->
+                <div id="event-image-preview-container" class="hidden p-sm bg-surface-container-low rounded-xl border border-outline-variant flex items-center justify-between">
+                    <div class="flex items-center gap-sm">
+                        <img id="event-image-preview" src="" class="w-16 h-12 rounded-lg object-cover border border-outline-variant bg-white"/>
+                        <div>
+                            <p class="text-body-sm font-bold text-primary truncate max-w-[200px]" id="event-image-filename">imagem.jpg</p>
+                            <span class="text-[10px] text-emerald-600 font-bold">Imagem pronta para envio ✓</span>
+                        </div>
+                    </div>
+                    <button type="button" onclick="clearEventImage()" class="p-xs text-on-surface-variant hover:text-error transition-all">
+                        <span class="material-symbols-outlined text-[20px]">delete</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Descrição detalhada do evento -->
+            <div class="flex flex-col gap-xs md:col-span-2">
+                <label class="text-label-md font-label-md text-primary font-bold">Descrição / Detalhes do Evento</label>
+                <textarea id="event-descricao" class="border border-outline-variant rounded-lg p-sm text-body-sm focus:border-primary focus:ring-1 focus:ring-primary h-20 bg-white" placeholder="Insira detalhes complementares sobre o evento, conteúdos cobrados na prova ou orientações..."></textarea>
+            </div>
+            
+            <div class="flex items-center gap-sm md:col-span-2">
+                <input type="checkbox" id="event-destaque" class="rounded text-primary focus:ring-primary h-4 w-4"/>
+                <label for="event-destaque" class="text-body-sm text-primary font-bold cursor-pointer select-none">Marcar este evento como Destaque principal do painel superior</label>
+            </div>
+        </form>
+        <div class="p-md border-t border-surface-variant bg-surface-container-low flex justify-end gap-md">
+            <button class="px-md py-sm rounded-xl text-label-md font-bold hover:bg-surface-container-high transition-all" onclick="closeEventModal()">Cancelar</button>
+            <button type="submit" form="form-agenda" class="bg-primary text-white px-lg py-sm rounded-xl text-label-md font-bold hover:opacity-90 active:scale-95 transition-all" id="btn-save-event">Registrar Agendamento</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Sidebar Mobile Toggle
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+        if (sidebar.classList.contains('-translate-x-full')) {
+            sidebar.classList.remove('-translate-x-full');
+            overlay.classList.remove('hidden');
+        } else {
+            sidebar.classList.add('-translate-x-full');
+            overlay.classList.add('hidden');
+        }
+    }
+
+    // Active Sidebar Highlight
+    (function() {
+        const path = window.location.pathname;
+        const page = path.split('/').pop() || 'unificado.html';
+        
+        const menuMap = {
+            'dashboard.html': 'menu-dashboard',
+            'turmas.html': 'menu-turmas',
+            'fichadoaluno.html': 'menu-alunos',
+            'calendario.html': 'menu-calendario',
+            'agenda.html': 'menu-agenda',
+            'frequencia.html': 'menu-frequencia',
+            'ocorrencias.html': 'menu-ocorrencias',
+            'solicitacoes.html': 'menu-solicitacoes',
+            'whatsapp.html': 'menu-whatsapp',
+            'relatorios.html': 'menu-relatorios',
+            'boletins.html': 'menu-boletins',
+            'usuarios.html': 'menu-usuarios'
+        };
+        
+        const activeMenuId = menuMap[page];
+        if (activeMenuId) {
+            const activeLink = document.getElementById(activeMenuId);
+            if (activeLink) {
+                activeLink.classList.remove('text-on-surface-variant', 'hover:bg-surface-container-high', 'hover:scale-[1.02]');
+                activeLink.classList.add('bg-secondary-container', 'text-on-secondary-container', 'font-bold', 'scale-95', 'border-l-4', 'border-primary');
+            }
+        }
+    })();
+
+    // ==========================================================================
+    // SEGURANÇA E PROTEÇÃO DO CLIENTE (Anti-F12 / Anti-Inspect / Anti-Botão Direito)
+    // ==========================================================================
+    (function() {
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.keyCode === 123) {
+                e.preventDefault();
+                return false;
+            }
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 73) {
+                e.preventDefault();
+                return false;
+            }
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 74) {
+                e.preventDefault();
+                return false;
+            }
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 67) {
+                e.preventDefault();
+                return false;
+            }
+            if (e.ctrlKey && e.keyCode === 85) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        setInterval(function() {
+            (function() {
+                const start = new Date();
+                debugger;
+                const end = new Date();
+                if (end - start > 100) {
+                    console.clear();
+                    document.body.innerHTML = `
+                        <div class="fixed inset-0 bg-red-950 text-red-200 flex flex-col items-center justify-center p-md text-center z-[99999]">
+                            <span class="material-symbols-outlined text-[64px] mb-md text-red-400">gavel</span>
+                            <h1 class="text-headline-xl font-bold">Acesso Bloqueado</h1>
+                            <p class="text-body-lg max-w-md mt-sm">O uso de Ferramentas de Desenvolvedor (F12) é estritamente proibido neste sistema para garantir a segurança dos dados escolares.</p>
+                            <button onclick="window.location.reload()" class="mt-lg px-lg py-sm bg-red-600 text-white rounded-xl font-bold hover:bg-red-500 transition-colors">Recarregar Sistema</button>
+                        </div>`;
+                }
+            })();
+        }, 1000);
+
+        if (typeof console !== 'undefined') {
+            setInterval(function() {
+                console.clear();
+            }, 3000);
+        }
+    })();
+
+    // ==========================================================================
+    // LÓGICA DE NEGÓCIO DE AGENDA ESCOLAR TOTALMENTE DINÂMICA E INTEGRADA
+    // ==========================================================================
+    (function() {
+        // Obter tabelas do localStorage
+        function getDb(key, defaultValue = []) {
+            try {
+                const data = localStorage.getItem(key);
+                return data ? JSON.parse(data) : defaultValue;
+            } catch(e) {
+                console.error("Erro ao ler localStorage: ", e);
+                return defaultValue;
+            }
+        }
+
+        let turmas = getDb('sigaedu_turmas', [
+            { id: 1, nome: "1º Ano A", turno: "Manhã", tipo: "Regular", vagas: 30, alunosAtivos: 28, frequencia: 92 },
+            { id: 2, nome: "9º Ano C", turno: "Tarde", tipo: "Fluxo", vagas: 25, alunosAtivos: 22, frequencia: 91 },
+            { id: 3, nome: "EJA Mod I", turno: "Noite", tipo: "EJA", vagas: 40, alunosAtivos: 35, frequencia: 81 }
+        ]);
+
+        if (!localStorage.getItem('sigaedu_turmas')) {
+            localStorage.setItem('sigaedu_turmas', JSON.stringify(turmas));
+        }
+
+        let defaultAgenda = [
+            {
+                id: "evt_1",
+                titulo: "Olimpíada Brasileira de Matemática (OBMEP)",
+                tipo: "Olimpíada",
+                data: "2026-06-24",
+                turno: "Matutino",
+                horario: "08:00 - 12:00",
+                professor: "Sistema (SIGAEDU)",
+                turmas: ["1º Ano A", "9º Ano C"],
+                descricao: "Aplicação da primeira fase da OBMEP para todos os alunos do Fundamental II e Ensino Médio. Trazer caneta preta ou azul.",
+                imagem: null,
+                status: "Confirmado",
+                destaque: true
+            },
+            {
+                id: "evt_2",
+                titulo: "Avaliação Mensal de Química - 2º Bimestre",
+                tipo: "Teste",
+                data: "2026-06-15",
+                turno: "Matutino",
+                horario: "07:30 - 09:10",
+                professor: "Prof. Ana Paula",
+                turmas: ["1º Ano A"],
+                descricao: "Conteúdo cobrado: Tabela Periódica, ligações químicas e balanceamento de equações. Estudar o capítulo 4 do livro didático.",
+                imagem: null,
+                status: "Confirmado",
+                destaque: false
+            },
+            {
+                id: "evt_3",
+                titulo: "Semana da Arte Moderna - Exposição Interna",
+                tipo: "Projeto",
+                data: "2026-06-18",
+                turno: "Vespertino",
+                horario: "Todo o dia",
+                professor: "Coord. Ricardo",
+                turmas: ["1º Ano A", "9º Ano C"],
+                descricao: "Exposição de quadros e manifestações artísticas idealizadas pelos alunos em homenagem ao movimento de 1922. Aberto para visitação da comunidade.",
+                imagem: "https://lh3.googleusercontent.com/aida-public/AB6AXuAj_lYDOJYI5RTbZOZb29NYokeQcJGzr-o0VVU_KgAP-cuG5KJhfr7pj7ee7EZdUluxBhsdRnP81tdqueOVEvANdb2AD0FXXzksHCDlrK3ILL64R1I11gq-tfDlEauTCKZ-t5WUoU7xUfEiUNoLzZlClQgKSMFU2S_oDC8t8XYKnLISi9c0nyEuwYHZWQvD-sDTlw8bdqyUd13PeJ7_oLVLPNq5UqSYQQ5xuvU39NSIlxQi-g3BOfbaC9jE4H1hVN47wpA3u5Mp0kk",
+                status: "Em Preparação",
+                destaque: false
+            },
+            {
+                id: "evt_4",
+                titulo: "Reunião de Pais e Mestres - Conselho de Classe",
+                tipo: "Reunião",
+                data: "2026-06-20",
+                turno: "Noturno",
+                horario: "19:00 - 20:30",
+                professor: "Dir. Marta",
+                turmas: ["EJA Mod I"],
+                descricao: "Alinhamento com pais e responsáveis sobre o andamento pedagógico do 1º Bimestre e consolidação de notas bimestrais.",
+                imagem: null,
+                status: "Confirmado",
+                destaque: false
+            }
+        ];
+
+        let agenda = getDb('sigaedu_agenda', []);
+        
+        // Semeando a base se estiver vazia
+        if (agenda.length === 0) {
+            agenda = defaultAgenda;
+            localStorage.setItem('sigaedu_agenda', JSON.stringify(agenda));
+        }
+
+        // Estado de Visualização
+        let currentScope = 'Geral'; // 'Geral' ou 'Turma'
+        let uploadedEventImage = null;
+
+        // DOM Elements
+        const filterTurno = document.getElementById("filter-turno");
+        const filterTurma = document.getElementById("filter-turma");
+        const globalSearch = document.getElementById("global-search");
+        const agendaFeed = document.getElementById("agenda-feed");
+        const totalEventsBadge = document.getElementById("total-events-badge");
+
+        const counterTests = document.getElementById("counter-tests");
+        const counterMeetings = document.getElementById("counter-meetings");
+        const counterProjects = document.getElementById("counter-projects");
+        const highlightCardContainer = document.getElementById("highlight-card-container");
+
+        const modalAgenda = document.getElementById("modal-agenda");
+        const formAgenda = document.getElementById("form-agenda");
+        const turmasChecklist = document.getElementById("event-turmas-checklist");
+        
+        const imageDropzone = document.getElementById("event-image-dropzone");
+        const imagePreviewContainer = document.getElementById("event-image-preview-container");
+        const imagePreview = document.getElementById("event-image-preview");
+        const imageFilename = document.getElementById("event-image-filename");
+
+        // Helper para Toasts Premium
+        function showToast(message, icon, colorHex) {
+            const toast = document.createElement("div");
+            toast.className = "fixed bottom-5 right-5 bg-zinc-900 text-white px-lg py-sm rounded-xl shadow-2xl flex items-center gap-sm animate-in fade-in slide-in-from-bottom-5 duration-300 z-[9999]";
+            toast.innerHTML = `
+                <span class="material-symbols-outlined" style="color: ${colorHex}">${icon}</span>
+                <span class="text-label-md font-bold">${message}</span>
+            `;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.add("animate-out", "fade-out", "slide-out-to-bottom-5");
+                setTimeout(() => toast.remove(), 300);
+            }, 2500);
+        }
+
+        // Preencher seletores e checklists dinamicamente
+        function initializeFiltersAndForm() {
+            // Seletor superior de Turmas
+            filterTurma.innerHTML = '<option value="Todas">Todas as Turmas</option>';
+            
+            // Checklist no Modal de Novo Agendamento
+            turmasChecklist.innerHTML = '';
+
+            turmas.forEach(t => {
+                // Preencher filtro superior
+                const opt = document.createElement('option');
+                opt.value = t.nome;
+                opt.textContent = `${t.nome} (${t.turno})`;
+                filterTurma.appendChild(opt);
+
+                // Preencher Checklist de multiplas turmas
+                const label = document.createElement('label');
+                label.className = "flex items-center gap-xs cursor-pointer select-none hover:bg-white p-1 rounded-lg transition-colors";
+                label.innerHTML = `
+                    <input type="checkbox" value="${t.nome}" class="rounded text-primary focus:ring-primary class-checkbox h-4 w-4 border-outline-variant"/>
+                    <span class="text-body-sm text-primary font-medium">${t.nome} - <span class="text-[11px] text-on-surface-variant font-normal">${t.turno}</span></span>
+                `;
+                turmasChecklist.appendChild(label);
+            });
+        }
+
+        // Retorna o ícone e gradiente HSL de preenchimento do card de acordo com o Tipo de Evento
+        function getCoverFallback(type) {
+            const types = {
+                'Prova': { icon: 'assignment', gradient: 'from-amber-600 to-amber-700 bg-amber-50 text-amber-700 border-amber-200' },
+                'Teste': { icon: 'quiz', gradient: 'from-blue-600 to-indigo-700 bg-blue-50 text-blue-700 border-blue-200' },
+                'Atividades': { icon: 'auto_stories', gradient: 'from-teal-600 to-emerald-700 bg-teal-50 text-teal-700 border-teal-200' },
+                'Projeto': { icon: 'science', gradient: 'from-purple-600 to-pink-700 bg-purple-50 text-purple-700 border-purple-200' },
+                'Olimpíada': { icon: 'emoji_events', gradient: 'from-yellow-600 to-amber-600 bg-yellow-50 text-yellow-700 border-yellow-200' },
+                'Reunião': { icon: 'groups', gradient: 'from-zinc-600 to-slate-700 bg-zinc-50 text-zinc-700 border-zinc-200' },
+                'Aulão': { icon: 'school', gradient: 'from-cyan-600 to-blue-700 bg-cyan-50 text-cyan-700 border-cyan-200' },
+                'Palestra': { icon: 'co_present', gradient: 'from-rose-600 to-red-700 bg-rose-50 text-rose-700 border-rose-200' },
+                'Jogos': { icon: 'sports_soccer', gradient: 'from-emerald-600 to-green-700 bg-emerald-50 text-emerald-700 border-emerald-200' }
+            };
+            return types[type] || { icon: 'event_note', gradient: 'from-zinc-700 to-zinc-900 bg-zinc-50 text-zinc-700 border-zinc-200' };
+        }
+
+        // Renderizar a Agenda Escolar e Métricas de Resumo
+        window.renderAgenda = function() {
+            agenda = getDb('sigaedu_agenda', []);
+
+            const selTurno = filterTurno.value;
+            const selTurma = filterTurma.value;
+            const searchVal = globalSearch.value.trim().toLowerCase();
+
+            // Filtragem
+            let filtered = agenda.filter(event => {
+                // Filtro por Turno
+                if (selTurno !== 'Todos' && event.turno !== selTurno) return false;
+                
+                // Filtro por Turma
+                if (selTurma !== 'Todas' && !event.turmas.includes(selTurma)) return false;
+
+                // Escopo "Por Minhas Turmas" (Simulação que mostra apenas eventos vinculados a turmas regulares cadastradas)
+                if (currentScope === 'Turma') {
+                    const minhasTurmas = turmas.map(t => t.nome);
+                    const overlaps = event.turmas.some(t => minhasTurmas.includes(t));
+                    if (!overlaps) return false;
+                }
+
+                // Barra de Busca
+                if (searchVal) {
+                    const matchesTitle = event.titulo.toLowerCase().includes(searchVal);
+                    const matchesDesc = event.descricao.toLowerCase().includes(searchVal);
+                    const matchesType = event.tipo.toLowerCase().includes(searchVal);
+                    const matchesProf = event.professor.toLowerCase().includes(searchVal);
+                    if (!matchesTitle && !matchesDesc && !matchesType && !matchesProf) return false;
+                }
+
+                return true;
+            });
+
+            // Ordenar por data mais próxima
+            filtered.sort((a, b) => new Date(a.data) - new Date(b.data));
+
+            // Atualizar contagem no badge
+            totalEventsBadge.textContent = `${filtered.length} Evento(s)`;
+
+            // Limpar feed anterior
+            agendaFeed.innerHTML = '';
+
+            if (filtered.length === 0) {
+                agendaFeed.innerHTML = `
+                    <div class="bg-white border-2 border-dashed border-surface-variant/40 rounded-xl p-lg text-center shadow-inner flex flex-col items-center justify-center min-h-[220px]">
+                        <span class="material-symbols-outlined text-[48px] text-on-surface-variant/60 mb-sm">event_busy</span>
+                        <p class="text-body-md font-bold text-primary">Nenhum agendamento encontrado</p>
+                        <p class="text-body-sm text-on-surface-variant max-w-xs mt-1">Crie um novo evento no botão superior ou mude os filtros para buscar outro período.</p>
+                    </div>`;
+            } else {
+                filtered.forEach(evt => {
+                    const dateObj = new Date(evt.data + "T00:00:00");
+                    const day = String(dateObj.getDate()).padStart(2, '0');
+                    const monthShort = dateObj.toLocaleDateString('pt-BR', { month: 'short' }).substring(0, 3).toUpperCase();
+                    
+                    const meta = getCoverFallback(evt.tipo);
+                    
+                    // Render do thumbnail cover
+                    let thumbnailHtml = '';
+                    if (evt.imagem) {
+                        thumbnailHtml = `
+                            <div class="w-full md:w-24 h-20 rounded-lg overflow-hidden bg-surface-container flex-shrink-0 border border-outline-variant shadow-sm relative group-hover:scale-105 transition-transform duration-300">
+                                <img src="${evt.imagem}" class="w-full h-full object-cover" alt="${evt.titulo}"/>
+                            </div>
+                        `;
+                    } else {
+                        // Vector/Gradient cover fallback
+                        thumbnailHtml = `
+                            <div class="w-full md:w-24 h-20 rounded-lg bg-gradient-to-br ${meta.gradient} flex-shrink-0 flex items-center justify-center shadow-inner border border-outline-variant relative group-hover:scale-105 transition-transform duration-300">
+                                <span class="material-symbols-outlined text-white text-[32px] opacity-80" data-icon="${meta.icon}">${meta.icon}</span>
+                            </div>
+                        `;
+                    }
+
+                    const typeBadgeColors = {
+                        'Prova': 'bg-red-50 text-red-700 border-red-200',
+                        'Teste': 'bg-blue-50 text-blue-700 border-blue-200',
+                        'Projeto': 'bg-purple-50 text-purple-700 border-purple-200',
+                        'Olimpíada': 'bg-yellow-50 text-yellow-700 border-yellow-200',
+                        'Reunião': 'bg-zinc-50 text-zinc-700 border-zinc-200'
+                    };
+                    const typeBadgeClass = typeBadgeColors[evt.tipo] || 'bg-slate-50 text-slate-700 border-slate-200';
+
+                    const classesBadges = evt.turmas.map(t => `<span class="bg-surface-container text-primary text-[10px] font-bold px-2 py-0.5 rounded-full border border-outline-variant/30 select-none">${t}</span>`).join(' ');
+
+                    const card = document.createElement('div');
+                    card.className = "bg-white border border-surface-variant rounded-xl p-md flex flex-col md:flex-row md:items-center gap-md hover:shadow-md transition-all group animate-in fade-in duration-300 relative";
+                    card.innerHTML = `
+                        <div class="flex flex-col items-center justify-center min-w-[80px] h-[80px] bg-surface-container rounded-xl border border-outline-variant shrink-0 select-none shadow-sm">
+                            <span class="text-headline-md font-black text-primary leading-none">${day}</span>
+                            <span class="text-label-sm font-bold uppercase tracking-wider text-on-surface-variant">${monthShort}</span>
+                        </div>
+                        
+                        ${thumbnailHtml}
+
+                        <div class="flex-1 space-y-1 text-left min-w-0">
+                            <div class="flex flex-wrap items-center gap-2">
+                                <span class="px-2.5 py-0.5 rounded-full border text-[10px] font-bold uppercase tracking-wider ${typeBadgeClass}">${evt.tipo}</span>
+                                <span class="text-body-sm text-on-surface-variant font-medium flex items-center gap-1 select-none">
+                                    <span class="material-symbols-outlined text-[14px]">schedule</span> ${evt.horario || 'Todo o dia'}
+                                </span>
+                                <span class="text-body-sm text-on-surface-variant select-none">| ${evt.turno}</span>
+                            </div>
+                            <h4 class="text-label-md font-bold text-primary group-hover:text-zinc-700 transition-colors truncate max-w-[450px]" title="${evt.titulo}">${evt.titulo}</h4>
+                            <p class="text-body-sm text-on-surface-variant flex items-center gap-sm flex-wrap mt-1">
+                                <strong class="text-primary font-bold">Turmas:</strong> ${classesBadges}
+                            </p>
+                        </div>
+
+                        <div class="flex items-center gap-lg select-none shrink-0 justify-between md:justify-end border-t md:border-t-0 border-outline-variant/30 pt-sm md:pt-0">
+                            <div class="flex items-center gap-2">
+                                <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary overflow-hidden border border-outline-variant">
+                                    <img alt="${evt.professor}" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRGSGbqGOo2dzNp40hZk4pp_0rVieA-Su6u1WdWdVVqvGIA6n7dJMIDQVg3vkTYKgYN5HRKv7SOzuV4CGLSmB4xKZHKFpq-2ab9UNYf9ye3MByCMdx_JIehrQjusuLvStYhxK5Qj2eZHDffXBfYxzFUFDsX7kk7oInOP0foJp972O4lAIpD8pOJMQ4ehoA3BKsZHDj0gIh6Fx7Dr-Uvdu89v6j1O2f_mCuy7lSXEnJdzNLXbaD9C36QemEJIA6ok8BwdRRm8oVmvA"/>
+                                </div>
+                                <div class="text-left leading-tight">
+                                    <p class="text-label-sm font-bold text-primary truncate max-w-[120px]">${evt.professor || 'Coordenação'}</p>
+                                    <p class="text-[9px] text-on-surface-variant font-medium">Responsável</p>
+                                </div>
+                            </div>
+                            <span class="px-3 py-1 rounded-full text-[11px] font-extrabold border bg-emerald-50 text-emerald-700 border-emerald-200 tracking-wide">${evt.status}</span>
+                        </div>
+
+                        <!-- Hover Actions -->
+                        <div class="flex items-center gap-xs md:opacity-0 group-hover:opacity-100 transition-opacity absolute right-4 top-2 bg-white/90 p-1 rounded-lg border border-outline-variant/40 shadow-sm md:static md:border-0 md:bg-transparent md:shadow-none select-none">
+                            <button onclick="editAgendaEvent('${evt.id}')" class="p-1 hover:bg-surface-container-high rounded-full transition-all text-on-surface-variant hover:text-primary" title="Editar Evento">
+                                <span class="material-symbols-outlined text-[18px]">edit</span>
+                            </button>
+                            <button onclick="deleteAgendaEvent('${evt.id}')" class="p-1 hover:bg-red-50 rounded-full transition-all text-error" title="Excluir Evento">
+                                <span class="material-symbols-outlined text-[18px]">delete</span>
+                            </button>
+                        </div>
+                    `;
+                    agendaFeed.appendChild(card);
+                });
+            }
+
+            renderTopHighlightAndMeters();
+        }
+
+        // Renderizar Destaque e Contadores Bento
+        function renderTopHighlightAndMeters() {
+            const today = new Date();
+            const twoWeeksLater = new Date(today.getTime() + (14 * 24 * 60 * 60 * 1000));
+
+            // Contadores de testes, reuniões e projetos nas próximas 2 semanas
+            let tests = 0;
+            let meetings = 0;
+            let projects = 0;
+
+            agenda.forEach(evt => {
+                const date = new Date(evt.data + "T00:00:00");
+                if (date >= today && date <= twoWeeksLater) {
+                    if (evt.tipo === 'Teste' || evt.tipo === 'Prova') tests++;
+                    else if (evt.tipo === 'Reunião') meetings++;
+                    else if (evt.tipo === 'Projeto') projects++;
+                }
+            });
+
+            counterTests.textContent = `${tests} Teste${tests !== 1 ? 's' : ''}`;
+            counterMeetings.textContent = `${meetings} Reunião${meetings !== 1 ? 'ões' : ''}`;
+            counterProjects.textContent = `${projects} Projeto${projects !== 1 ? 's' : ''}`;
+
+            // Encontrar o evento destaque da agenda
+            let highlight = agenda.find(e => e.destaque === true);
+            if (!highlight && agenda.length > 0) {
+                highlight = agenda[0]; // fallback
+            }
+
+            if (highlight) {
+                const dateObj = new Date(highlight.data + "T00:00:00");
+                const formattedDate = dateObj.toLocaleDateString('pt-BR', { day: 'numeric', month: 'long' });
+                
+                let highlightImgHtml = '';
+                if (highlight.imagem) {
+                    highlightImgHtml = `<div class="absolute right-0 top-0 bottom-0 w-1/3 opacity-30 bg-cover bg-center" style="background-image: url('${highlight.imagem}')"></div>`;
+                } else {
+                    highlightImgHtml = `<div class="absolute right-0 top-0 bottom-0 w-1/3 opacity-20 bg-gradient-to-l from-secondary to-transparent"></div>`;
+                }
+
+                highlightCardContainer.innerHTML = `
+                    <div class="z-10 text-left">
+                        <span class="inline-block bg-secondary text-primary px-sm py-1 rounded-full text-label-sm font-extrabold mb-md tracking-wider">DESTAQUE ATIVO</span>
+                        <h3 class="text-headline-md font-headline-md leading-tight mb-sm truncate max-w-[400px] md:max-w-[550px]" title="${highlight.titulo}">${highlight.titulo}</h3>
+                        <p class="text-body-sm text-surface-variant opacity-90 max-w-md line-clamp-2">${highlight.descricao}</p>
+                    </div>
+                    <div class="z-10 flex items-center gap-lg mt-md">
+                        <div class="flex items-center gap-xs">
+                            <span class="material-symbols-outlined text-secondary" data-icon="calendar_month">calendar_month</span>
+                            <span class="text-label-md font-bold">${formattedDate}</span>
+                        </div>
+                        <div class="flex items-center gap-xs">
+                            <span class="material-symbols-outlined text-secondary" data-icon="schedule">schedule</span>
+                            <span class="text-label-md font-bold">${highlight.horario || 'Todo o dia'}</span>
+                        </div>
+                    </div>
+                    ${highlightImgHtml}
+                    <span class="material-symbols-outlined absolute -right-4 -bottom-4 text-[160px] text-white opacity-5 select-none" data-icon="functions">functions</span>
+                `;
+            } else {
+                highlightCardContainer.innerHTML = `
+                    <div class="text-center p-md flex flex-col items-center justify-center h-full w-full">
+                        <span class="material-symbols-outlined text-[48px] opacity-40">campaign</span>
+                        <p class="font-bold mt-sm">Nenhum evento em destaque ativo</p>
+                    </div>`;
+            }
+        }
+
+        // Abrir Modal de Cadastro ZERADO ou configurado
+        window.openNewEventModal = function() {
+            formAgenda.reset();
+            document.getElementById("event-edit-id").value = "";
+            document.getElementById("modal-agenda-title").textContent = "Novo Agendamento";
+            
+            // Desmarcar todos os checkboxes de turmas
+            const checkboxes = document.querySelectorAll(".class-checkbox");
+            checkboxes.forEach(cb => cb.checked = false);
+
+            clearEventImage();
+            modalAgenda.classList.remove('hidden');
+        };
+
+        // Fechar modal de cadastro
+        window.closeEventModal = function() {
+            modalAgenda.classList.add('hidden');
+            formAgenda.reset();
+            clearEventImage();
+        };
+
+        // Upload da Imagem com Redimensionamento e Compressão Inteligente
+        window.handleEventImageUpload = function(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                const originalSizeKb = (file.size / 1024).toFixed(1);
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        let width = img.width;
+                        let height = img.height;
+                        const maxDimension = 800; // Otimizado para cards e destaques
+                        
+                        if (width > height) {
+                            if (width > maxDimension) {
+                                height *= maxDimension / width;
+                                width = maxDimension;
+                            }
+                        } else {
+                            if (height > maxDimension) {
+                                width *= maxDimension / height;
+                                height = maxDimension;
+                            }
+                        }
+                        
+                        canvas.width = width;
+                        canvas.height = height;
+                        
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+                        
+                        // Compressão JPEG alta qualidade (0.7)
+                        const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
+                        uploadedEventImage = compressedBase64;
+                        
+                        // Tamanho aproximado base64
+                        const compressedSizeKb = ((compressedBase64.length * 3) / 4 / 1024).toFixed(1);
+
+                        imagePreview.src = compressedBase64;
+                        imageFilename.textContent = file.name;
+
+                        imagePreviewContainer.classList.remove("hidden");
+                        imageDropzone.classList.add("hidden");
+                        
+                        showToast(`Capa otimizada: de ${originalSizeKb} KB para ${compressedSizeKb} KB ✓`, "compress", "#10B981");
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        };
+
+        // Limpar Imagem do modal
+        window.clearEventImage = function() {
+            uploadedEventImage = null;
+            document.getElementById("event-imagem").value = "";
+            imagePreviewContainer.classList.add("hidden");
+            imageDropzone.classList.remove("hidden");
+        };
+
+        // Salvar Agendamento (Inserir ou Editar)
+        window.saveAgendaEvent = function(event) {
+            event.preventDefault();
+
+            const editId = document.getElementById("event-edit-id").value;
+            const titulo = document.getElementById("event-title").value.trim();
+            const tipo = document.getElementById("event-tipo").value;
+            const data = document.getElementById("event-data").value;
+            const turno = document.getElementById("event-turno").value;
+            const horario = document.getElementById("event-horario").value.trim();
+            const professor = document.getElementById("event-professor").value.trim();
+            const descricao = document.getElementById("event-descricao").value.trim();
+            const destaque = document.getElementById("event-destaque").checked;
+
+            // Coletar turmas selecionadas do checklist
+            const checkedBoxes = document.querySelectorAll(".class-checkbox:checked");
+            const selectedClasses = Array.from(checkedBoxes).map(cb => cb.value);
+
+            if (selectedClasses.length === 0) {
+                alert("Por favor, selecione pelo menos uma turma vinculada a este agendamento.");
+                return;
+            }
+
+            agenda = getDb('sigaedu_agenda', []);
+
+            if (destaque) {
+                // Desativar qualquer outro destaque anterior para manter apenas 1 ativo
+                agenda.forEach(e => e.destaque = false);
+            }
+
+            if (editId) {
+                // Editar existente
+                const evt = agenda.find(e => e.id === editId);
+                if (evt) {
+                    evt.titulo = titulo;
+                    evt.tipo = tipo;
+                    evt.data = data;
+                    evt.turno = turno;
+                    evt.horario = horario || "Todo o dia";
+                    evt.professor = professor || "Coordenação";
+                    evt.descricao = descricao || "Sem descrição informada.";
+                    evt.turmas = selectedClasses;
+                    evt.destaque = destaque;
+                    if (uploadedEventImage) {
+                        evt.imagem = uploadedEventImage;
+                    }
+                }
+                showToast("Agendamento atualizado com sucesso!", "edit_calendar", "#4ADE80");
+            } else {
+                // Criar Novo
+                const newEvt = {
+                    id: "evt_" + Date.now(),
+                    titulo: titulo,
+                    tipo: tipo,
+                    data: data,
+                    turno: turno,
+                    horario: horario || "Todo o dia",
+                    professor: professor || "Coordenação",
+                    descricao: descricao || "Sem descrição informada.",
+                    turmas: selectedClasses,
+                    imagem: uploadedEventImage,
+                    status: "Confirmado",
+                    destaque: destaque
+                };
+                agenda.unshift(newEvt);
+                showToast("Novo agendamento registrado com sucesso!", "event_available", "#4ADE80");
+            }
+
+            localStorage.setItem('sigaedu_agenda', JSON.stringify(agenda));
+            closeEventModal();
+            renderAgenda();
+        };
+
+        // Editar Agendamento
+        window.editAgendaEvent = function(id) {
+            agenda = getDb('sigaedu_agenda', []);
+            const evt = agenda.find(e => e.id === id);
+            if (!evt) return;
+
+            // Abrir e preencher modal
+            document.getElementById("event-edit-id").value = evt.id;
+            document.getElementById("modal-agenda-title").textContent = "Editar Agendamento";
+            
+            document.getElementById("event-title").value = evt.titulo;
+            document.getElementById("event-tipo").value = evt.tipo;
+            document.getElementById("event-data").value = evt.data;
+            document.getElementById("event-turno").value = evt.turno;
+            document.getElementById("event-horario").value = evt.horario || "";
+            document.getElementById("event-professor").value = evt.professor || "";
+            document.getElementById("event-descricao").value = evt.descricao || "";
+            document.getElementById("event-destaque").checked = evt.destaque || false;
+
+            // Marcar checkboxes de turmas envolvidas
+            const checkboxes = document.querySelectorAll(".class-checkbox");
+            checkboxes.forEach(cb => {
+                cb.checked = evt.turmas.includes(cb.value);
+            });
+
+            clearEventImage();
+            
+            if (evt.imagem) {
+                uploadedEventImage = evt.imagem;
+                imagePreview.src = evt.imagem;
+                imageFilename.textContent = "Imagem Cadastrada";
+                imagePreviewContainer.classList.remove("hidden");
+                imageDropzone.classList.add("hidden");
+            }
+
+            modalAgenda.classList.remove('hidden');
+        };
+
+        // Excluir Agendamento (Acesso restrito ao Criador ou Admin mediante Senha)
+        window.deleteAgendaEvent = function(id) {
+            agenda = getDb('sigaedu_agenda', []);
+            const evt = agenda.find(e => e.id === id);
+            if (!evt) return;
+
+            const activeUser = "Dhenison Carlos"; // Usuário logado administrador
+
+            // Se o criador do evento for o próprio usuário ativo
+            if (evt.professor === activeUser) {
+                if (confirm(`Tem certeza que deseja excluir o agendamento "${evt.titulo}" criado por você?`)) {
+                    performDeletion(id);
+                }
+            } else {
+                // Se for outro criador, exige senha do Administrador
+                const password = prompt(`Ação Restrita! O agendamento "${evt.titulo}" foi registrado por "${evt.professor}".\nDigite a senha do Administrador para autorizar a exclusão:`);
+                if (password === null) return; // cancelou
+
+                if (password === "siga@EDU2026" || password === "siga@EDU2026excluir") {
+                    if (confirm(`Confirmar exclusão definitiva do agendamento "${evt.titulo}"?`)) {
+                        performDeletion(id);
+                    }
+                } else {
+                    alert("Senha incorreta! Operação de exclusão não autorizada.");
+                }
+            }
+        };
+
+        function performDeletion(id) {
+            agenda = getDb('sigaedu_agenda', []);
+            agenda = agenda.filter(e => e.id !== id);
+            localStorage.setItem('sigaedu_agenda', JSON.stringify(agenda));
+            renderAgenda();
+            showToast("Agendamento removido do calendário escolar.", "delete", "#EF4444");
+        }
+
+        // Inicializar componentes
+        initializeFiltersAndForm();
+        renderAgenda();
+
+        // Configuração de Toggles de Escopo
+        const btnScopeAll = document.getElementById("btn-scope-all");
+        const btnScopeTurma = document.getElementById("btn-scope-turma");
+
+        btnScopeAll.addEventListener("click", () => {
+            currentScope = 'Geral';
+            btnScopeAll.className = "px-md py-xs text-label-md font-bold bg-white shadow-sm rounded-lg transition-all";
+            btnScopeTurma.className = "px-md py-xs text-label-md font-medium text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all";
+            renderAgenda();
+        });
+
+        btnScopeTurma.addEventListener("click", () => {
+            currentScope = 'Turma';
+            btnScopeTurma.className = "px-md py-xs text-label-md font-bold bg-white shadow-sm rounded-lg transition-all";
+            btnScopeAll.className = "px-md py-xs text-label-md font-medium text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all";
+            renderAgenda();
+        });
+
+        // Configuração dos Event Listeners de Filtro
+        filterTurno.addEventListener('change', renderAgenda);
+        filterTurma.addEventListener('change', renderAgenda);
+        globalSearch.addEventListener('input', renderAgenda);
+
+    })();
+</script>
+</body>
+</html>
