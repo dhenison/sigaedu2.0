@@ -256,7 +256,7 @@
 </div>
 <span class="text-label-sm font-bold text-secondary px-2 py-1 bg-secondary-container/20 rounded-full">Matutino</span>
 </div>
-<h3 class="text-headline-md font-headline-md text-primary">1.240</h3>
+<h3 id="stat-alunos-matutino" class="text-headline-md font-headline-md text-primary">0</h3>
 <p class="text-body-sm text-on-surface-variant">Alunos ativos no período</p>
 </div>
 <div class="bg-white border border-surface-variant rounded-xl p-md shadow-sm hover:shadow-md transition-shadow group">
@@ -266,7 +266,7 @@
 </div>
 <span class="text-label-sm font-bold text-secondary px-2 py-1 bg-secondary-container/20 rounded-full">Vespertino</span>
 </div>
-<h3 class="text-headline-md font-headline-md text-primary">980</h3>
+<h3 id="stat-alunos-vespertino" class="text-headline-md font-headline-md text-primary">0</h3>
 <p class="text-body-sm text-on-surface-variant">Alunos ativos no período</p>
 </div>
 <!-- Frequências -->
@@ -283,12 +283,12 @@
 <div class="space-y-sm">
 <div class="flex justify-between items-center">
 <span class="text-body-sm">Realizadas</span>
-<span class="text-label-md font-bold text-primary">85%</span>
+<span id="stat-frequencia-percent" class="text-label-md font-bold text-primary">0%</span>
 </div>
 <div class="w-full bg-surface-container-low h-2 rounded-full overflow-hidden">
-<div class="bg-secondary-container h-full w-[85%] rounded-full"></div>
+<div id="stat-frequencia-bar" class="bg-secondary-container h-full w-[0%] rounded-full"></div>
 </div>
-<p class="text-label-sm text-on-surface-variant">12 turmas pendentes</p>
+<p id="stat-frequencia-label" class="text-label-sm text-on-surface-variant">0 turmas pendentes</p>
 </div>
 </div>
 <!-- Ocorrências -->
@@ -299,11 +299,11 @@
 </div>
 <div class="text-right">
 <p class="text-label-sm font-bold text-error">Urgente</p>
-<p class="text-headline-md font-headline-md text-primary">04</p>
+<p id="stat-ocorrencias-urgente" class="text-headline-md font-headline-md text-primary">00</p>
 </div>
 </div>
 <h3 class="text-label-md font-bold text-primary">Ocorrências Hoje</h3>
-<p class="text-body-sm text-on-surface-variant">2 requerem ação imediata</p>
+<p id="stat-ocorrencias-label" class="text-body-sm text-on-surface-variant">0 registradas hoje</p>
 </div>
 </section>
 <!-- Bento Grid Content -->
@@ -365,41 +365,7 @@
 <span class="material-symbols-outlined" data-icon="filter_list">filter_list</span>
 </button>
 </div>
-<div class="flex-1 overflow-y-auto max-h-[400px] p-md space-y-md hide-scrollbar">
-<!-- Message Item -->
-<div class="flex gap-sm p-sm rounded-xl hover:bg-surface-container-low transition-colors cursor-pointer border border-transparent hover:border-surface-variant">
-<img alt="Professor não cadastrado" class="w-10 h-10 rounded-full object-cover" data-alt="Close up portrait of a middle-aged female teacher with kind eyes and a welcoming smile, wearing glasses and a professional beige sweater. The lighting is soft and bright, suggesting a modern school environment. The color palette is composed of warm neutrals and soft pastels, conveying trust and education." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrSs0bTIeMbPpXPTtHua_P6xSNZhUKRnNal5YYDaQYpGFQRG-3hxPdhnN2gCo_t-kn4WCNwSi_MWtKaNeTDOMGCp0EJ6Z2I_FOd20XJMeDTQpSBt9i9kEeQC8BCM4KUT7ohOYY5m9zx-tBLEdfKQKChJ32q7XZdIZNcve2wDnKr7Z07f9eojzrntruPeOCOf-0-0KytQAfRVFqr8BaCeeLbi7SNlbGFDOwwgo6KQJ0KSEkJf0wavEZerQj8V2-TUC-czyBUo1pLHo"/>
-<div class="flex-1">
-<div class="flex justify-between items-start">
-<p class="text-label-md font-bold">Professor não cadastrado</p>
-<span class="text-xs text-on-surface-variant">10:45</span>
-</div>
-<p class="text-body-sm text-on-surface-variant line-clamp-1">Solicitação de sala multimídia para...</p>
-<div class="mt-xs inline-flex items-center gap-1 px-2 py-0.5 bg-secondary-container text-[10px] font-bold rounded">MATEMÁTICA</div>
-</div>
-</div>
-<div class="flex gap-sm p-sm rounded-xl hover:bg-surface-container-low transition-colors cursor-pointer border border-transparent hover:border-surface-variant">
-<img alt="Professor não cadastrado" class="w-10 h-10 rounded-full object-cover" data-alt="A portrait of a male high school science teacher in his late 40s with a short beard and a friendly professional look, wearing a blue button-down shirt. He stands in a high-tech laboratory setting with soft focus equipment in the background. Bright, clinical yet warm lighting with a palette of blues and whites." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDA7EYgNhseWB_tiPsTgnyGVBYFit932u6Luo70-4-ZEvhkU0nsNCR2PqNrR-7Q5ALFSt7M_p9Zqv9TT-fVgLbBTaHROPVuMb7ubTSYe4eRLJEd4O61n82Do8t_VwiHDC1IeJPXoUJPZwphXyjda46RhU6wWvDouW8KOJvv-Pp9__4axG_5DCrFtTuEyTLGwJfdGS2uawrDV8P5zg_4-18CxIsb2RvP0V6D9hbF2g8g4MgZC47LwjumPSBdSyo4WXhkyWf1sFRMszk"/>
-<div class="flex-1">
-<div class="flex justify-between items-start">
-<p class="text-label-md font-bold">Professor não cadastrado</p>
-<span class="text-xs text-on-surface-variant">09:12</span>
-</div>
-<p class="text-body-sm text-on-surface-variant line-clamp-1">Lançamento de notas concluído do 3º...</p>
-<div class="mt-xs inline-flex items-center gap-1 px-2 py-0.5 bg-surface-container-high text-[10px] font-bold rounded">BIOLOGIA</div>
-</div>
-</div>
-<div class="flex gap-sm p-sm rounded-xl hover:bg-surface-container-low transition-colors cursor-pointer border border-transparent hover:border-surface-variant">
-<img alt="Professor não cadastrado" class="w-10 h-10 rounded-full object-cover" data-alt="A portrait of a young female literature professor in a bright modern library, with shelves of books visible in a soft bokeh background. She has a vibrant energy, wearing a simple black professional dress and a yellow scarf. The lighting is natural and optimistic, highlighting the crystalline design system style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAtaPrOMl8DU1umwjp_b4Kw5FRDqvF_pAjXKYz2jCR4bjvC4MFgJVKQi614Bng-uQQnWwAHnMAvc7_j8ll4inIMJALpnq2gdo-2GmBjWX-0G4vwHcRgx3byvlSnaBU578yo2IYFuz89DxnEp37hKrwPseyco1aoL3g1gPCKwnvIKwx7ybESCcHOdQn_Eg9Mx4brvflPmmWJVgOZEFwD3WNn9euWXQHKSaJVnsPDa5-t2XOpJr0kuxeqiwKKbZT0SIcyzyivcJvy_8"/>
-<div class="flex-1">
-<div class="flex justify-between items-start">
-<p class="text-label-md font-bold">Professor não cadastrado</p>
-<span class="text-xs text-on-surface-variant">Ontem</span>
-</div>
-<p class="text-body-sm text-on-surface-variant line-clamp-1">Agendamento de reposição de aula...</p>
-<div class="mt-xs inline-flex items-center gap-1 px-2 py-0.5 bg-secondary-container text-[10px] font-bold rounded">LITERATURA</div>
-</div>
-</div>
+<div id="recent-agenda-feed" class="flex-1 overflow-y-auto max-h-[400px] p-md space-y-md hide-scrollbar">
 </div>
 <button class="m-md py-3 bg-primary text-on-primary rounded-xl font-bold hover:opacity-90 transition-opacity">Ver todas as mensagens</button>
 </div>
@@ -428,73 +394,7 @@
 <th class="px-gutter py-4 text-label-sm font-bold text-on-surface-variant uppercase text-right">Ações</th>
 </tr>
 </thead>
-<tbody class="divide-y divide-surface-variant">
-<tr class="hover:bg-surface-container-low transition-colors">
-<td class="px-gutter py-4">
-<div class="flex items-center gap-sm">
-<div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center font-bold text-xs">AA</div>
-<div>
-<p class="text-body-sm font-bold">Aluno não cadastrado</p>
-<p class="text-[10px] text-on-surface-variant">ID: #45293</p>
-</div>
-</div>
-</td>
-<td class="px-gutter py-4 text-body-sm">Nenhuma turma cadastrada</td>
-<td class="px-gutter py-4 font-bold">9.2</td>
-<td class="px-gutter py-4 text-body-sm">98%</td>
-<td class="px-gutter py-4">
-<span class="px-2 py-1 bg-secondary-container/20 text-secondary text-[10px] font-bold rounded-full">EXCELENTE</span>
-</td>
-<td class="px-gutter py-4 text-right">
-<button class="text-on-surface-variant hover:text-primary transition-colors">
-<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
-</button>
-</td>
-</tr>
-<tr class="hover:bg-surface-container-low transition-colors">
-<td class="px-gutter py-4">
-<div class="flex items-center gap-sm">
-<div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center font-bold text-xs">BM</div>
-<div>
-<p class="text-body-sm font-bold">Aluno não cadastrado</p>
-<p class="text-[10px] text-on-surface-variant">ID: #45312</p>
-</div>
-</div>
-</td>
-<td class="px-gutter py-4 text-body-sm">Nenhuma turma cadastrada</td>
-<td class="px-gutter py-4 font-bold text-error">5.8</td>
-<td class="px-gutter py-4 text-body-sm text-error">72%</td>
-<td class="px-gutter py-4">
-<span class="px-2 py-1 bg-error/10 text-error text-[10px] font-bold rounded-full">ALERTA</span>
-</td>
-<td class="px-gutter py-4 text-right">
-<button class="text-on-surface-variant hover:text-primary transition-colors">
-<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
-</button>
-</td>
-</tr>
-<tr class="hover:bg-surface-container-low transition-colors">
-<td class="px-gutter py-4">
-<div class="flex items-center gap-sm">
-<div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center font-bold text-xs">CR</div>
-<div>
-<p class="text-body-sm font-bold">Aluno não cadastrado</p>
-<p class="text-[10px] text-on-surface-variant">ID: #45281</p>
-</div>
-</div>
-</td>
-<td class="px-gutter py-4 text-body-sm">1º Ano B - Matutino</td>
-<td class="px-gutter py-4 font-bold">7.5</td>
-<td class="px-gutter py-4 text-body-sm">91%</td>
-<td class="px-gutter py-4">
-<span class="px-2 py-1 bg-surface-container-high text-on-surface-variant text-[10px] font-bold rounded-full">REGULAR</span>
-</td>
-<td class="px-gutter py-4 text-right">
-<button class="text-on-surface-variant hover:text-primary transition-colors">
-<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
-</button>
-</td>
-</tr>
+<tbody id="alunos-monitoring-tbody" class="divide-y divide-surface-variant">
 </tbody>
 </table>
 </div>
@@ -624,6 +524,194 @@
           console.clear();
         }, 3000);
       }
+    })();
+  </script>
+  <script>
+    (async function() {
+      const supabase = window.supabaseClient;
+      const selectedEscola = window.selectedEscola;
+
+      if (!supabase || !selectedEscola) {
+        console.error("Supabase ou escola ativa não inicializados.");
+        return;
+      }
+
+      const escolaId = selectedEscola.id;
+
+      async function carregarDashboard() {
+        try {
+          // 1. Carregar turmas
+          const { data: turmas, error: errorTurmas } = await supabase
+            .from('turmas')
+            .select('id, nome, turno')
+            .eq('escola_id', escolaId);
+
+          if (errorTurmas) throw errorTurmas;
+          const turmasMap = new Map(turmas.map(t => [t.id, t]));
+
+          // 2. Carregar alunos
+          const { data: alunos, error: errorAlunos } = await supabase
+            .from('alunos')
+            .select('id, nome, turma_id')
+            .eq('escola_id', escolaId);
+
+          if (errorAlunos) throw errorAlunos;
+
+          // Contar alunos por turno
+          let matutinoCount = 0;
+          let vespertinoCount = 0;
+
+          alunos.forEach(aluno => {
+            const turma = turmasMap.get(aluno.turma_id);
+            if (turma) {
+              if (turma.turno === 'Manhã') matutinoCount++;
+              else if (turma.turno === 'Tarde') vespertinoCount++;
+            }
+          });
+
+          document.getElementById('stat-alunos-matutino').textContent = matutinoCount.toLocaleString('pt-BR');
+          document.getElementById('stat-alunos-vespertino').textContent = vespertinoCount.toLocaleString('pt-BR');
+
+          // 3. Frequências do dia
+          const today = new Date().toISOString().split('T')[0];
+          const { data: freqToday, error: errorFreq } = await supabase
+            .from('frequencias')
+            .select('turma_id')
+            .eq('escola_id', escolaId)
+            .eq('data_frequencia', today);
+
+          if (errorFreq) throw errorFreq;
+
+          const totalTurmas = turmas.length;
+          const freqRealizadas = new Set(freqToday.map(f => f.turma_id)).size;
+          const freqPercent = totalTurmas > 0 ? Math.round((freqRealizadas / totalTurmas) * 100) : 100;
+          const freqPendentes = totalTurmas - freqRealizadas;
+
+          document.getElementById('stat-frequencia-percent').textContent = `${freqPercent}%`;
+          document.getElementById('stat-frequencia-bar').style.width = `${freqPercent}%`;
+          document.getElementById('stat-frequencia-label').textContent = `${freqPendentes} turma(s) pendente(s)`;
+
+          // 4. Ocorrências do dia
+          const { data: ocoToday, error: errorOco } = await supabase
+            .from('ocorrencias')
+            .select('id, tipo_ocorrencia')
+            .eq('escola_id', escolaId)
+            .eq('data_ocorrencia', today);
+
+          if (errorOco) throw errorOco;
+
+          const totalOco = ocoToday.length;
+          const urgentOco = ocoToday.filter(o => o.tipo_ocorrencia === 'Grave' || o.tipo_ocorrencia === 'Indisciplina Grave').length;
+
+          document.getElementById('stat-ocorrencias-urgente').textContent = String(urgentOco).padStart(2, '0');
+          document.getElementById('stat-ocorrencias-label').textContent = `${totalOco} registrada(s) hoje`;
+
+          // 5. Carregar alunos na tabela de monitoramento
+          const tbodyAlunos = document.getElementById('alunos-monitoring-tbody');
+          tbodyAlunos.innerHTML = '';
+
+          if (alunos.length === 0) {
+            tbodyAlunos.innerHTML = `
+              <tr>
+                <td colspan="6" class="px-gutter py-8 text-center text-body-sm text-on-surface-variant/60">
+                  Nenhum aluno cadastrado para esta escola.
+                </td>
+              </tr>
+            `;
+          } else {
+            const limitAlunos = alunos.slice(0, 5);
+            limitAlunos.forEach(aluno => {
+              const tr = document.createElement('tr');
+              tr.className = "hover:bg-surface-container-low transition-colors";
+              
+              const initials = aluno.nome.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+              const turma = turmasMap.get(aluno.turma_id);
+              const turmaNome = turma ? `${turma.nome} (${turma.turno})` : 'Sem Turma';
+
+              tr.innerHTML = `
+                <td class="px-gutter py-4">
+                  <div class="flex items-center gap-sm">
+                    <div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center font-bold text-xs select-none">${initials}</div>
+                    <div>
+                      <p class="text-body-sm font-bold">${aluno.nome}</p>
+                      <p class="text-[10px] text-on-surface-variant">Aluno Ativo</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-gutter py-4 text-body-sm">${turmaNome}</td>
+                <td class="px-gutter py-4 font-bold">--</td>
+                <td class="px-gutter py-4 text-body-sm">--</td>
+                <td class="px-gutter py-4">
+                  <span class="px-2 py-1 bg-secondary-container/20 text-secondary text-[10px] font-bold rounded-full">ATIVO</span>
+                </td>
+                <td class="px-gutter py-4 text-right">
+                  <a href="fichadoaluno.html" class="text-on-surface-variant hover:text-primary transition-colors">
+                    <span class="material-symbols-outlined">visibility</span>
+                  </a>
+                </td>
+              `;
+              tbodyAlunos.appendChild(tr);
+            });
+          }
+
+          // 6. Mural de mensagens
+          const feedAgenda = document.getElementById('recent-agenda-feed');
+          feedAgenda.innerHTML = '';
+
+          const { data: recentEvents, error: errorEvents } = await supabase
+            .from('agenda')
+            .select('*')
+            .eq('escola_id', escolaId)
+            .neq('tipo', 'ConfiguracaoCalendario')
+            .order('data_evento', { ascending: false })
+            .limit(3);
+
+          if (errorEvents) throw errorEvents;
+
+          if (!recentEvents || recentEvents.length === 0) {
+            feedAgenda.innerHTML = `
+              <div class="text-center py-8 text-body-sm text-on-surface-variant/60">
+                Nenhum agendamento recente cadastrado.
+              </div>
+            `;
+          } else {
+            recentEvents.forEach(evt => {
+              let details = {};
+              try {
+                details = JSON.parse(evt.descricao);
+              } catch(e) {
+                details = { descricao: evt.descricao, tipo: 'Atividades', professor: 'Coordenação' };
+              }
+
+              const div = document.createElement('div');
+              div.className = "flex gap-sm p-sm rounded-xl hover:bg-surface-container-low transition-colors cursor-pointer border border-transparent hover:border-surface-variant";
+              
+              const avatarUrl = evt.imagem_url || "https://lh3.googleusercontent.com/aida-public/AB6AXuBrSs0bTIeMbPpXPTtHua_P6xSNZhUKRnNal5YYDaQYpGFQRG-3hxPdhnN2gCo_t-kn4WCNwSi_MWtKaNeTDOMGCp0EJ6Z2I_FOd20XJMeDTQpSBt9i9kEeQC8BCM4KUT7ohOYY5m9zx-tBLEdfKQKChJ32q7XZdIZNcve2wDnKr7Z07f9eojzrntruPeOCOf-0-0KytQAfRVFqr8BaCeeLbi7SNlbGFDOwwgo6KQJ0KSEkJf0wavEZerQj8V2-TUC-czyBUo1pLHo";
+              const formattedDate = new Date(evt.data_evento + "T00:00:00").toLocaleDateString('pt-BR', { day: 'numeric', month: 'short' });
+
+              div.innerHTML = `
+                <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary shrink-0 select-none overflow-hidden border border-outline-variant">
+                  <img src="${avatarUrl}" alt="${details.professor}" class="w-full h-full object-cover"/>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex justify-between items-start">
+                    <p class="text-label-md font-bold truncate pr-sm">${evt.titulo}</p>
+                    <span class="text-xs text-on-surface-variant shrink-0">${formattedDate}</span>
+                  </div>
+                  <p class="text-body-sm text-on-surface-variant line-clamp-1">${details.descricao || evt.descricao}</p>
+                  <div class="mt-xs inline-flex items-center gap-1 px-2 py-0.5 bg-secondary-container text-[10px] font-bold rounded uppercase">${details.tipo || 'Atividade'}</div>
+                </div>
+              `;
+              feedAgenda.appendChild(div);
+            });
+          }
+
+        } catch(err) {
+          console.error("Erro ao carregar dados do Dashboard:", err);
+        }
+      }
+
+      await carregarDashboard();
     })();
   </script>
 </body></html>
