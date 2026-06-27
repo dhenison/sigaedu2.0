@@ -44,17 +44,28 @@
 
   window.userSession = session; // Exporta sessão globalmente
 
-  // 3. Atualiza os dados de perfil no cabeçalho dinamicamente
+  // Função Global de Logout
+  window.logoutUsuario = async function() {
+    try {
+      if (window.supabaseClient) {
+        await window.supabaseClient.auth.signOut();
+      }
+    } catch(e) {
+      console.error("Erro ao fazer signout no Supabase:", e);
+    }
+    localStorage.removeItem('sigaedu_user_session');
+    localStorage.removeItem('sigaedu_selected_escola');
+    window.location.href = "login.html";
+  };
+
+  // 3. Atualiza os dados de perfil no cabeçalho dinamicamente e injeta o botão Sair
   document.addEventListener("DOMContentLoaded", function() {
-    // Procura o bloco do perfil do usuário no cabeçalho
     const profileContainers = document.querySelectorAll("header .flex.items-center.gap-sm.pl-sm");
     
     profileContainers.forEach(container => {
-      // Nome do usuário
       const nameEl = container.querySelector(".text-right p.text-label-md");
       if (nameEl) nameEl.textContent = session.profile.nome;
       
-      // Papel/Perfil do usuário
       const roleEl = container.querySelector(".text-right p.text-label-sm");
       if (roleEl) {
         const perfisTraduzidos = {
@@ -67,7 +78,6 @@
         roleEl.textContent = perfisTraduzidos[session.profile.perfil] || session.profile.perfil;
       }
 
-      // Imagem do perfil (avatar)
       const imgEl = container.querySelector("img");
       if (imgEl && session.profile.avatar) {
         imgEl.src = session.profile.avatar;
@@ -75,14 +85,27 @@
       }
     });
 
+    // Injeta o botão Sair no menu lateral
+    const configEl = document.getElementById("menu-configuracoes");
+    if (configEl) {
+      const logoutEl = document.createElement("a");
+      logoutEl.id = "menu-logout";
+      logoutEl.className = "flex items-center gap-sm px-sm py-3 text-error hover:bg-red-50 hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200 cursor-pointer";
+      logoutEl.onclick = window.logoutUsuario;
+      logoutEl.innerHTML = `
+        <span class="material-symbols-outlined text-error" data-icon="logout">logout</span>
+        <span class="text-label-md font-label-md">Sair</span>
+      `;
+      configEl.parentNode.insertBefore(logoutEl, configEl.nextSibling);
+    }
+
     // 4. Fluxo de Seleção de Escola para Super Admin
     if (session.profile.perfil === 'super_admin') {
       inicializarSeletorEscolasSuperAdmin();
     } else {
-      // Usuário comum herda a escola do seu próprio perfil de forma fixa
       const escolaFixa = {
         id: session.profile.escola_id,
-        nome: "Minha Escola" // Nome genérico ou carregado
+        nome: "Minha Escola"
       };
       localStorage.setItem('sigaedu_selected_escola', JSON.stringify(escolaFixa));
       window.selectedEscola = escolaFixa;
