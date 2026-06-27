@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html class="light" lang="pt-BR">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>SIGAEDU - Portal do Aluno</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet"/>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-container-high": "#ebe7e6",
+            "on-primary": "#ffffff",
+            "inverse-surface": "#313030",
+            "surface-bright": "#fdf8f8",
+            "surface-variant": "#e5e2e1",
+            "secondary-fixed": "#ffe16d",
+            "primary-container": "#1c1b1b",
+            "on-secondary-container": "#6e5c00",
+            "inverse-on-surface": "#f4f0ef",
+            "secondary": "#705d00",
+            "on-background": "#1c1b1b",
+            "surface-dim": "#ddd9d8",
+            "inverse-primary": "#c8c6c5",
+            "primary": "#000000",
+            "surface": "#fdf8f8",
+            "error": "#ba1a1a",
+            "outline": "#747878",
+            "surface-container-highest": "#e5e2e1",
+            "primary-fixed": "#e5e2e1",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#f7f3f2",
+            "surface-container": "#f1edec",
+            "tertiary": "#000000",
+            "on-error": "#ffffff",
+            "surface-tint": "#5f5e5e",
+            "error-container": "#ffdad6",
+            "secondary-container": "#fcd400",
+            "outline-variant": "#c4c7c7",
+            "background": "#fdf8f8",
+            "on-surface-variant": "#444748",
+            "on-secondary": "#ffffff",
+            "on-surface": "#1c1b1b"
+          },
+          borderRadius: {
+            DEFAULT: "0.125rem",
+            lg: "0.25rem",
+            xl: "0.5rem",
+            full: "0.75rem"
+          },
+          spacing: {
+            base: "8px",
+            gutter: "24px",
+            md: "24px",
+            xl: "80px",
+            "container-max": "1440px",
+            lg: "48px",
+            sm: "12px",
+            xs: "4px"
+          },
+          fontFamily: {
+            "headline-lg": ["Inter"],
+            "headline-xl": ["Inter"],
+            "headline-md": ["Inter"],
+            "label-sm": ["Inter"],
+            "label-md": ["Inter"],
+            "body-md": ["Inter"],
+            "body-lg": ["Inter"],
+            "body-sm": ["Inter"]
+          },
+          fontSize: {
+            "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+            "headline-xl": ["40px", {"lineHeight": "48px", "fontWeight": "700"}],
+            "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+            "label-sm": ["12px", {"lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "500"}],
+            "label-md": ["14px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+            "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+            "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+            "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: "Inter", sans-serif; }
+    .material-symbols-outlined {
+      font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      overflow: hidden;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+    .cristalico {
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      background: rgba(255, 255, 255, 0.74);
+    }
+    .app-card {
+      background: #ffffff;
+      border: 1px solid #e5e2e1;
+      border-radius: 0.5rem;
+      box-shadow: 0 8px 30px rgba(28, 27, 27, 0.04);
+    }
+    .app-card-hover {
+      transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+    }
+    .app-card-hover:hover {
+      transform: translateY(-3px);
+      border-color: #fcd400;
+      box-shadow: 0 14px 36px rgba(28, 27, 27, 0.08);
+    }
+    .soft-grid {
+      background-image:
+        linear-gradient(rgba(28, 27, 27, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(28, 27, 27, 0.035) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .hidden-view { display: none; }
+    .border-error { border-color: #ba1a1a !important; }
+    .shake { animation: shake 0.16s ease-in-out 0s 2; }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-6px); }
+      75% { transform: translateX(6px); }
+    }
+  </style>
+</head>
+<script src="clean-demo-data.js"></script>
+<body class="min-h-screen bg-[#F8F9FA] text-on-surface overflow-x-hidden">
+  <section id="login-view" class="min-h-screen flex flex-col soft-grid">
+    <header class="fixed top-0 left-0 right-0 z-40 h-16 px-gutter border-b border-surface-variant cristalico">
+      <div class="max-w-container-max mx-auto h-full flex items-center justify-between">
+        <div class="flex items-center gap-sm">
+          <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-md">
+            <span class="material-symbols-outlined text-secondary-container">school</span>
+          </div>
+          <div>
+            <p class="text-label-md font-black tracking-tight leading-none">SIGAEDU</p>
+            <p class="text-label-sm text-on-surface-variant">Portal do Aluno</p>
+          </div>
+        </div>
+        <a class="hidden sm:flex items-center gap-xs text-label-md font-bold text-primary hover:underline" href="login.html">
+          <span class="material-symbols-outlined text-[20px]">admin_panel_settings</span>
+          Acesso institucional
+        </a>
+      </div>
+    </header>
+
+    <main class="flex-1 pt-24 px-4 pb-10 flex items-center justify-center">
+      <div class="w-full max-w-[1080px] grid lg:grid-cols-[1.05fr_0.95fr] gap-lg items-center">
+        <div class="hidden lg:block">
+          <div class="inline-flex items-center gap-xs px-sm py-2 rounded-full bg-secondary-container/70 text-primary text-label-sm font-bold uppercase tracking-wider mb-md">
+            <span class="material-symbols-outlined text-[18px]">verified_user</span>
+            Acesso exclusivo do estudante
+          </div>
+          <h1 class="text-headline-xl font-black text-primary max-w-xl">Sua rotina escolar em um unico lugar.</h1>
+          <p class="text-body-lg text-on-surface-variant mt-sm max-w-xl">Consulte horarios, agenda da escola, projetos ativos e acompanhe sua participacao no Topo do Saber.</p>
+          <div class="grid grid-cols-3 gap-sm mt-lg max-w-xl">
+            <div class="app-card p-md">
+              <span class="material-symbols-outlined text-primary mb-sm">calendar_month</span>
+              <p class="text-label-md font-bold">Agenda</p>
+              <p class="text-label-sm text-on-surface-variant mt-xs">Eventos e entregas</p>
+            </div>
+            <div class="app-card p-md">
+              <span class="material-symbols-outlined text-primary mb-sm">schedule</span>
+              <p class="text-label-md font-bold">Horario</p>
+              <p class="text-label-sm text-on-surface-variant mt-xs">Aulas do dia</p>
+            </div>
+            <div class="app-card p-md">
+              <span class="material-symbols-outlined text-primary mb-sm">emoji_events</span>
+              <p class="text-label-md font-bold">Olimpiadas</p>
+              <p class="text-label-sm text-on-surface-variant mt-xs">Topo do Saber</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="app-card p-6 sm:p-8">
+          <div class="text-center mb-8">
+            <div class="w-16 h-16 mx-auto bg-primary rounded-xl flex items-center justify-center shadow-lg mb-md">
+              <span class="text-secondary-container font-black text-headline-md">SA</span>
+            </div>
+            <h2 class="text-headline-md font-bold text-primary">Entrar no Portal do Aluno</h2>
+            <p class="text-body-sm text-on-surface-variant mt-xs">Use seu e-mail institucional de estudante.</p>
+          </div>
+
+          <form class="space-y-5" id="student-login-form">
+            <div>
+              <label class="block text-label-md font-bold text-on-surface mb-2" for="student-login">E-mail institucional</label>
+              <div class="relative">
+                <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">alternate_email</span>
+                <input class="w-full pl-12 pr-4 py-3 bg-[#F8F9FA] border border-[#F0F2F5] rounded-lg focus:border-primary focus:ring-0 text-body-md" id="student-login" placeholder="aluno@aluno.seduc.pa.gov.br" required type="text"/>
+              </div>
+              <p class="hidden text-[11px] text-error font-bold mt-1.5" id="login-error"></p>
+            </div>
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <label class="block text-label-md font-bold text-on-surface" for="student-password">Senha</label>
+                <button class="text-label-sm font-bold text-primary hover:underline" type="button" onclick="openRecovery()">Esqueceu a senha?</button>
+              </div>
+              <div class="relative">
+                <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">lock</span>
+                <input class="w-full pl-12 pr-12 py-3 bg-[#F8F9FA] border border-[#F0F2F5] rounded-lg focus:border-primary focus:ring-0 text-body-md" id="student-password" placeholder="********" required type="password"/>
+                <button class="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-on-surface-variant hover:text-primary" type="button" onclick="togglePassword()" aria-label="Exibir senha">
+                  <span class="material-symbols-outlined text-[20px]" id="password-icon">visibility</span>
+                </button>
+              </div>
+            </div>
+            <button class="w-full py-4 bg-secondary-container text-primary font-black rounded-lg shadow-sm hover:brightness-95 active:scale-[0.98] transition-all flex items-center justify-center gap-sm" type="submit">
+              Acessar minha area
+              <span class="material-symbols-outlined">arrow_forward</span>
+            </button>
+          </form>
+
+          <div class="mt-6 pt-6 border-t border-surface-variant">
+            <p class="text-label-sm text-on-surface-variant">Ambiente demonstrativo SigaEDU 2026</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </section>
+
+  <section id="portal-view" class="hidden-view min-h-screen bg-background">
+    <aside id="student-sidebar" class="fixed left-0 top-0 bottom-0 z-50 w-64 bg-white/75 backdrop-blur-xl border-r border-surface-variant shadow-md p-sm pt-xl flex flex-col transition-transform duration-300 -translate-x-full lg:translate-x-0">
+      <div class="px-sm mb-lg flex items-center justify-between">
+        <div class="flex items-center gap-sm">
+          <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-md">
+            <span class="material-symbols-outlined text-secondary-container">school</span>
+          </div>
+          <div>
+            <h1 class="text-label-md font-black text-primary tracking-tight leading-none">SIGAEDU</h1>
+            <p class="text-body-sm font-medium text-on-surface-variant">Portal do Aluno</p>
+          </div>
+        </div>
+        <button class="lg:hidden p-1 text-on-surface hover:bg-surface-container-high rounded-full" onclick="toggleSidebar()">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <nav class="flex-1 space-y-1">
+        <a class="flex items-center gap-sm px-sm py-3 rounded-xl bg-secondary-container text-primary font-bold border-l-4 border-primary" href="#inicio">
+          <span class="material-symbols-outlined">home</span>
+          <span class="text-label-md">Inicio</span>
+        </a>
+        <a class="flex items-center gap-sm px-sm py-3 rounded-xl text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#horario">
+          <span class="material-symbols-outlined">schedule</span>
+          <span class="text-label-md">Horario de Aula</span>
+        </a>
+        <a class="flex items-center gap-sm px-sm py-3 rounded-xl text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#agenda">
+          <span class="material-symbols-outlined">event_note</span>
+          <span class="text-label-md">Agenda Escolar</span>
+        </a>
+        <a class="flex items-center gap-sm px-sm py-3 rounded-xl text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#projetos">
+          <span class="material-symbols-outlined">science</span>
+          <span class="text-label-md">Projetos</span>
+        </a>
+        <a class="flex items-center gap-sm px-sm py-3 rounded-xl text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#topo-saber">
+          <span class="material-symbols-outlined">emoji_events</span>
+          <span class="text-label-md">Topo do Saber</span>
+        </a>
+      </nav>
+
+      <button class="mt-md flex items-center justify-center gap-sm px-sm py-3 bg-primary text-white rounded-xl font-bold hover:opacity-90" type="button" onclick="logoutStudent()">
+        <span class="material-symbols-outlined">logout</span>
+        Sair
+      </button>
+    </aside>
+
+    <div id="student-overlay" class="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm hidden lg:hidden" onclick="toggleSidebar()"></div>
+
+    <main class="lg:ml-64 min-h-screen flex flex-col">
+      <header class="fixed top-0 right-0 left-0 lg:left-64 z-40 h-xl px-gutter flex items-center justify-between bg-white/75 backdrop-blur-xl border-b border-surface-variant shadow-sm">
+        <div class="flex items-center gap-md min-w-0">
+          <button class="lg:hidden p-2 text-on-surface hover:bg-surface-container-high rounded-full" onclick="toggleSidebar()">
+            <span class="material-symbols-outlined">menu</span>
+          </button>
+          <div class="min-w-0">
+            <p class="text-label-sm uppercase tracking-wider text-on-surface-variant font-bold">Colegio Estadual SigaEDU</p>
+            <h2 class="text-label-md sm:text-headline-md font-bold text-primary truncate">Bem-vinda, Aluno</h2>
+          </div>
+        </div>
+        <div class="flex items-center gap-sm">
+          <button class="relative p-2 text-on-surface-variant hover:bg-surface-container-low rounded-full">
+            <span class="material-symbols-outlined">notifications</span>
+            <span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+          </button>
+          <img alt="Foto da aluna Aluno" class="w-10 h-10 rounded-full object-cover border-2 border-secondary-container" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&amp;fit=crop&amp;w=160&amp;q=80"/>
+        </div>
+      </header>
+
+      <div class="mt-xl p-gutter flex-1 space-y-lg" id="inicio">
+        <section class="grid grid-cols-1 xl:grid-cols-[1.15fr_0.85fr] gap-md">
+          <div class="app-card overflow-hidden">
+            <div class="p-lg bg-primary text-white relative">
+              <div class="absolute inset-0 opacity-10 soft-grid"></div>
+              <div class="relative flex flex-col sm:flex-row sm:items-center gap-md">
+                <img alt="Foto da aluna Aluno" class="w-24 h-24 rounded-xl object-cover border-4 border-secondary-container shadow-lg" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&amp;fit=crop&amp;w=240&amp;q=80"/>
+                <div class="min-w-0">
+                  <div class="inline-flex items-center gap-xs bg-secondary-container text-primary px-sm py-1 rounded-full text-label-sm font-black uppercase tracking-wider mb-sm">
+                    <span class="material-symbols-outlined text-[18px]">badge</span>
+                    Matricula 2026.04178
+                  </div>
+                  <h1 class="text-headline-lg font-black">Aluno não cadastrado</h1>
+                  <p class="text-body-md text-inverse-on-surface mt-xs">8&ordm; Ano B - Ensino Fundamental | Turno Matutino</p>
+                </div>
+              </div>
+            </div>
+            <div class="grid sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-surface-variant">
+              <div class="p-md">
+                <p class="text-label-sm text-on-surface-variant uppercase tracking-wider font-bold">Frequencia</p>
+                <p class="text-headline-md font-black text-primary mt-xs">96%</p>
+              </div>
+              <div class="p-md">
+                <p class="text-label-sm text-on-surface-variant uppercase tracking-wider font-bold">Media atual</p>
+                <p class="text-headline-md font-black text-primary mt-xs">8.7</p>
+              </div>
+              <div class="p-md">
+                <p class="text-label-sm text-on-surface-variant uppercase tracking-wider font-bold">Proximo evento</p>
+                <p class="text-body-md font-bold text-primary mt-xs">Feira de Ciencias</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="app-card p-lg">
+            <div class="flex items-start justify-between gap-md mb-md">
+              <div>
+                <p class="text-label-sm text-on-surface-variant uppercase tracking-wider font-bold">Resumo de hoje</p>
+                <h3 class="text-headline-md font-bold text-primary">Quinta-feira</h3>
+              </div>
+              <div class="w-12 h-12 bg-secondary-container rounded-xl flex items-center justify-center">
+                <span class="material-symbols-outlined text-primary">sunny</span>
+              </div>
+            </div>
+            <div class="space-y-sm">
+              <div class="flex items-center gap-sm p-sm rounded-xl bg-surface-container-low">
+                <span class="material-symbols-outlined text-primary">menu_book</span>
+                <div>
+                  <p class="text-label-md font-bold">5 aulas programadas</p>
+                  <p class="text-body-sm text-on-surface-variant">Matematica, Portugues, Ciencias e Historia</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-sm p-sm rounded-xl bg-surface-container-low">
+                <span class="material-symbols-outlined text-primary">assignment</span>
+                <div>
+                  <p class="text-label-md font-bold">2 atividades pendentes</p>
+                  <p class="text-body-sm text-on-surface-variant">Entrega ate sexta-feira</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-sm p-sm rounded-xl bg-secondary-container/20">
+                <span class="material-symbols-outlined text-secondary">emoji_events</span>
+                <div>
+                  <p class="text-label-md font-bold">Inscricao aberta</p>
+                  <p class="text-body-sm text-on-surface-variant">Olimpiada Topo do Saber</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-md">
+          <a class="app-card app-card-hover p-md block" href="#horario">
+            <div class="w-12 h-12 bg-primary rounded-xl flex items-center justify-center mb-md">
+              <span class="material-symbols-outlined text-secondary-container">schedule</span>
+            </div>
+            <h3 class="text-headline-md font-bold text-primary">Horario de Aula</h3>
+            <p class="text-body-sm text-on-surface-variant mt-xs">Veja as disciplinas, professores e salas do dia.</p>
+            <div class="mt-md flex items-center gap-xs text-label-md font-bold text-primary">Abrir <span class="material-symbols-outlined text-[18px]">arrow_forward</span></div>
+          </a>
+          <a class="app-card app-card-hover p-md block" href="#agenda">
+            <div class="w-12 h-12 bg-secondary-container rounded-xl flex items-center justify-center mb-md">
+              <span class="material-symbols-outlined text-primary">event_note</span>
+            </div>
+            <h3 class="text-headline-md font-bold text-primary">Agenda Escolar</h3>
+            <p class="text-body-sm text-on-surface-variant mt-xs">Eventos, provas, reunioes e entregas importantes.</p>
+            <div class="mt-md flex items-center gap-xs text-label-md font-bold text-primary">Abrir <span class="material-symbols-outlined text-[18px]">arrow_forward</span></div>
+          </a>
+          <a class="app-card app-card-hover p-md block" href="#projetos">
+            <div class="w-12 h-12 bg-surface-container-high rounded-xl flex items-center justify-center mb-md">
+              <span class="material-symbols-outlined text-primary">science</span>
+            </div>
+            <h3 class="text-headline-md font-bold text-primary">Projetos</h3>
+            <p class="text-body-sm text-on-surface-variant mt-xs">Acompanhe clubes, oficinas e trilhas de aprendizagem.</p>
+            <div class="mt-md flex items-center gap-xs text-label-md font-bold text-primary">Abrir <span class="material-symbols-outlined text-[18px]">arrow_forward</span></div>
+          </a>
+          <a class="app-card app-card-hover p-md block" href="#topo-saber">
+            <div class="w-12 h-12 bg-primary rounded-xl flex items-center justify-center mb-md">
+              <span class="material-symbols-outlined text-secondary-container">emoji_events</span>
+            </div>
+            <h3 class="text-headline-md font-bold text-primary">Topo do Saber</h3>
+            <p class="text-body-sm text-on-surface-variant mt-xs">Olimpiadas, ranking, desafios e medalhas.</p>
+            <div class="mt-md flex items-center gap-xs text-label-md font-bold text-primary">Abrir <span class="material-symbols-outlined text-[18px]">arrow_forward</span></div>
+          </a>
+        </section>
+
+        <section class="grid grid-cols-1 xl:grid-cols-12 gap-md">
+          <div class="xl:col-span-7 app-card" id="horario">
+            <div class="p-lg border-b border-surface-variant flex flex-col sm:flex-row sm:items-center sm:justify-between gap-sm">
+              <div>
+                <p class="text-label-sm uppercase tracking-wider text-on-surface-variant font-bold">Horario de Aula</p>
+                <h2 class="text-headline-md font-bold text-primary">Aulas de hoje</h2>
+              </div>
+              <span class="inline-flex items-center gap-xs px-sm py-2 rounded-full bg-secondary-container/30 text-secondary text-label-sm font-black">8&ordm; Ano B</span>
+            </div>
+            <div class="p-md space-y-sm">
+              <div class="grid grid-cols-[76px_1fr_auto] gap-sm items-center p-sm rounded-xl bg-surface-container-low">
+                <p class="text-label-md font-black">07:30</p>
+                <div>
+                  <p class="text-label-md font-bold">Matematica</p>
+                  <p class="text-body-sm text-on-surface-variant">Professor não cadastrado - Sala 08</p>
+                </div>
+                <span class="material-symbols-outlined text-primary">functions</span>
+              </div>
+              <div class="grid grid-cols-[76px_1fr_auto] gap-sm items-center p-sm rounded-xl bg-white border border-surface-variant">
+                <p class="text-label-md font-black">08:20</p>
+                <div>
+                  <p class="text-label-md font-bold">Lingua Portuguesa</p>
+                  <p class="text-body-sm text-on-surface-variant">Professor não cadastrado - Sala 08</p>
+                </div>
+                <span class="material-symbols-outlined text-primary">menu_book</span>
+              </div>
+              <div class="grid grid-cols-[76px_1fr_auto] gap-sm items-center p-sm rounded-xl bg-white border border-surface-variant">
+                <p class="text-label-md font-black">09:30</p>
+                <div>
+                  <p class="text-label-md font-bold">Ciencias</p>
+                  <p class="text-body-sm text-on-surface-variant">Lab. 02 - Experimento guiado</p>
+                </div>
+                <span class="material-symbols-outlined text-primary">biotech</span>
+              </div>
+              <div class="grid grid-cols-[76px_1fr_auto] gap-sm items-center p-sm rounded-xl bg-white border border-surface-variant">
+                <p class="text-label-md font-black">10:20</p>
+                <div>
+                  <p class="text-label-md font-bold">Historia</p>
+                  <p class="text-body-sm text-on-surface-variant">Professor não cadastrado - Sala 08</p>
+                </div>
+                <span class="material-symbols-outlined text-primary">history_edu</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="xl:col-span-5 app-card" id="agenda">
+            <div class="p-lg border-b border-surface-variant">
+              <p class="text-label-sm uppercase tracking-wider text-on-surface-variant font-bold">Agenda Escolar</p>
+              <h2 class="text-headline-md font-bold text-primary">Proximos compromissos</h2>
+            </div>
+            <div class="p-md space-y-sm">
+              <div class="flex gap-sm p-sm rounded-xl bg-secondary-container/20">
+                <div class="w-12 h-12 rounded-xl bg-secondary-container flex flex-col items-center justify-center text-primary font-black">
+                  <span class="text-[10px] leading-none">JUN</span>
+                  <span class="text-lg leading-none">20</span>
+                </div>
+                <div>
+                  <p class="text-label-md font-bold">Feira de Ciencias</p>
+                  <p class="text-body-sm text-on-surface-variant">Apresentacao dos projetos por equipe.</p>
+                </div>
+              </div>
+              <div class="flex gap-sm p-sm rounded-xl border border-surface-variant">
+                <div class="w-12 h-12 rounded-xl bg-surface-container-low flex flex-col items-center justify-center text-primary font-black">
+                  <span class="text-[10px] leading-none">JUN</span>
+                  <span class="text-lg leading-none">24</span>
+                </div>
+                <div>
+                  <p class="text-label-md font-bold">Avaliacao de Matematica</p>
+                  <p class="text-body-sm text-on-surface-variant">Conteudo: fracoes, razao e proporcao.</p>
+                </div>
+              </div>
+              <div class="flex gap-sm p-sm rounded-xl border border-surface-variant">
+                <div class="w-12 h-12 rounded-xl bg-surface-container-low flex flex-col items-center justify-center text-primary font-black">
+                  <span class="text-[10px] leading-none">JUL</span>
+                  <span class="text-lg leading-none">02</span>
+                </div>
+                <div>
+                  <p class="text-label-md font-bold">Reuniao de responsaveis</p>
+                  <p class="text-body-sm text-on-surface-variant">Entrega de acompanhamento bimestral.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="grid grid-cols-1 xl:grid-cols-12 gap-md">
+          <div class="xl:col-span-7 app-card" id="projetos">
+            <div class="p-lg border-b border-surface-variant flex items-center justify-between">
+              <div>
+                <p class="text-label-sm uppercase tracking-wider text-on-surface-variant font-bold">Projetos</p>
+                <h2 class="text-headline-md font-bold text-primary">Trilhas em andamento</h2>
+              </div>
+              <button class="p-2 rounded-xl border border-surface-variant hover:bg-surface-container-low" type="button">
+                <span class="material-symbols-outlined">filter_list</span>
+              </button>
+            </div>
+            <div class="p-md grid md:grid-cols-2 gap-sm">
+              <article class="p-md rounded-xl border border-surface-variant bg-white">
+                <div class="flex items-center justify-between mb-sm">
+                  <span class="material-symbols-outlined text-primary">eco</span>
+                  <span class="px-2 py-1 rounded-full bg-secondary-container/30 text-secondary text-[10px] font-black">78%</span>
+                </div>
+                <h3 class="text-label-md font-bold">Horta Inteligente</h3>
+                <p class="text-body-sm text-on-surface-variant mt-xs">Pesquisa sobre irrigacao automatizada e sustentabilidade.</p>
+                <div class="mt-md h-2 bg-surface-container-low rounded-full overflow-hidden">
+                  <div class="h-full w-[78%] bg-secondary-container rounded-full"></div>
+                </div>
+              </article>
+              <article class="p-md rounded-xl border border-surface-variant bg-white">
+                <div class="flex items-center justify-between mb-sm">
+                  <span class="material-symbols-outlined text-primary">draw</span>
+                  <span class="px-2 py-1 rounded-full bg-surface-container-high text-on-surface-variant text-[10px] font-black">42%</span>
+                </div>
+                <h3 class="text-label-md font-bold">Jornal da Escola</h3>
+                <p class="text-body-sm text-on-surface-variant mt-xs">Producao de noticias e entrevistas com a comunidade.</p>
+                <div class="mt-md h-2 bg-surface-container-low rounded-full overflow-hidden">
+                  <div class="h-full w-[42%] bg-primary rounded-full"></div>
+                </div>
+              </article>
+            </div>
+          </div>
+
+          <div class="xl:col-span-5 app-card overflow-hidden" id="topo-saber">
+            <div class="p-lg bg-primary text-white">
+              <div class="flex items-start justify-between gap-md">
+                <div>
+                  <p class="text-label-sm uppercase tracking-wider text-secondary-container font-black">Projeto Topo do Saber</p>
+                  <h2 class="text-headline-md font-black mt-xs">Olimpiadas do conhecimento</h2>
+                  <p class="text-body-sm text-inverse-on-surface mt-xs">Prepare-se para desafios por area, ranking por turma e medalhas escolares.</p>
+                </div>
+                <div class="w-14 h-14 bg-secondary-container rounded-xl flex items-center justify-center shrink-0">
+                  <span class="material-symbols-outlined text-primary text-[32px]">emoji_events</span>
+                </div>
+              </div>
+            </div>
+            <div class="p-md space-y-sm">
+              <div class="flex items-center justify-between p-sm rounded-xl bg-secondary-container/20">
+                <div>
+                  <p class="text-label-md font-bold">Nivel atual</p>
+                  <p class="text-body-sm text-on-surface-variant">Fase escolar - Matematica</p>
+                </div>
+                <span class="text-headline-md font-black text-primary">2&ordm;</span>
+              </div>
+              <div class="flex items-center justify-between p-sm rounded-xl border border-surface-variant">
+                <div>
+                  <p class="text-label-md font-bold">Pontuacao</p>
+                  <p class="text-body-sm text-on-surface-variant">Somatorio dos simulados</p>
+                </div>
+                <span class="text-headline-md font-black text-primary">840</span>
+              </div>
+              <button class="w-full py-3 bg-secondary-container text-primary rounded-xl font-black hover:brightness-95" type="button">Ver desafios</button>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <footer class="w-full py-md px-gutter flex flex-col sm:flex-row gap-sm justify-between items-start sm:items-center mt-auto bg-transparent">
+        <p class="text-label-sm text-on-surface-variant">Desenvolvido por Dhenison Carlos - 2026</p>
+        <div class="flex gap-md">
+          <a class="text-label-sm text-on-surface-variant hover:text-primary" href="#">Termos de Uso</a>
+          <a class="text-label-sm text-on-surface-variant hover:text-primary" href="#">Privacidade</a>
+        </div>
+      </footer>
+    </main>
+  </section>
+
+  <div class="fixed inset-0 z-[100] hidden items-center justify-center p-4" id="recovery-modal">
+    <div class="absolute inset-0 bg-primary/25 backdrop-blur-sm" onclick="closeRecovery()"></div>
+    <div class="relative app-card w-full max-w-[440px] p-lg">
+      <div class="flex items-start justify-between gap-md mb-md">
+        <div>
+          <h3 class="text-headline-md font-bold text-primary">Recuperar acesso</h3>
+          <p class="text-body-sm text-on-surface-variant mt-xs">Informe CPF e data de nascimento para localizar seu cadastro.</p>
+        </div>
+        <button class="p-2 rounded-full hover:bg-surface-container-low" type="button" onclick="closeRecovery()">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <form id="recovery-form" class="space-y-sm">
+        <label class="block">
+          <span class="block text-label-md font-bold mb-2">CPF do aluno</span>
+          <input id="recovery-cpf" class="w-full p-3 bg-[#F8F9FA] border border-[#F0F2F5] rounded-lg focus:border-primary focus:ring-0" inputmode="numeric" maxlength="14" placeholder="000.000.000-00" required type="text"/>
+        </label>
+        <label class="block">
+          <span class="block text-label-md font-bold mb-2">Data de nascimento</span>
+          <input id="recovery-birthdate" class="w-full p-3 bg-[#F8F9FA] border border-[#F0F2F5] rounded-lg focus:border-primary focus:ring-0" required type="date"/>
+        </label>
+        <p id="recovery-error" class="hidden text-body-sm text-error font-bold" role="alert"></p>
+        <button class="w-full py-3 bg-primary text-white rounded-lg font-bold flex items-center justify-center gap-xs" type="submit">
+          <span class="material-symbols-outlined text-[20px]">search</span>
+          Localizar cadastro
+        </button>
+      </form>
+
+      <div id="recovery-result" class="hidden mt-md border border-secondary-container bg-secondary-container/10 rounded-lg p-md" aria-live="polite">
+        <div class="flex items-start gap-sm">
+          <span class="material-symbols-outlined text-primary">verified_user</span>
+          <div class="min-w-0 flex-1">
+            <p class="text-label-sm font-bold text-on-surface-variant uppercase">Solicitação recebida</p>
+            <p class="text-body-sm text-primary mt-xs">Se os dados corresponderem a um cadastro ativo, o Supabase enviará um link de redefinição ao e-mail institucional.</p>
+          </div>
+        </div>
+        <button id="recovery-use-login" class="w-full py-3 bg-secondary-container text-primary rounded-lg font-black mt-md flex items-center justify-center gap-xs" type="button">
+          Voltar para o login
+          <span class="material-symbols-outlined text-[20px]">login</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="supabase-config.js"></script>
+  <script>
+    const loginView = document.getElementById("login-view");
+    const portalView = document.getElementById("portal-view");
+    const loginInput = document.getElementById("student-login");
+    const passwordInput = document.getElementById("student-password");
+    const loginError = document.getElementById("login-error");
+    const recoveryForm = document.getElementById("recovery-form");
+    const recoveryCpf = document.getElementById("recovery-cpf");
+    const recoveryBirthdate = document.getElementById("recovery-birthdate");
+    const recoveryError = document.getElementById("recovery-error");
+    const recoveryResult = document.getElementById("recovery-result");
+
+    function showPortal() {
+      loginView.classList.add("hidden-view");
+      portalView.classList.remove("hidden-view");
+      window.scrollTo({ top: 0, behavior: "auto" });
+    }
+
+    function logoutStudent() {
+      portalView.classList.add("hidden-view");
+      loginView.classList.remove("hidden-view");
+      passwordInput.value = "";
+      window.scrollTo({ top: 0, behavior: "auto" });
+    }
+
+    function togglePassword() {
+      const icon = document.getElementById("password-icon");
+      const isPassword = passwordInput.type === "password";
+      passwordInput.type = isPassword ? "text" : "password";
+      icon.textContent = isPassword ? "visibility_off" : "visibility";
+    }
+
+    function toggleSidebar() {
+      const sidebar = document.getElementById("student-sidebar");
+      const overlay = document.getElementById("student-overlay");
+      sidebar.classList.toggle("-translate-x-full");
+      overlay.classList.toggle("hidden");
+    }
+
+    function onlyDigits(value) {
+      return String(value || "").replace(/\D/g, "");
+    }
+
+    function normalizeBirthdate(value) {
+      const raw = String(value || "").trim();
+      const isoMatch = raw.match(/^(\d{4})-(\d{2})-(\d{2})/);
+      if (isoMatch) return `${isoMatch[1]}-${isoMatch[2]}-${isoMatch[3]}`;
+      const brMatch = raw.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+      if (brMatch) return `${brMatch[3]}-${brMatch[2]}-${brMatch[1]}`;
+      if (/^\d{5}$/.test(raw)) {
+        const excelDate = new Date(Date.UTC(1899, 11, 30) + Number(raw) * 86400000);
+        return excelDate.toISOString().slice(0, 10);
+      }
+      return raw;
+    }
+
+    function maskCpf(value) {
+      const digits = onlyDigits(value).slice(0, 11);
+      return digits
+        .replace(/^(\d{3})(\d)/, "$1.$2")
+        .replace(/^(\d{3})\.(\d{3})(\d)/, "$1.$2.$3")
+        .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+    }
+
+    function resetRecovery() {
+      recoveryForm.reset();
+      recoveryForm.classList.remove("hidden");
+      recoveryError.classList.add("hidden");
+      recoveryError.textContent = "";
+      recoveryResult.classList.add("hidden");
+    }
+
+    function openRecovery() {
+      const modal = document.getElementById("recovery-modal");
+      resetRecovery();
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+      setTimeout(function() { recoveryCpf.focus(); }, 0);
+    }
+
+    function closeRecovery() {
+      const modal = document.getElementById("recovery-modal");
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+    }
+
+    async function findStudentAccess(event) {
+      event.preventDefault();
+      const cpf = onlyDigits(recoveryCpf.value);
+      const birthdate = normalizeBirthdate(recoveryBirthdate.value);
+      const config = window.SIGAEDU_CONFIG || {};
+      if (!config.supabaseUrl || !config.supabaseAnonKey || config.supabaseUrl.includes("SEU-PROJETO")) {
+        recoveryError.textContent = "A conexão segura com o Supabase ainda não foi configurada.";
+        recoveryError.classList.remove("hidden");
+        return;
+      }
+
+      const submitButton = recoveryForm.querySelector('button[type="submit"]');
+      submitButton.disabled = true;
+      submitButton.classList.add("opacity-60");
+      try {
+        await fetch(`${config.supabaseUrl}/functions/v1/recuperar-acesso-aluno`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "apikey": config.supabaseAnonKey,
+            "Authorization": `Bearer ${config.supabaseAnonKey}`
+          },
+          body: JSON.stringify({ cpf, dataNascimento: birthdate })
+        });
+        recoveryError.classList.add("hidden");
+        recoveryResult.classList.remove("hidden");
+        recoveryForm.classList.add("hidden");
+      } catch (error) {
+        recoveryError.textContent = "Não foi possível concluir a solicitação agora. Tente novamente em alguns minutos.";
+        recoveryError.classList.remove("hidden");
+      } finally {
+        submitButton.disabled = false;
+        submitButton.classList.remove("opacity-60");
+      }
+    }
+
+    function useRecoveredAccess() {
+      closeRecovery();
+      loginInput.focus();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    recoveryCpf.addEventListener("input", function() {
+      recoveryCpf.value = maskCpf(recoveryCpf.value);
+    });
+    recoveryForm.addEventListener("submit", findStudentAccess);
+    document.getElementById("recovery-use-login").addEventListener("click", useRecoveredAccess);
+
+    document.getElementById("student-login-form").addEventListener("submit", async function(event) {
+      event.preventDefault();
+      const login = loginInput.value.trim().toLowerCase();
+      const hasStudentDomain = login.endsWith("@aluno.seduc.pa.gov.br");
+
+      if (!hasStudentDomain) {
+        loginError.textContent = "Use o e-mail institucional do aluno.";
+        loginError.classList.remove("hidden");
+        loginInput.classList.add("border-error", "shake");
+        setTimeout(function() { loginInput.classList.remove("shake"); }, 500);
+        return;
+      }
+
+      const config = window.SIGAEDU_CONFIG || {};
+      if (!config.supabaseUrl || !config.supabaseAnonKey || config.supabaseUrl.includes("SEU-PROJETO")) {
+        loginError.textContent = "A conexão segura com o Supabase ainda não foi configurada.";
+        loginError.classList.remove("hidden");
+        return;
+      }
+
+      const button = event.currentTarget.querySelector('button[type="submit"]');
+      button.disabled = true;
+      button.classList.add("opacity-60");
+      try {
+        const response = await fetch(`${config.supabaseUrl}/auth/v1/token?grant_type=password`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "apikey": config.supabaseAnonKey },
+          body: JSON.stringify({ email: login, password: passwordInput.value })
+        });
+        if (!response.ok) {
+          loginError.textContent = "E-mail ou senha inválidos.";
+          loginError.classList.remove("hidden");
+          return;
+        }
+        loginError.classList.add("hidden");
+        loginInput.classList.remove("border-error");
+        showPortal();
+      } catch (error) {
+        loginError.textContent = "Não foi possível conectar ao Supabase. Tente novamente.";
+        loginError.classList.remove("hidden");
+      } finally {
+        button.disabled = false;
+        button.classList.remove("opacity-60");
+      }
+    });
+  </script>
+</body>
+</html>

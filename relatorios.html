@@ -132,6 +132,7 @@
         }
     </style>
 </head>
+<script src="clean-demo-data.js"></script>
 <body class="font-body-md text-on-surface">
 
 <!-- SideNavBar Componente Unificado -->
@@ -164,7 +165,11 @@
             <span class="material-symbols-outlined" data-icon="person">person</span>
             <span class="text-label-md font-label-md">Alunos</span>
         </a>
-        <a id="menu-calendario" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="calendario.html">
+      <a id="menu-sala-aee" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="sala_aee.html">
+        <span class="material-symbols-outlined" data-icon="psychology_alt">psychology_alt</span>
+        <span class="text-label-md font-label-md">Sala AEE</span>
+      </a>
+      <a id="menu-calendario" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="calendario.html">
             <span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
             <span class="text-label-md font-label-md">Calendário</span>
         </a>
@@ -427,6 +432,7 @@
             'dashboard.html': 'menu-dashboard',
             'turmas.html': 'menu-turmas',
             'fichadoaluno.html': 'menu-alunos',
+        'sala_aee.html': 'menu-sala-aee',
             'calendario.html': 'menu-calendario',
             'agenda.html': 'menu-agenda',
             'frequencia.html': 'menu-frequencia',
@@ -519,11 +525,7 @@
             }
         }
 
-        let turmas = getDb('sigaedu_turmas', [
-            { id: 1, nome: "1º Ano A", turno: "Manhã", tipo: "Regular", vagas: 30, alunosAtivos: 28, frequencia: 92 },
-            { id: 2, nome: "9º Ano C", turno: "Tarde", tipo: "Fluxo", vagas: 25, alunosAtivos: 22, frequencia: 91 },
-            { id: 3, nome: "EJA Mod I", turno: "Noite", tipo: "EJA", vagas: 40, alunosAtivos: 35, frequencia: 81 }
-        ]);
+        let turmas = getDb('sigaedu_turmas', []);
 
         if (!localStorage.getItem('sigaedu_turmas')) {
             localStorage.setItem('sigaedu_turmas', JSON.stringify(turmas));

@@ -130,6 +130,10 @@
         }
     </script>
 </head>
+<script src="clean-demo-data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="supabase-init.js"></script>
 <body class="bg-background text-on-background">
 <!-- SideNavBar Componente Unificado -->
 <aside id="sidebar" class="fixed left-0 top-0 bottom-0 z-50 flex flex-col p-sm pt-xl overflow-y-auto w-64 bg-white/70 backdrop-blur-xl border-r border-surface-variant dark:border-outline-variant shadow-md transition-transform duration-300 -translate-x-full md:translate-x-0">
@@ -160,6 +164,10 @@
       <a id="menu-alunos" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="fichadoaluno.html">
         <span class="material-symbols-outlined" data-icon="person">person</span>
         <span class="text-label-md font-label-md">Alunos</span>
+      </a>
+      <a id="menu-sala-aee" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="sala_aee.html">
+        <span class="material-symbols-outlined" data-icon="psychology_alt">psychology_alt</span>
+        <span class="text-label-md font-label-md">Sala AEE</span>
       </a>
       <a id="menu-calendario" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="calendario.html">
         <span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
@@ -499,25 +507,78 @@
     // LÓGICA DE NEGÓCIO DE SOLICITAÇÕES PEDAGÓGICAS (PERSISTIDO EM LOCALSTORAGE)
     // ==========================================================================
     let solicitacoes = [];
+    let turmas = [];
     let selectedTurmas = [];
     let uploadedFile = null;
     let activeSolicitacaoForTreatment = null;
 
-    function loadSolicitacoesDb() {
-      // "limpe as informações para que eu faça o teste"
-      // Se for o primeiro carregamento desta versão atualizada, limpa dados antigos mockados
-      if (!localStorage.getItem('sigaedu_solicitacoes_clean_v1')) {
-        localStorage.setItem('sigaedu_solicitacoes', JSON.stringify([]));
-        localStorage.setItem('sigaedu_solicitacoes_clean_v1', 'true');
-      }
-      if (!localStorage.getItem('sigaedu_solicitacoes')) {
-        localStorage.setItem('sigaedu_solicitacoes', JSON.stringify([]));
-      }
-      solicitacoes = JSON.parse(localStorage.getItem('sigaedu_solicitacoes')) || [];
+    const supabase = window.supabaseClient;
+    const selectedEscola = window.selectedEscola;
+
+    if (!supabase || !selectedEscola) {
+      console.error("Supabase ou escola ativa não inicializados.");
     }
 
-    function saveSolicitacoesDb() {
-      localStorage.setItem('sigaedu_solicitacoes', JSON.stringify(solicitacoes));
+    const escolaId = selectedEscola ? selectedEscola.id : null;
+
+    async function loadSolicitacoesDb() {
+      if (!supabase || !escolaId) return;
+
+      try {
+        // 1. Carregar turmas
+        const { data: dbTurmas, error: errorTurmas } = await supabase
+          .from('turmas')
+          .select('*')
+          .eq('escola_id', escolaId);
+
+        if (errorTurmas) throw errorTurmas;
+        turmas = dbTurmas;
+
+        // 2. Carregar solicitações
+        const { data: dbSolicitacoes, error: errorSolicitacoes } = await supabase
+          .from('solicitacoes')
+          .select('*')
+          .eq('escola_id', escolaId)
+          .order('created_at', { ascending: false });
+
+        if (errorSolicitacoes) throw errorSolicitacoes;
+
+        solicitacoes = dbSolicitacoes.map(dbSol => {
+          let parsedDetalhes = {};
+          try {
+            parsedDetalhes = typeof dbSol.detalhes === 'string' ? JSON.parse(dbSol.detalhes || '{}') : (dbSol.detalhes || {});
+          } catch(e) {
+            parsedDetalhes = { descricao: dbSol.detalhes || '' };
+          }
+
+          let parsedRespostas = {};
+          if (dbSol.status === 'Atendida') {
+            if (Array.isArray(dbSol.respostas) && dbSol.respostas.length > 0) {
+              parsedRespostas = dbSol.respostas[0];
+            } else if (dbSol.respostas && typeof dbSol.respostas === 'object') {
+              parsedRespostas = dbSol.respostas;
+            }
+          }
+
+          return {
+            id: dbSol.id,
+            tipo: dbSol.tipo,
+            dataHora: new Date(dbSol.created_at).toLocaleDateString('pt-BR') + ' às ' + new Date(dbSol.created_at).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+            turmas: parsedDetalhes.turmas || [],
+            solicitante: dbSol.requerente,
+            status: dbSol.status,
+            descricao: parsedDetalhes.descricao || '',
+            anexo: parsedDetalhes.anexo || null,
+            atendidoEm: parsedRespostas.atendidoEm || null,
+            observacoes: parsedRespostas.observacoes || ''
+          };
+        });
+
+        renderSolicitacoesTable();
+        renderSolicitacoesStats();
+      } catch(err) {
+        console.error("Erro ao carregar solicitações do Supabase:", err);
+      }
     }
 
     // Modal Nova Solicitação helper
@@ -555,11 +616,8 @@
 
     function renderTurmasDropdown() {
       const panel = document.getElementById("turmas-dropdown-panel");
-      const turmasDb = JSON.parse(localStorage.getItem('sigaedu_turmas')) || [
-        { nome: "1º Ano A" }, { nome: "9º Ano C" }, { nome: "EJA Mod I" }
-      ];
       
-      panel.innerHTML = turmasDb.map(t => {
+      panel.innerHTML = turmas.map(t => {
         const isSelected = selectedTurmas.includes(t.nome);
         const checkedAttr = isSelected ? "checked" : "";
         return `
@@ -641,7 +699,7 @@
     };
 
     // Save Request
-    window.saveNewSolicitacao = function(event) {
+    window.saveNewSolicitacao = async function(event) {
       event.preventDefault();
       
       const tipo = document.getElementById("sol-tipo").value;
@@ -651,32 +709,40 @@
         alert("Por favor, selecione pelo menos uma turma alvo.");
         return;
       }
-      
-      const now = new Date();
-      const months = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
-      const formattedDate = `${now.getDate()} ${months[now.getMonth()]}, ${now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`;
-      
-      const newSol = {
-        id: "sol_" + Date.now(),
-        tipo: tipo,
-        dataHora: formattedDate,
-        turmas: selectedTurmas,
-        solicitante: "Dhenison Carlos", // Logged in user
-        status: "Pendente",
+
+      const detailsObj = {
         descricao: descricao,
-        anexo: uploadedFile,
-        atendidoEm: null,
-        observacoes: ""
+        turmas: selectedTurmas,
+        anexo: uploadedFile
       };
-      
-      solicitacoes.unshift(newSol);
-      saveSolicitacoesDb();
-      
-      closeNewModal();
-      renderSolicitacoesTable();
-      renderSolicitacoesStats();
-      
-      alert("Solicitação Pedagógica enviada com sucesso!");
+
+      const submitBtn = document.querySelector("#form-new-solicitacao button[type='submit']");
+      const originalText = submitBtn.innerHTML;
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = "Enviando...";
+
+      try {
+        const { error } = await supabase
+          .from('solicitacoes')
+          .insert({
+            escola_id: escolaId,
+            tipo: tipo,
+            requerente: 'Dhenison Carlos', // Usuário Master
+            detalhes: JSON.stringify(detailsObj),
+            status: 'Pendente'
+          });
+
+        if (error) throw error;
+
+        alert("Solicitação Pedagógica enviada com sucesso ao Supabase!");
+        closeNewModal();
+        await loadSolicitacoesDb();
+      } catch(err) {
+        alert("Erro ao enviar solicitação ao Supabase: " + err.message);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
+      }
     };
 
     // Re-render Table
@@ -837,7 +903,7 @@
     };
 
     // Confirm Treatment conclusion
-    window.finalizarTratamentoSolicitacao = function() {
+    window.finalizarTratamentoSolicitacao = async function() {
       if (!activeSolicitacaoForTreatment) return;
       
       const confirmCheck = document.getElementById("confirm-check");
@@ -847,27 +913,35 @@
       }
       
       const obs = document.getElementById("sol-atendimento-obs").value.trim();
-      const sol = solicitacoes.find(s => s.id === activeSolicitacaoForTreatment.id);
+      const now = new Date();
+      const atendidoEm = `${now.getDate()}/${now.getMonth() + 1} às ${now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`;
       
-      if (sol) {
-        const now = new Date();
-        sol.status = "Atendida";
-        sol.observacoes = obs || "Atendida com sucesso.";
-        sol.atendidoEm = `${now.getDate()}/${now.getMonth() + 1} às ${now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`;
+      const respostasObj = [{
+        observacoes: obs || "Atendida com sucesso.",
+        atendidoEm: atendidoEm
+      }];
+
+      try {
+        const { error } = await supabase
+          .from('solicitacoes')
+          .update({
+            status: 'Atendida',
+            respostas: respostasObj
+          })
+          .eq('id', activeSolicitacaoForTreatment.id);
+
+        if (error) throw error;
+
+        alert("Solicitação finalizada e arquivada com sucesso!");
+        closeTreatmentModal();
+        await loadSolicitacoesDb();
+      } catch(err) {
+        alert("Erro ao finalizar solicitação no Supabase: " + err.message);
       }
-      
-      saveSolicitacoesDb();
-      closeTreatmentModal();
-      renderSolicitacoesTable();
-      renderSolicitacoesStats();
-      
-      alert("Solicitação finalizada e arquivada com sucesso!");
     };
 
     // Load DB on startup
     loadSolicitacoesDb();
-    renderSolicitacoesTable();
-    renderSolicitacoesStats();
 
     // Função para abrir/fechar a Sidebar no Mobile
     function toggleSidebar() {
@@ -891,6 +965,7 @@
         'dashboard.html': 'menu-dashboard',
         'turmas.html': 'menu-turmas',
         'fichadoaluno.html': 'menu-alunos',
+        'sala_aee.html': 'menu-sala-aee',
         'calendario.html': 'menu-calendario',
         'agenda.html': 'menu-agenda',
         'frequencia.html': 'menu-frequencia',

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SIGAEDU - Redefinir senha</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>body{font-family:Inter,sans-serif}</style>
+</head>
+<body class="min-h-screen bg-[#f8f9fa] flex flex-col p-4 text-[#1c1b1b]">
+  <main class="w-full max-w-md bg-white border border-[#e5e2e1] rounded-lg shadow-lg p-8 m-auto">
+    <div class="w-12 h-12 bg-black text-[#fcd400] rounded-lg flex items-center justify-center font-black mb-6">SA</div>
+    <h1 class="text-2xl font-bold">Definir nova senha</h1>
+    <p class="text-sm text-[#444748] mt-2">Crie uma senha nova para o Portal do Aluno.</p>
+
+    <form id="reset-form" class="space-y-4 mt-6">
+      <label class="block">
+        <span class="block text-sm font-bold mb-2">Nova senha</span>
+        <input id="new-password" class="w-full p-3 border border-[#c4c7c7] rounded-lg" minlength="8" required type="password" autocomplete="new-password">
+      </label>
+      <label class="block">
+        <span class="block text-sm font-bold mb-2">Confirmar nova senha</span>
+        <input id="confirm-password" class="w-full p-3 border border-[#c4c7c7] rounded-lg" minlength="8" required type="password" autocomplete="new-password">
+      </label>
+      <p id="reset-message" class="hidden text-sm font-bold" role="alert"></p>
+      <button class="w-full py-3 bg-[#fcd400] text-black rounded-lg font-extrabold" type="submit">Atualizar senha</button>
+    </form>
+    <a class="hidden mt-5 text-sm font-bold underline" id="back-login" href="portal_aluno.html">Voltar ao Portal do Aluno</a>
+  </main>
+  <footer class="w-full py-4 text-center text-xs text-[#444748]">Desenvolvido por Dhenison Carlos - 2026</footer>
+
+  <script src="supabase-config.js"></script>
+  <script type="module">
+    import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+    const config = window.SIGAEDU_CONFIG || {};
+    const form = document.getElementById("reset-form");
+    const message = document.getElementById("reset-message");
+    const backLogin = document.getElementById("back-login");
+
+    function showMessage(text, success = false) {
+      message.textContent = text;
+      message.className = `text-sm font-bold ${success ? "text-green-700" : "text-red-700"}`;
+    }
+
+    if (!config.supabaseUrl || !config.supabaseAnonKey || config.supabaseUrl.includes("SEU-PROJETO")) {
+      showMessage("A conexão segura com o Supabase ainda não foi configurada.");
+      form.querySelector("button").disabled = true;
+    } else {
+      const supabase = createClient(config.supabaseUrl, config.supabaseAnonKey);
+      form.addEventListener("submit", async event => {
+        event.preventDefault();
+        const password = document.getElementById("new-password").value;
+        const confirmation = document.getElementById("confirm-password").value;
+        if (password !== confirmation) {
+          showMessage("As senhas informadas não coincidem.");
+          return;
+        }
+
+        const button = form.querySelector("button");
+        button.disabled = true;
+        button.classList.add("opacity-60");
+        const { error } = await supabase.auth.updateUser({ password });
+        if (error) {
+          showMessage("O link expirou ou é inválido. Solicite uma nova recuperação no portal.");
+          button.disabled = false;
+          button.classList.remove("opacity-60");
+          return;
+        }
+
+        showMessage("Senha atualizada com sucesso.", true);
+        form.querySelectorAll("input").forEach(input => input.value = "");
+        backLogin.classList.remove("hidden");
+      });
+    }
+  </script>
+</body>
+</html>

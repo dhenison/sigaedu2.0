@@ -133,6 +133,10 @@
         }
     </style>
 </head>
+<script src="clean-demo-data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="supabase-init.js"></script>
 <body class="text-on-surface">
 <!-- Top Header (TopNavBar Shared Component Unificado) -->
 <header class="fixed top-0 right-0 left-0 md:left-64 z-40 h-xl px-gutter flex justify-between items-center bg-white/70 backdrop-blur-xl dark:bg-surface-container/70 border-b border-surface-variant dark:border-outline-variant shadow-sm transition-all duration-300">
@@ -194,6 +198,10 @@
       <a id="menu-alunos" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="fichadoaluno.html">
         <span class="material-symbols-outlined" data-icon="person">person</span>
         <span class="text-label-md font-label-md">Alunos</span>
+      </a>
+      <a id="menu-sala-aee" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="sala_aee.html">
+        <span class="material-symbols-outlined" data-icon="psychology_alt">psychology_alt</span>
+        <span class="text-label-md font-label-md">Sala AEE</span>
       </a>
       <a id="menu-calendario" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="calendario.html">
         <span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
@@ -546,6 +554,7 @@
         'dashboard.html': 'menu-dashboard',
         'turmas.html': 'menu-turmas',
         'fichadoaluno.html': 'menu-alunos',
+        'sala_aee.html': 'menu-sala-aee',
         'calendario.html': 'menu-calendario',
         'agenda.html': 'menu-agenda',
         'frequencia.html': 'menu-frequencia',
@@ -639,21 +648,20 @@
     // LÓGICA DE NEGÓCIO DA CHAMADA CONSOLIDADA E INTEGRAÇÃO DO CALENDÁRIO
     // ==========================================================================
     (function() {
-      // 1. Dados e Estruturas de Banco Local
-      let defaultTurmas = [
-        { id: 1, nome: "1º Ano A", turno: "Manhã", tipo: "Regular", vagas: 30, alunosAtivos: 28, frequencia: 92, classeTurno: "shift-morning" },
-        { id: 2, nome: "9º Ano C", turno: "Tarde", tipo: "Fluxo", vagas: 25, alunosAtivos: 22, frequencia: 91, classeTurno: "shift-afternoon" },
-        { id: 3, nome: "EJA Mod I", turno: "Noite", tipo: "EJA", vagas: 40, alunosAtivos: 35, frequencia: 81, classeTurno: "shift-night" }
-      ];
+      // Estado em memória (carregados do Supabase)
+      let turmas = [];
+      let alunos = [];
+      let calendarioDb = {};
 
-      if (!localStorage.getItem('sigaedu_turmas')) {
-        localStorage.setItem('sigaedu_turmas', JSON.stringify(defaultTurmas));
+      const supabase = window.supabaseClient;
+      const selectedEscola = window.selectedEscola;
+
+      if (!supabase || !selectedEscola) {
+        console.error("Supabase ou escola ativa não inicializados.");
+        return;
       }
-      let turmas = JSON.parse(localStorage.getItem('sigaedu_turmas'));
       
-      let alunos = JSON.parse(localStorage.getItem('sigaedu_alunos')) || [];
-      let calendarioDb = JSON.parse(localStorage.getItem('sigaedu_calendario_2026')) || {};
-      let frequenciaDb = JSON.parse(localStorage.getItem('sigaedu_frequencia')) || {};
+      const escolaId = selectedEscola.id;
 
       // DOM Elements
       const dataChamadaInput = document.getElementById("data-chamada");
@@ -708,6 +716,34 @@
         }, 2500);
       }
 
+      // Busca dados do Supabase ao inicializar
+      async function carregarDados() {
+        try {
+          const { data: dbTurmas, error: errorTurmas } = await supabase
+            .from('turmas')
+            .select('*')
+            .eq('escola_id', escolaId)
+            .order('nome', { ascending: true });
+
+          if (errorTurmas) throw errorTurmas;
+          turmas = dbTurmas;
+
+          const { data: dbAlunos, error: errorAlunos } = await supabase
+            .from('alunos')
+            .select('*')
+            .eq('escola_id', escolaId)
+            .order('nome', { ascending: true });
+
+          if (errorAlunos) throw errorAlunos;
+          alunos = dbAlunos;
+
+          populateTurmaSelector();
+          await checkDateLetivoState();
+        } catch(err) {
+          console.error("Erro ao carregar dados do Supabase:", err);
+        }
+      }
+
       // Popular Turmas a partir do Turno Selecionado
       function populateTurmaSelector() {
         const selectedTurno = turnoSelect.value;
@@ -717,7 +753,7 @@
         if (matching.length > 0) {
           matching.forEach(t => {
             const opt = document.createElement("option");
-            opt.value = t.nome;
+            opt.value = t.id; // Usando o UUID da turma
             opt.textContent = `${t.nome} - ${t.tipo}`;
             turmaSelect.appendChild(opt);
           });
@@ -730,28 +766,24 @@
       }
 
       // Carregar e Validar Calendário Letivo
-      function checkDateLetivoState() {
-        // Recarregar DB mais recente para sincronização instantânea
+      async function checkDateLetivoState() {
         calendarioDb = JSON.parse(localStorage.getItem('sigaedu_calendario_2026')) || {};
         
         const selectedDate = dataChamadaInput.value;
         if (!selectedDate) return;
         
         const dateObj = new Date(selectedDate + "T00:00:00");
-        const dayOfWeek = dateObj.getDay(); // 0 = Dom, 6 = Sáb
+        const dayOfWeek = dateObj.getDay();
         const formattedDate = selectedDate.split("-").reverse().join("/");
         
-        // Estado fallback inicial: 0 (recesso)
         let state = 0;
         if (selectedDate in calendarioDb) {
           state = calendarioDb[selectedDate].state;
         }
 
-        // São dias letivos aptos a chamada apenas letivo (1) e eventos/provas (3)
         const isLetivo = (state === 1 || state === 3);
 
         if (!isLetivo) {
-          // Ocultar painel de chamada e mostrar card de dia não letivo
           chamadaActiveContainer.classList.add("hidden");
           statusChamadaPainel.classList.add("hidden");
           warningNonLetivoCard.classList.remove("hidden");
@@ -770,14 +802,13 @@
           statusChamadaPainel.classList.remove("hidden");
           warningNonLetivoCard.classList.add("hidden");
           
-          loadDailyAttendance();
-          renderTurmasStatusPanel();
+          await loadDailyAttendance();
+          await renderTurmasStatusPanel();
         }
       }
 
       // Renderizar Painel Geral de Status das Turmas
-      function renderTurmasStatusPanel() {
-        frequenciaDb = JSON.parse(localStorage.getItem('sigaedu_frequencia')) || {};
+      async function renderTurmasStatusPanel() {
         const selectedDate = dataChamadaInput.value;
         const formattedDate = selectedDate.split("-").reverse().join("/");
         document.getElementById("status-panel-date").textContent = formattedDate;
@@ -791,53 +822,96 @@
           turmasStatusList.innerHTML = `<tr><td colspan="3" class="py-md text-center italic text-on-surface-variant">Nenhuma turma cadastrada neste turno.</td></tr>`;
           return;
         }
-        
-        matchingTurmas.forEach(turma => {
-          const dbKey = `${selectedDate}_${turma.nome}`;
-          const savedRecord = frequenciaDb[dbKey];
-          
-          const hasEntrada = savedRecord && savedRecord.consolidadoEntrada;
-          const hasSaida = savedRecord && savedRecord.consolidadoSaida;
-          
-          const entClass = hasEntrada 
-            ? "bg-emerald-50 text-emerald-700 border border-emerald-200" 
-            : "bg-red-50 text-red-700 border border-red-200 animate-pulse";
-          const entText = hasEntrada ? "Realizada" : "Pendente";
-          
-          const saiClass = hasSaida 
-            ? "bg-emerald-50 text-emerald-700 border border-emerald-200" 
-            : "bg-red-50 text-red-700 border border-red-200 animate-pulse";
-          const saiText = hasSaida ? "Realizada" : "Pendente";
-          
-          const row = document.createElement("tr");
-          row.className = "border-b border-surface-variant/20 hover:bg-surface-container-lowest transition-colors";
-          row.innerHTML = `
-            <td class="py-sm font-bold text-primary">${turma.nome}</td>
-            <td class="py-sm text-center">
-              <span class="px-md py-1 rounded-full text-[12px] font-bold ${entClass} whitespace-nowrap">${entText}</span>
-            </td>
-            <td class="py-sm text-center">
-              <span class="px-md py-1 rounded-full text-[12px] font-bold ${saiClass} whitespace-nowrap">${saiText}</span>
-            </td>
-          `;
-          turmasStatusList.appendChild(row);
-        });
+
+        try {
+          const { data: dbFreqs, error } = await supabase
+            .from('frequencias')
+            .select('*')
+            .eq('escola_id', escolaId)
+            .eq('data', selectedDate);
+
+          if (error) throw error;
+
+          matchingTurmas.forEach(turma => {
+            const record = dbFreqs.find(f => f.turma_id === turma.id);
+            const pres = record ? record.presencas : null;
+            
+            const hasEntrada = pres && pres.consolidadoEntrada;
+            const hasSaida = pres && pres.consolidadoSaida;
+            
+            const entClass = hasEntrada 
+              ? "bg-emerald-50 text-emerald-700 border border-emerald-200" 
+              : "bg-red-50 text-red-700 border border-red-200 animate-pulse";
+            const entText = hasEntrada ? "Realizada" : "Pendente";
+            
+            const saiClass = hasSaida 
+              ? "bg-emerald-50 text-emerald-700 border border-emerald-200" 
+              : "bg-red-50 text-red-700 border border-red-200 animate-pulse";
+            const saiText = hasSaida ? "Realizada" : "Pendente";
+            
+            const row = document.createElement("tr");
+            row.className = "border-b border-surface-variant/20 hover:bg-surface-container-lowest transition-colors";
+            row.innerHTML = `
+              <td class="py-sm font-bold text-primary">${turma.nome}</td>
+              <td class="py-sm text-center">
+                <span class="px-md py-1 rounded-full text-[12px] font-bold ${entClass} whitespace-nowrap">${entText}</span>
+              </td>
+              <td class="py-sm text-center">
+                <span class="px-md py-1 rounded-full text-[12px] font-bold ${saiClass} whitespace-nowrap">${saiText}</span>
+              </td>
+            `;
+            turmasStatusList.appendChild(row);
+          });
+        } catch(err) {
+          console.error("Erro ao renderizar painel de status das turmas:", err);
+        }
+      }
+
+      // Salvar Frequência no Supabase
+      async function salvarFrequencia() {
+        const selectedDate = dataChamadaInput.value;
+        const selectedTurmaId = turmaSelect.value;
+        if (!selectedTurmaId || !selectedDate) return;
+
+        const presencasPayload = {
+          entrada: entradaStatus,
+          saida: saidaStatus,
+          justificativaTipos: justificativaTipos,
+          entradaTrancada: entradaTrancada,
+          consolidadoEntrada: (saidaSection.classList.contains("hidden") === false),
+          consolidadoSaida: (resultadoConsolidadoContainer.classList.contains("hidden") === false)
+        };
+
+        try {
+          const { error } = await supabase
+            .from('frequencias')
+            .upsert({
+              escola_id: escolaId,
+              turma_id: selectedTurmaId,
+              data: selectedDate,
+              presencas: presencasPayload
+            }, {
+              onConflict: 'turma_id, data'
+            });
+
+          if (error) throw error;
+        } catch(err) {
+          console.error("Erro ao salvar frequência no Supabase:", err);
+          showToast("Erro ao salvar no banco", "error", "#EF4444");
+        }
       }
 
       // Carregar Base de Chamadas do Dia
-      function loadDailyAttendance() {
-        alunos = JSON.parse(localStorage.getItem('sigaedu_alunos')) || [];
-        frequenciaDb = JSON.parse(localStorage.getItem('sigaedu_frequencia')) || {};
-        
+      async function loadDailyAttendance() {
         const selectedDate = dataChamadaInput.value;
-        const selectedTurma = turmaSelect.value;
+        const selectedTurmaId = turmaSelect.value;
 
-        if (!selectedTurma) {
+        if (!selectedTurmaId) {
           studentList.innerHTML = `<tr><td colspan="2" class="px-md py-lg text-center text-on-surface-variant italic">Nenhuma turma selecionada ou cadastrada.</td></tr>`;
           return;
         }
 
-        activeStudents = alunos.filter(a => a.turma === selectedTurma);
+        activeStudents = alunos.filter(a => a.turma_id === selectedTurmaId);
 
         if (activeStudents.length === 0) {
           studentList.innerHTML = `
@@ -854,58 +928,64 @@
           return;
         }
 
-        const dbKey = `${selectedDate}_${selectedTurma}`;
-        const savedRecord = frequenciaDb[dbKey];
+        try {
+          const { data: savedRecord, error } = await supabase
+            .from('frequencias')
+            .select('*')
+            .eq('turma_id', selectedTurmaId)
+            .eq('data', selectedDate)
+            .maybeSingle();
 
-        if (savedRecord) {
-          entradaStatus = savedRecord.entrada || {};
-          saidaStatus = savedRecord.saida || {};
-          justificativaTipos = savedRecord.justificativaTipos || {};
-          entradaTrancada = savedRecord.entradaTrancada !== undefined ? savedRecord.entradaTrancada : true;
-          
-          renderRoster('entrada');
-          
-          if (savedRecord.consolidadoEntrada) {
-            saidaSection.classList.remove("hidden");
-            saidaSection.style.opacity = 1;
-            renderRoster('saida');
-          } else {
-            saidaSection.classList.add("hidden");
-            saidaSection.style.opacity = 0;
-          }
+          if (error) throw error;
 
-          if (savedRecord.consolidadoSaida) {
-            renderConsolidatedSummary();
-          } else {
-            entradaPanel.classList.remove("hidden");
-            if (savedRecord.consolidadoEntrada) {
+          if (savedRecord && savedRecord.presencas) {
+            const pres = savedRecord.presencas;
+            entradaStatus = pres.entrada || {};
+            saidaStatus = pres.saida || {};
+            justificativaTipos = pres.justificativaTipos || {};
+            entradaTrancada = pres.entradaTrancada !== undefined ? pres.entradaTrancada : true;
+            
+            renderRoster('entrada');
+            
+            if (pres.consolidadoEntrada) {
               saidaSection.classList.remove("hidden");
+              saidaSection.style.opacity = 1;
+              renderRoster('saida');
+            } else {
+              saidaSection.classList.add("hidden");
+              saidaSection.style.opacity = 0;
             }
-            resultadoConsolidadoContainer.classList.add("hidden");
+
+            if (pres.consolidadoSaida) {
+              renderConsolidatedSummary();
+            } else {
+              entradaPanel.classList.remove("hidden");
+              if (pres.consolidadoEntrada) {
+                saidaSection.classList.remove("hidden");
+              }
+              resultadoConsolidadoContainer.classList.add("hidden");
+              updateLiveCounters();
+            }
+          } else {
+            entradaStatus = {};
+            saidaStatus = {};
+            justificativaTipos = {};
+            entradaTrancada = false;
+            
+            activeStudents.forEach(s => {
+              entradaStatus[s.cpf] = 'Pendente';
+              saidaStatus[s.cpf] = 'Pendente';
+            });
+            
+            resetSummary(activeStudents.length);
+            renderRoster('entrada');
             updateLiveCounters();
           }
-        } else {
-          // Inicializar diário novo limpo
-          entradaStatus = {};
-          saidaStatus = {};
-          justificativaTipos = {};
-          entradaTrancada = false;
-          
-          activeStudents.forEach(s => {
-            entradaStatus[s.cpf] = 'Pendente';
-            saidaStatus[s.cpf] = 'Pendente';
-          });
-
-          renderRoster('entrada');
-          saidaSection.classList.add("hidden");
-          saidaSection.style.opacity = 0;
-          
-          updateLiveCounters();
-          resetSummary(activeStudents.length);
+        } catch(err) {
+          console.error("Erro ao carregar diário do Supabase:", err);
         }
       }
 
-      // Renderizar Roster Geral
       function renderRoster(type) {
         const targetBody = type === 'entrada' ? studentList : saidaList;
         targetBody.innerHTML = "";
@@ -935,7 +1015,6 @@
           const motiveKey = `${type}_${id}`;
           const motive = justificativaTipos[motiveKey];
 
-          // Text do botão FJ
           let fjText = "FJ";
           if (current === 'FJ' && motive) {
             const word = motive.split(" ").pop();
@@ -984,7 +1063,7 @@
           row.innerHTML = `
             <td class="px-sm py-sm flex items-center gap-sm">
               <div class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center font-bold text-primary overflow-hidden shadow-inner border border-outline-variant">
-                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRGSGbqGOo2dzNp40hZk4pp_0rVieA-Su6u1WdWdVVqvGIA6n7dJMIDQVg3vkTYKgYN5HRKv7SOzuV4CGLSmB4xKZHKFpq-2ab9UNYf9ye3MByCMdx_JIehrQjusuLvStYhxK5Qj2eZHDffXBfYxzFUFDsX7kk7oInOP0foJp972O4lAIpD8pOJMQ4ehoA3BKsZHDj0gIh6Fx7Dr-Uvdu89v6j1O2f_mCuy7lSXEnJdzNLXbaD9C36QemEJIA6ok8BwdRRm8oVmvA" alt="${student.nome}" class="w-full h-full object-cover"/>
+                <img src="${student.avatar || 'https://lh3.googleusercontent.com/aida-public/AB6AXuDRGSGbqGOo2dzNp40hZk4pp_0rVieA-Su6u1WdWdVVqvGIA6n7dJMIDQVg3vkTYKgYN5HRKv7SOzuV4CGLSmB4xKZHKFpq-2ab9UNYf9ye3MByCMdx_JIehrQjusuLvStYhxK5Qj2eZHDffXBfYxzFUFDsX7kk7oInOP0foJp972O4lAIpD8pOJMQ4ehoA3BKsZHDj0gIh6Fx7Dr-Uvdu89v6j1O2f_mCuy7lSXEnJdzNLXbaD9C36QemEJIA6ok8BwdRRm8oVmvA'}" alt="${student.nome}" class="w-full h-full object-cover"/>
               </div>
               <div>
                 <p class="text-label-md font-bold text-primary leading-none mb-1">${student.nome}</p>
@@ -998,7 +1077,6 @@
         });
       }
 
-      // Definir Status Individual
       window.selectStudentStatus = function(type, cpf, value) {
         if (value === 'FJ') {
           activeFjContext = { type, cpf };
@@ -1008,14 +1086,12 @@
 
         const statusMap = type === 'entrada' ? entradaStatus : saidaStatus;
         statusMap[cpf] = value;
-        
         delete justificativaTipos[`${type}_${cpf}`];
         
         renderRoster(type);
         updateLiveCounters();
       };
 
-      // Modal FJ Helpers
       window.abrirModalJustificativa = function() {
         document.getElementById("modal-justificativa").classList.remove("hidden");
       };
@@ -1025,58 +1101,40 @@
         activeFjContext = null;
       };
 
-      window.selecionarTipoJustificativa = function(motive) {
+      window.selecionarTipoJustificativa = async function(motive) {
         if (!activeFjContext) return;
 
         const { type, cpf } = activeFjContext;
         const statusMap = type === 'entrada' ? entradaStatus : saidaStatus;
         statusMap[cpf] = 'FJ';
-
         justificativaTipos[`${type}_${cpf}`] = motive;
-
-        // Atualizar DB imediatamente
-        const selectedDate = dataChamadaInput.value;
-        const selectedTurma = turmaSelect.value;
-        const dbKey = `${selectedDate}_${selectedTurma}`;
-        if (frequenciaDb[dbKey]) {
-          frequenciaDb[dbKey].justificativaTipos = justificativaTipos;
-          localStorage.setItem('sigaedu_frequencia', JSON.stringify(frequenciaDb));
-        }
 
         fecharModalJustificativa();
         renderRoster(type);
         updateLiveCounters();
 
+        await salvarFrequencia();
+        fecharModalJustificativa();
         showToast(`Justificativa registrada: ${motive}`, "description", "#F59E0B");
       };
 
-      // Destrancar Entrada com Senha Admin
-      window.destrancarEntrada = function() {
+      window.destrancarEntrada = async function() {
         const password = prompt("Digite a senha do Administrador para destravar e editar a chamada de Entrada:");
         if (password === null) return;
 
         if (password === "siga@EDU2026excluir") {
           entradaTrancada = false;
 
-          const selectedDate = dataChamadaInput.value;
-          const selectedTurma = turmaSelect.value;
-          const dbKey = `${selectedDate}_${selectedTurma}`;
-
-          if (frequenciaDb[dbKey]) {
-            frequenciaDb[dbKey].entradaTrancada = false;
-            frequenciaDb[dbKey].consolidadoEntrada = false; // reverte status de consolidado
-            localStorage.setItem('sigaedu_frequencia', JSON.stringify(frequenciaDb));
-          }
+          await salvarFrequencia();
 
           renderRoster('entrada');
-          renderTurmasStatusPanel(); // Atualiza painel geral de status!
+          await renderTurmasStatusPanel();
           showToast("Entrada destrancada para edições acadêmicas!", "lock_open", "#4ADE80");
         } else {
           alert("Senha incorreta! Não foi possível destravar a chamada.");
         }
       };
 
-      // Bulk de Presenças
       window.setAll = function(type, value) {
         activeStudents.forEach(student => {
           const id = student.cpf;
@@ -1092,7 +1150,6 @@
         updateLiveCounters();
       };
 
-      // Atualizar Contadores da Sessão Ativa
       function updateLiveCounters() {
         let total = activeStudents.length;
         let presencas = 0;
@@ -1116,7 +1173,6 @@
         summaryPendente.textContent = pendentes;
       }
 
-      // Resetar Bento Card de Resumo
       function resetSummary(count) {
         summaryTotal.textContent = count;
         summaryPresenca.textContent = 0;
@@ -1136,8 +1192,7 @@
         evasionList.innerHTML = "";
       }
 
-      // Consolidar Entrada (Etapa 1)
-      window.consolidarEntrada = function() {
+      window.consolidarEntrada = async function() {
         const pendentes = activeStudents.filter(s => entradaStatus[s.cpf] === 'Pendente');
         if (pendentes.length > 0) {
           if (!confirm(`Atenção: Existem ${pendentes.length} alunos com chamada pendente na Entrada. Deseja marcar o restante como PRESENÇA e prosseguir?`)) {
@@ -1148,11 +1203,9 @@
           updateLiveCounters();
         }
 
-        // Espelhar na saída os alunos EXATAMENTE como ficou a entrada (P->P, F->F, FJ->FJ)
         activeStudents.forEach(s => {
           const id = s.cpf;
           saidaStatus[id] = entradaStatus[id];
-          
           if (entradaStatus[id] === 'FJ') {
             justificativaTipos[`saida_${id}`] = justificativaTipos[`entrada_${id}`];
           }
@@ -1160,23 +1213,9 @@
 
         entradaTrancada = true;
 
-        const selectedDate = dataChamadaInput.value;
-        const selectedTurma = turmaSelect.value;
-        const dbKey = `${selectedDate}_${selectedTurma}`;
-
-        frequenciaDb[dbKey] = {
-          entrada: entradaStatus,
-          saida: saidaStatus,
-          justificativaTipos: justificativaTipos,
-          entradaTrancada: true,
-          consolidadoEntrada: true,
-          consolidadoSaida: false
-        };
-
-        localStorage.setItem('sigaedu_frequencia', JSON.stringify(frequenciaDb));
-
+        await salvarFrequencia();
         renderRoster('entrada');
-        renderTurmasStatusPanel(); // Atualiza painel geral de status!
+        await renderTurmasStatusPanel();
         
         saidaSection.classList.remove("hidden");
         setTimeout(() => {
@@ -1189,8 +1228,7 @@
         showToast("Entrada trancada! Realize a Chamada de Saída.", "lock", "#F59E0B");
       };
 
-      // Consolidar Saída (Etapa 2 e Final)
-      window.consolidarSaida = function() {
+      window.consolidarSaida = async function() {
         const pendentes = activeStudents.filter(s => saidaStatus[s.cpf] === 'Pendente');
         if (pendentes.length > 0) {
           if (!confirm(`Atenção: Existem ${pendentes.length} alunos pendentes na chamada de saída. Deseja marcar como PRESENÇA e consolidar?`)) {
@@ -1203,22 +1241,67 @@
           renderRoster('saida');
         }
 
-        const selectedDate = dataChamadaInput.value;
-        const selectedTurma = turmaSelect.value;
-        const dbKey = `${selectedDate}_${selectedTurma}`;
+        await salvarFrequencia();
 
-        frequenciaDb[dbKey].saida = saidaStatus;
-        frequenciaDb[dbKey].justificativaTipos = justificativaTipos;
-        frequenciaDb[dbKey].consolidadoSaida = true;
+        // Registrar automaticamente na aba Ocorrências do Supabase
+        let evasoes = 0;
+        let evasaoAlunos = [];
 
-        localStorage.setItem('sigaedu_frequencia', JSON.stringify(frequenciaDb));
+        activeStudents.forEach(student => {
+          const id = student.cpf;
+          const ent = entradaStatus[id];
+          const sai = saidaStatus[id];
+
+          if (ent === 'P' && sai === 'F') {
+            evasoes++;
+            evasaoAlunos.push(student);
+          }
+        });
+
+        if (evasaoAlunos.length > 0) {
+          const selectedDate = dataChamadaInput.value;
+          const selectedTurmaId = turmaSelect.value;
+          const formattedDate = selectedDate.split("-").reverse().join("/");
+
+          for (let student of evasaoAlunos) {
+            try {
+              const { data: ocoExistente, error: errorCheck } = await supabase
+                .from('ocorrencias')
+                .select('id')
+                .eq('aluno_id', student.id)
+                .eq('data', selectedDate)
+                .eq('tipo', 'Evasão')
+                .maybeSingle();
+
+              if (errorCheck) throw errorCheck;
+
+              if (!ocoExistente) {
+                const { error: errorInsert } = await supabase
+                  .from('ocorrencias')
+                  .insert({
+                    escola_id: escolaId,
+                    aluno_id: student.id,
+                    turma_id: selectedTurmaId,
+                    data: selectedDate,
+                    tipo: 'Evasão',
+                    descricao: `Evasão detectada automaticamente pelo diário de classe na chamada consolidada do dia ${formattedDate}. O(A) aluno(a) obteve PRESENÇA na chamada de Entrada, mas obteve FALTA na chamada de Saída sem justificativa cadastrada.`,
+                    responsavel: 'Sistema (SIGAEDU)',
+                    status: 'Pendente'
+                  });
+
+                if (errorInsert) throw errorInsert;
+              }
+            } catch(err) {
+              console.error("Erro ao registrar ocorrência de evasão:", err);
+            }
+          }
+        }
 
         renderConsolidatedSummary();
-        renderTurmasStatusPanel(); // Atualiza painel geral de status!
+        await renderTurmasStatusPanel();
         showToast("Chamada Diária Fechada com Sucesso!", "verified", "#4ADE80");
       };
 
-      // Renderizar o Resumo de Consolidação Completo e Minimizar/Colapsar Frequências
       function renderConsolidatedSummary() {
         let presencas = 0;
         let faltas = 0;
@@ -1233,97 +1316,28 @@
           if (ent === 'P' && sai === 'F') {
             evasoes++;
             evasaoAlunos.push(student);
-            faltas++; // Evadido conta como ausência no diário geral
+            faltas++;
           } else if (ent === 'F') {
             faltas++;
           } else if (ent === 'FJ') {
-            presencas++; // Falta justificada conta como presença pedagógica
+            presencas++;
           } else {
             presencas++;
           }
         });
-
-        // Registrar automaticamente na aba Ocorrências
-        if (evasaoAlunos.length > 0) {
-          const selectedDate = dataChamadaInput.value;
-          const selectedTurma = turmaSelect.value;
-          const selectedTurno = turnoSelect.value;
-          
-          let occurrencesDb = JSON.parse(localStorage.getItem('sigaedu_ocorrencias')) || [];
-          let alunosDb = JSON.parse(localStorage.getItem('sigaedu_alunos')) || [];
-          const formattedDate = selectedDate.split("-").reverse().join("/");
-          let updatedAlunos = false;
-          let updatedOccurrences = false;
-
-          evasaoAlunos.forEach(student => {
-            let exists = occurrencesDb.some(oco => 
-              oco.tipo === "Evasão" && 
-              oco.dataOcorrencia === selectedDate && 
-              oco.turma === selectedTurma && 
-              oco.alunosEnvolvidos.some(a => a.cpf === student.cpf)
-            );
-
-            if (!exists) {
-              const newOco = {
-                id: "oco_" + Date.now() + "_" + Math.floor(Math.random() * 1000),
-                tipo: "Evasão",
-                turno: selectedTurno,
-                turma: selectedTurma,
-                alunosEnvolvidos: [{ cpf: student.cpf, nome: student.nome }],
-                dataOcorrencia: selectedDate,
-                dataRegistro: new Date().toISOString().split('T')[0],
-                relato: `Evasão detectada automaticamente pelo diário de classe na chamada consolidada do dia ${formattedDate}. O(A) aluno(a) obteve PRESENÇA na chamada de Entrada, mas obteve FALTA na chamada de Saída sem justificativa cadastrada.`,
-                autor: "Sistema (SIGAEDU)",
-                status: "Pendente",
-                resposta: "",
-                arquivoAssinado: null,
-                evidencia: null
-              };
-              
-              occurrencesDb.unshift(newOco);
-              updatedOccurrences = true;
-
-              // Propagar para a ficha individual do aluno
-              let studentRecord = alunosDb.find(a => a.cpf === student.cpf);
-              if (studentRecord) {
-                if (!studentRecord.ocorrencias) {
-                  studentRecord.ocorrencias = [];
-                }
-                studentRecord.ocorrencias.unshift({
-                  id: newOco.id,
-                  titulo: "Evasão (Automática)",
-                  data: formattedDate,
-                  desc: newOco.relato,
-                  tipo: "Pendente"
-                });
-                updatedAlunos = true;
-              }
-            }
-          });
-
-          if (updatedOccurrences) {
-            localStorage.setItem('sigaedu_ocorrencias', JSON.stringify(occurrencesDb));
-          }
-          if (updatedAlunos) {
-            localStorage.setItem('sigaedu_alunos', JSON.stringify(alunosDb));
-          }
-        }
 
         summaryTotal.textContent = activeStudents.length;
         summaryPresenca.textContent = presencas;
         summaryFalta.textContent = faltas;
         summaryPendente.textContent = 0;
 
-        // Minimizar/Esconder painéis de Entrada e Saída
         entradaPanel.classList.add("hidden");
         entradaActions.classList.add("hidden");
         saidaSection.classList.add("hidden");
 
-        // Exibir painel e tabela analítica de Resultado do Dia
         resultadoConsolidadoContainer.classList.remove("hidden");
         renderConsolidatedTable();
 
-        // Render success preview card
         if (evasoes > 0) {
           finalResultCard.innerHTML = `
             <div class="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mb-md border border-red-100 mx-auto">
@@ -1350,14 +1364,13 @@
           finalResultCard.className = "bg-white rounded-xl border-2 border-emerald-300 p-md text-center shadow-lg animate-in zoom-in-95";
         }
 
-        // Renderizar Alertas de Evasão
         if (evasoes > 0) {
           alertsContainer.classList.remove("hidden");
           evasionList.innerHTML = evasaoAlunos.map(student => `
             <div class="flex items-center justify-between p-sm bg-red-50 border border-red-200 rounded-xl flex-wrap gap-sm">
               <div class="flex items-center gap-sm min-w-0">
                 <div class="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center font-bold text-red-700 overflow-hidden border shrink-0">
-                  <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRGSGbqGOo2dzNp40hZk4pp_0rVieA-Su6u1WdWdVVqvGIA6n7dJMIDQVg3vkTYKgYN5HRKv7SOzuV4CGLSmB4xKZHKFpq-2ab9UNYf9ye3MByCMdx_JIehrQjusuLvStYhxK5Qj2eZHDffXBfYxzFUFDsX7kk7oInOP0foJp972O4lAIpD8pOJMQ4ehoA3BKsZHDj0gIh6Fx7Dr-Uvdu89v6j1O2f_mCuy7lSXEnJdzNLXbaD9C36QemEJIA6ok8BwdRRm8oVmvA" class="w-full h-full object-cover"/>
+                  <img src="${student.avatar || 'https://lh3.googleusercontent.com/aida-public/AB6AXuDRGSGbqGOo2dzNp40hZk4pp_0rVieA-Su6u1WdWdVVqvGIA6n7dJMIDQVg3vkTYKgYN5HRKv7SOzuV4CGLSmB4xKZHKFpq-2ab9UNYf9ye3MByCMdx_JIehrQjusuLvStYhxK5Qj2eZHDffXBfYxzFUFDsX7kk7oInOP0foJp972O4lAIpD8pOJMQ4ehoA3BKsZHDj0gIh6Fx7Dr-Uvdu89v6j1O2f_mCuy7lSXEnJdzNLXbaD9C36QemEJIA6ok8BwdRRm8oVmvA'}" class="w-full h-full object-cover"/>
                 </div>
                 <div class="min-w-0">
                   <p class="text-body-sm font-bold text-red-950 truncate">${student.nome}</p>
@@ -1375,7 +1388,6 @@
         }
       }
 
-      // Reabrir painéis detalhados de chamadas (Minimizadas / Expandidas)
       window.reabrirChamadas = function() {
         if (entradaPanel.classList.contains("hidden")) {
           entradaPanel.classList.remove("hidden");
@@ -1394,7 +1406,6 @@
         }
       };
 
-      // Tabela Analítica Consolidadora
       function renderConsolidatedTable() {
         resultadoConsolidadoList.innerHTML = "";
 
@@ -1425,7 +1436,6 @@
             saiBadge = "bg-amber-50 text-amber-700 border border-amber-200";
           }
 
-          // Resultado Geral do Aluno
           let resText = "Presença Plena (P)";
           let resBadge = "bg-emerald-100 text-emerald-800 border border-emerald-300 font-extrabold";
 
@@ -1445,7 +1455,7 @@
           row.innerHTML = `
             <td class="px-sm py-sm flex items-center gap-sm">
               <div class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center font-bold text-primary overflow-hidden shadow-inner border border-outline-variant">
-                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRGSGbqGOo2dzNp40hZk4pp_0rVieA-Su6u1WdWdVVqvGIA6n7dJMIDQVg3vkTYKgYN5HRKv7SOzuV4CGLSmB4xKZHKFpq-2ab9UNYf9ye3MByCMdx_JIehrQjusuLvStYhxK5Qj2eZHDffXBfYxzFUFDsX7kk7oInOP0foJp972O4lAIpD8pOJMQ4ehoA3BKsZHDj0gIh6Fx7Dr-Uvdu89v6j1O2f_mCuy7lSXEnJdzNLXbaD9C36QemEJIA6ok8BwdRRm8oVmvA" alt="${student.nome}" class="w-full h-full object-cover"/>
+                <img src="${student.avatar || 'https://lh3.googleusercontent.com/aida-public/AB6AXuDRGSGbqGOo2dzNp40hZk4pp_0rVieA-Su6u1WdWdVVqvGIA6n7dJMIDQVg3vkTYKgYN5HRKv7SOzuV4CGLSmB4xKZHKFpq-2ab9UNYf9ye3MByCMdx_JIehrQjusuLvStYhxK5Qj2eZHDffXBfYxzFUFDsX7kk7oInOP0foJp972O4lAIpD8pOJMQ4ehoA3BKsZHDj0gIh6Fx7Dr-Uvdu89v6j1O2f_mCuy7lSXEnJdzNLXbaD9C36QemEJIA6ok8BwdRRm8oVmvA'}" alt="${student.nome}" class="w-full h-full object-cover"/>
               </div>
               <div>
                 <p class="text-label-md font-bold text-primary leading-none mb-1">${student.nome}</p>
@@ -1465,22 +1475,19 @@
         });
       }
 
-      // Notificação simulada via WhatsApp
       window.dispararWhatsapp = function(cpf) {
         const student = activeStudents.find(s => s.cpf === cpf);
         if (!student) return;
-
-        showToast(`Alerta de evasão do(a) aluno(a) ${student.nome} enviado para ${student.nomeResponsavel} no WhatsApp!`, "chat", "#25D366");
+        showToast(`Alerta de evasão do(a) aluno(a) ${student.nome} enviado para ${student.nome_responsavel || 'Responsável'} no WhatsApp!`, "chat", "#25D366");
       };
 
       // Inicialização Geral
-      populateTurmaSelector();
-      checkDateLetivoState();
+      carregarDados();
 
       // Bind Event Listeners
-      turnoSelect.addEventListener("change", () => {
+      turnoSelect.addEventListener("change", async () => {
         populateTurmaSelector();
-        checkDateLetivoState();
+        await checkDateLetivoState();
       });
       turmaSelect.addEventListener("change", checkDateLetivoState);
       dataChamadaInput.addEventListener("change", checkDateLetivoState);

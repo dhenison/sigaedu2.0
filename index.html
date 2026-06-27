@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SIGAEDU - Escolha seu acesso</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@400;600&display=block" rel="stylesheet">
+  <style>
+    body { font-family: Inter, sans-serif; }
+    .material-symbols-outlined { font-variation-settings: "FILL" 0, "wght" 500, "GRAD" 0, "opsz" 24; }
+  </style>
+</head>
+<script src="clean-demo-data.js"></script>
+<body class="min-h-screen bg-[#111] text-white">
+  <main class="relative min-h-screen flex flex-col overflow-hidden">
+    <img
+      class="absolute inset-0 w-full h-full object-cover"
+      src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=2000&q=85"
+      alt="Ambiente educacional com estudantes em um campus"
+    >
+    <div class="absolute inset-0 bg-black/70"></div>
+
+    <header class="relative z-10 h-20 px-6 border-b border-white/20 bg-black/20 backdrop-blur-md">
+      <div class="max-w-6xl mx-auto h-full flex items-center gap-3">
+        <div class="w-11 h-11 bg-black border border-white/20 rounded-lg flex items-center justify-center shadow-lg">
+          <span class="material-symbols-outlined text-[#fcd400]">school</span>
+        </div>
+        <div>
+          <p class="text-base font-black leading-none">SIGAEDU</p>
+          <p class="text-xs text-white/70 mt-1">Gestão e acompanhamento escolar</p>
+        </div>
+      </div>
+    </header>
+
+    <section class="relative z-10 flex-1 flex items-center px-6 py-12">
+      <div class="w-full max-w-6xl mx-auto">
+        <div class="max-w-2xl">
+          <p class="text-sm font-bold text-[#fcd400] uppercase tracking-wider">Bem-vindo</p>
+          <h1 class="text-4xl md:text-5xl font-black mt-3">SIGAEDU</h1>
+          <p class="text-base md:text-lg text-white/75 mt-4">Selecione o ambiente que deseja acessar.</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-4 mt-10 max-w-4xl">
+          <a href="login.html" class="group bg-white text-[#1c1b1b] border border-white rounded-lg p-6 md:p-8 transition-transform hover:-translate-y-1 focus:outline-none focus:ring-4 focus:ring-[#fcd400]/60">
+            <div class="flex items-start justify-between gap-4">
+              <div class="w-12 h-12 bg-black rounded-lg flex items-center justify-center">
+                <span class="material-symbols-outlined text-[#fcd400]">admin_panel_settings</span>
+              </div>
+              <span class="material-symbols-outlined transition-transform group-hover:translate-x-1">arrow_forward</span>
+            </div>
+            <h2 class="text-xl font-extrabold mt-8">Acesso à Escola</h2>
+            <p class="text-sm text-[#444748] mt-2">Gestão acadêmica para direção, secretaria, coordenação e professores.</p>
+          </a>
+
+          <a href="portal_aluno.html" class="group bg-[#fcd400] text-[#1c1b1b] border border-[#fcd400] rounded-lg p-6 md:p-8 transition-transform hover:-translate-y-1 focus:outline-none focus:ring-4 focus:ring-white/60">
+            <div class="flex items-start justify-between gap-4">
+              <div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center">
+                <span class="material-symbols-outlined">school</span>
+              </div>
+              <span class="material-symbols-outlined transition-transform group-hover:translate-x-1">arrow_forward</span>
+            </div>
+            <h2 class="text-xl font-extrabold mt-8">Portal do Aluno</h2>
+            <p class="text-sm text-black/70 mt-2">Acesso às informações acadêmicas com o e-mail institucional.</p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <footer class="relative z-10 px-6 py-5 border-t border-white/20 bg-black/30 backdrop-blur-md">
+      <div class="max-w-6xl mx-auto text-xs text-white/70">Desenvolvido por Dhenison Carlos - 2026</div>
+    </footer>
+  </main>
+</body>
+</html>

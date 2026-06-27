@@ -5,7 +5,7 @@
 #
 # Este script lê os componentes comuns (Sidebar, Overlay, Header e Scripts de navegação)
 # a partir do arquivo 'unificado.html' (nossa Fonte Única da Verdade) e os propaga
-# automaticamente para todas as 12 telas individuais do SIGAEDU.
+# automaticamente para todas as telas individuais do SIGAEDU.
 #
 # Como executar:
 # No console PowerShell da pasta do projeto, execute:
@@ -60,7 +60,7 @@ if (-not $headerMatch.Success) {
 }
 $headerBlock = $headerMatch.Value
 
-$scriptRegex = '(?s)<script>.*?function toggleSidebar\(\).*?</script>'
+$scriptRegex = '(?s)<script>\s*// Fun.*?function toggleSidebar\(\).*?</script>'
 $scriptMatch = [regex]::Match($unificadoContent, $scriptRegex)
 if (-not $scriptMatch.Success) {
     Write-Error "Erro: Nao foi possivel encontrar o script de navegacao em unificado.html"
@@ -68,11 +68,12 @@ if (-not $scriptMatch.Success) {
 }
 $scriptBlock = $scriptMatch.Value
 
-# 4. Lista dos 12 arquivos HTML individuais das telas do sistema
+# 4. Lista dos arquivos HTML individuais das telas do sistema
 $paginas = @(
     "dashboard.html",
     "turmas.html",
     "fichadoaluno.html",
+    "sala_aee.html",
     "calendario.html",
     "agenda.html",
     "frequencia.html",
@@ -84,7 +85,7 @@ $paginas = @(
     "usuarios.html"
 )
 
-Write-Host "Pronto! Iniciando a propagacao automatica para as 12 paginas..." -ForegroundColor Green
+Write-Host "Pronto! Iniciando a propagacao automatica para as paginas..." -ForegroundColor Green
 $atualizadosCount = 0
 
 foreach ($pagina in $paginas) {

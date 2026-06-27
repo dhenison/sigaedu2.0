@@ -126,6 +126,10 @@
         }
     </script>
 </head>
+<script src="clean-demo-data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="supabase-init.js"></script>
 <body class="bg-surface text-on-surface">
 <!-- Top Header (TopNavBar Shared Component Unificado) -->
 <header class="fixed top-0 right-0 left-0 md:left-64 z-40 h-xl px-gutter flex justify-between items-center bg-white/70 backdrop-blur-xl dark:bg-surface-container/70 border-b border-surface-variant dark:border-outline-variant shadow-sm transition-all duration-300">
@@ -187,6 +191,10 @@
       <a id="menu-alunos" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="fichadoaluno.html">
         <span class="material-symbols-outlined" data-icon="person">person</span>
         <span class="text-label-md font-label-md">Alunos</span>
+      </a>
+      <a id="menu-sala-aee" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="sala_aee.html">
+        <span class="material-symbols-outlined" data-icon="psychology_alt">psychology_alt</span>
+        <span class="text-label-md font-label-md">Sala AEE</span>
       </a>
       <a id="menu-calendario" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="calendario.html">
         <span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
@@ -290,10 +298,6 @@
         </select>
         <select id="filter-turma" class="bg-white border border-outline-variant rounded-lg text-label-sm px-md py-xs focus:border-primary h-10 w-full md:w-40" onchange="renderAlunosTable()">
           <option value="">Todas as Turmas</option>
-          <option value="1º Ano A">1º Ano A</option>
-          <option value="9º Ano C">9º Ano C</option>
-          <option value="EJA Mod I">EJA Mod I</option>
-          <option value="9º Ano B">9º Ano B</option>
         </select>
       </div>
     </div>
@@ -504,10 +508,7 @@
         <div>
           <label class="block text-label-md font-label-md text-on-surface-variant mb-xs">Turma</label>
           <select id="aluno-turma" required class="w-full border border-outline-variant p-sm rounded-lg text-body-md bg-white">
-            <option>1º Ano A</option>
-            <option>9º Ano C</option>
-            <option>EJA Mod I</option>
-            <option>9º Ano B</option>
+            <option value="">Cadastre uma turma primeiro</option>
           </select>
         </div>
       </div>
@@ -538,7 +539,7 @@
           </div>
           <div>
             <label class="block text-label-md font-label-md text-on-surface-variant mb-xs">Nome do Responsável</label>
-            <input id="aluno-responsavel-nome" required class="w-full border border-outline-variant p-sm rounded-lg text-body-md bg-white" placeholder="Ex: Maria Júlia dos Santos" type="text"/>
+            <input id="aluno-responsavel-nome" required class="w-full border border-outline-variant p-sm rounded-lg text-body-md bg-white" placeholder="Nome completo do responsável" type="text"/>
           </div>
         </div>
         <div id="parentesco-detalhe-container" class="hidden">
@@ -563,6 +564,24 @@
             <input id="aluno-rota" class="w-full border border-outline-variant p-sm rounded-lg text-body-md bg-white" placeholder="Ex: Rota 14 - Outeiro / Icoaraci" type="text"/>
           </div>
         </div>
+      </div>
+
+      <!-- Atendimento Educacional Especializado -->
+      <div class="bg-surface-container-low p-md rounded-xl border border-surface-variant text-left">
+        <div class="flex items-start justify-between gap-sm">
+          <div class="flex-1">
+            <h3 class="text-label-md font-bold text-primary">AEE - Atendimento Educacional Especializado</h3>
+            <p class="text-body-sm text-on-surface-variant">Ao selecionar Sim, o aluno será incluído automaticamente na Sala AEE.</p>
+          </div>
+          <span class="material-symbols-outlined text-primary">psychology_alt</span>
+        </div>
+        <label class="block mt-md max-w-xs">
+          <span class="block text-label-md font-label-md text-on-surface-variant mb-xs">Aluno atendido pelo AEE?</span>
+          <select id="aluno-aee-atendido" required class="w-full border border-outline-variant p-sm rounded-lg text-body-md bg-white">
+            <option>Não</option>
+            <option>Sim</option>
+          </select>
+        </label>
       </div>
 
       <!-- Credenciais -->
@@ -640,6 +659,7 @@
         'dashboard.html': 'menu-dashboard',
         'turmas.html': 'menu-turmas',
         'fichadoaluno.html': 'menu-alunos',
+        'sala_aee.html': 'menu-sala-aee',
         'calendario.html': 'menu-calendario',
         'agenda.html': 'menu-agenda',
         'frequencia.html': 'menu-frequencia',
@@ -732,11 +752,7 @@
     // Lógica Customizada para Gestão de Alunos (SigaEdu)
     (function() {
       // Estado das turmas padrão para consistência
-      let defaultTurmas = [
-        { id: 1, nome: "1º Ano A", turno: "Manhã", tipo: "Regular", vagas: 30, alunosAtivos: 28, frequencia: 92, classeTurno: "shift-morning" },
-        { id: 2, nome: "9º Ano C", turno: "Tarde", tipo: "Fluxo", vagas: 25, alunosAtivos: 22, frequencia: 91, classeTurno: "shift-afternoon" },
-        { id: 3, nome: "EJA Mod I", turno: "Noite", tipo: "EJA", vagas: 40, alunosAtivos: 35, frequencia: 81, classeTurno: "shift-night" }
-      ];
+      let defaultTurmas = [];
 
       // Base de dados relacional de Alunos em memória
       let defaultAlunos = [];
@@ -811,49 +827,115 @@
       const parentescoContainer = document.getElementById("parentesco-detalhe-container");
       const transporteSelect = document.getElementById("aluno-transporte");
       const rotaContainer = document.getElementById("rota-container");
+      const aeeAtendidoSelect = document.getElementById("aluno-aee-atendido");
 
       // 1. Expor funções de alternância de visualização globais
       window.showListView = function() {
-        fichaView.classList.add("hidden");
-        listView.classList.remove("hidden");
-      };
+      const rotaContainer = document.getElementById("transporte-rota-container");
+      const aeeAtendidoSelect = document.getElementById("aluno-aee-atendido") || document.getElementById("aluno-aee");
 
-      window.showFichaView = function() {
-        listView.classList.add("hidden");
-        fichaView.classList.remove("hidden");
-      };
+      const tableBody = document.querySelector("table tbody");
+      const searchInput = document.getElementById("search-alunos");
+      const filterTurno = document.getElementById("filter-turno");
+      const filterTurma = document.getElementById("filter-turma");
 
+      const avatarPreview = document.getElementById("avatar-preview");
+      let activeAvatar = "https://lh3.googleusercontent.com/aida-public/AB6AXuChwy7OeE79vSwiRfMcYvFI7j5KL0rYxzxlH0ftQIV2K52io4HEe4cd0YiBXu3EHDT46oWl-xO06U2HlDHIACep2nrtFTeAoj1sFYLyNMNH4pj_mqsFslfcFEpJIlzlffAAIXVRfMSfQG42g7KZ7tTmG4Cb1PDODyiP8dcCDnR352c3SQ812oFSRM77-CpYg3b5whPXEoMSsWFGlGcj_r2tkGoXE82Zf7iG-hZTTuX8vkZ6QeEfinXwnGrIpaAs--gB0SJrOLboUwE";
+      let editingAlunoId = null;
+
+      const avataresCameraSimulada = [
+        "https://lh3.googleusercontent.com/aida-public/AB6AXuAP80C3LDejN3T6NvYz6gSXVM6eNh_w661ejMGWGqh46GbnP5Y4nGI0NVcbYlrUCqcHq6m_kFkHMUlE6HPBnrZT2sbB-2GuVIg2O_s5vyGJ_QXMo7FuG9N1_cC11GGr5FgSBpkrV4nUHzhyRHPChCEhlU8GlQD1lWhYX-QZXXGSAnj9lMLWw-GQK93ZLVWe6l4zFskCnQtti35Audv4fhD-2Jk7GlOy0yYA15CCciBYzbAFzginJ6C7SsnRhZYCOn6gi434Xs5StE0",
+        "https://lh3.googleusercontent.com/aida-public/AB6AXuBzxb8h-o_07736HbmV6IZp3RwfLan-loB4beGk_d0rkKf5xQ0p4xPD_1-XaYzol6UIjoxxokk_adPSVhqKkABNGpKG6Hy95HH8ujPIGgEySVFIB0ZWrQTTvk_dqqg92n-XHryRVpRzh_jR5JJnkHvrGOAi5ZMhkw5BK2-9oH7AMT3GeFnqdXpunjIs7jowhIc2L34jw1vvSxmb9SqclR4YeFJ1o_ewrb5YuV1eCz-9cisW_VAq0tsGxw5FNbJSLMlI9w5sZI8avOg",
+        "https://lh3.googleusercontent.com/aida-public/AB6AXuBrSs0bTIeMbPpXPTtHua_P6xSNZhUKRnNal5YYDaQYpGFQRG-3hxPdhnN2gCo_t-kn4WCNwSi_MWtKaNeTDOMGCp0EJ6Z2I_FOd20XJMeDTQpSBt9i9kEeQC8BCM4KUT7ohOYY5m9zx-tBLEdfKQKChJ32q7XZdIZNcve2wDnKr7Z07f9eojzrntruPeOCOf-0-0KytQAfRVFqr8BaCeeLbi7SNlbGFDOwwgo6KQJ0KSEkJf0wavEZerQj8V2-TUC-czyBUo1pLHo",
+        "https://lh3.googleusercontent.com/aida-public/AB6AXuDA7EYgNhseWB_tiPsTgnyGVBYFit932u6Luo70-4-ZEvhkU0nsNCR2PqNrR-7Q5ALFSt7M_p9Zqv9TT-fVgLbBTaHROPVuMb7ubTSYe4eRLJEd4O61n82Do8t_VwiHDC1IeJPXoUJPZwphXyjda46RhU6wWvDouW8KOJvv-Pp9__4axG_5DCrFtTuEyTLGwJfdGS2uawrDV8P5zg_4-18CxIsb2RvP0V6D9hbF2g8g4MgZC47LwjumPSBdSyo4WXhkyWf1sFRMszk"
+      ];
+
+      // Busca dados do Supabase
+      async function carregarDados() {
+        try {
+          const { data: dbTurmas, error: errorTurmas } = await supabase
+            .from('turmas')
+            .select('*')
+            .eq('escola_id', escolaId)
+            .order('nome', { ascending: true });
+
+          if (errorTurmas) throw errorTurmas;
+          turmas = dbTurmas;
+
+          const { data: dbAlunos, error: errorAlunos } = await supabase
+            .from('alunos')
+            .select('*')
+            .eq('escola_id', escolaId)
+            .order('nome', { ascending: true });
+
+          if (errorAlunos) throw errorAlunos;
+          alunos = dbAlunos;
+
+          populateTurmas();
+          renderAlunosTable();
+          checarUrlParams();
+        } catch(err) {
+          console.error("Erro ao carregar alunos/turmas do Supabase:", err);
+        }
+      }
+
+      function populateTurmas() {
+        const filterTurmaEl = document.getElementById("filter-turma");
+        const alunoTurmaEl = document.getElementById("aluno-turma");
+        
+        const optionsHtml = turmas.map(t => `<option value="${t.nome}">${t.nome}</option>`).join('');
+
+        if (filterTurmaEl) {
+          filterTurmaEl.innerHTML = `<option value="">Todas as Turmas</option>` + optionsHtml;
+        }
+        if (alunoTurmaEl) {
+          alunoTurmaEl.innerHTML = `<option value="" disabled selected>Selecione a turma...</option>` + optionsHtml;
+        }
+      }
+
+      // Expor para o HTML
       window.toggleModal = function(modalId) {
-        const modal = document.getElementById(modalId);
-        if (modal) {
-          if (modal.classList.contains("hidden")) {
-            modal.classList.remove("hidden");
-          } else {
-            modal.classList.add("hidden");
-          }
+        const targetModal = document.getElementById(modalId);
+        if (targetModal) {
+          targetModal.classList.toggle("hidden");
         }
       };
 
-      // 2. Manipuladores de Mudanças no Formulário
-      window.handleResponsavelTypeChange = function(select) {
-        if (select.value === "Responsável com Parentesco") {
+      // Controla a visibilidade dos campos com base no Tipo de Responsável
+      responsavelTipoSelect.addEventListener("change", function() {
+        if (this.value === "Responsável com Parentesco") {
           parentescoContainer.classList.remove("hidden");
-          document.getElementById("aluno-responsavel-parentesco").setAttribute("required", "true");
+          document.getElementById("aluno-responsavel-parentesco").setAttribute("required", "");
         } else {
           parentescoContainer.classList.add("hidden");
           document.getElementById("aluno-responsavel-parentesco").removeAttribute("required");
         }
-      };
+      });
 
-      window.handleTransporteChange = function(select) {
-        if (select.value === "Sim") {
+      // Controla a visibilidade dos campos com base no Transporte
+      transporteSelect.addEventListener("change", function() {
+        if (this.value === "Sim") {
           rotaContainer.classList.remove("hidden");
-          document.getElementById("aluno-rota").setAttribute("required", "true");
+          document.getElementById("aluno-rota").setAttribute("required", "");
         } else {
           rotaContainer.classList.add("hidden");
           document.getElementById("aluno-rota").removeAttribute("required");
         }
-      };
+      });
+
+      function getAeeDataFromForm() {
+        return {
+          atendido: aeeAtendidoSelect.value === "Sim" ? "Sim" : "Não"
+        };
+      }
+
+      function preencherAeeNoFormulario(aluno) {
+        aeeAtendidoSelect.value = aluno.aee_atendido ? "Sim" : "Não";
+      }
+
+      function resetAeeFormulario() {
+        aeeAtendidoSelect.value = "Não";
+      }
 
       // Máscaras de Entrada e Formatação
       window.applyCpfMask = function(input) {
@@ -863,6 +945,8 @@
           value = value.replace(/^(\d{3})(\d{3})(\d{3})(\d{1,2})$/, "$1.$2.$3-$4");
         } else if (value.length > 6) {
           value = value.replace(/^(\d{3})(\d{3})(\d{1,3})$/, "$1.$2.$3");
+        } else if (value.length > 3) {
+          value = value.replace(/^(\d{3})(\d{1,3})$/, "$1.$2");
         } else if (value.length > 3) {
           value = value.replace(/^(\d{3})(\d{1,3})$/, "$1.$2");
         }
@@ -884,7 +968,6 @@
         input.value = value;
       };
 
-      // Upload de Foto
       window.handleAvatarUpload = function(input) {
         if (input.files && input.files[0]) {
           const reader = new FileReader();
@@ -896,7 +979,6 @@
         }
       };
 
-      // Tirar Foto (Simulador de Webcam)
       window.captureSimulatedPhoto = function() {
         const flash = document.getElementById("camera-flash");
         flash.classList.remove("opacity-0");
@@ -906,13 +988,12 @@
           flash.classList.remove("opacity-100");
           flash.classList.add("opacity-0");
           
-          // Seleciona um avatar aleatório de boa qualidade
           activeAvatar = avataresCameraSimulada[Math.floor(Math.random() * avataresCameraSimulada.length)];
           avatarPreview.src = activeAvatar;
           
           setTimeout(() => {
             toggleModal("modal-camera");
-            alert("Foto capturada com sucesso no simulador!");
+            alert("Foto capturada com sucesso!");
           }, 150);
         }, 100);
       };
@@ -928,7 +1009,11 @@
           const rawCpf = aluno.cpf.replace(/\D/g, "");
           const matchesSearch = aluno.nome.toLowerCase().includes(rawQuery) || rawCpf.includes(query) || aluno.cpf.includes(rawQuery);
           const matchesTurno = turnoSel === "" || aluno.turno === turnoSel;
-          const matchesTurma = turmaSel === "" || aluno.turma === turmaSel;
+          
+          const turmaObj = turmas.find(t => t.id === aluno.turma_id);
+          const turmaNome = turmaObj ? turmaObj.nome : "";
+          const matchesTurma = turmaSel === "" || turmaNome === turmaSel;
+          
           return matchesSearch && matchesTurno && matchesTurma;
         });
 
@@ -942,68 +1027,77 @@
           return;
         }
 
-        tableBody.innerHTML = filtrados.map(aluno => `
+        tableBody.innerHTML = filtrados.map(aluno => {
+          const turmaObj = turmas.find(t => t.id === aluno.turma_id);
+          const turmaNome = turmaObj ? turmaObj.nome : "Sem Turma";
+          
+          return `
           <tr class="hover:bg-surface-container-lowest transition-colors group">
             <td class="px-md py-md flex items-center gap-md">
-              <img src="${aluno.avatar}" alt="${aluno.nome}" class="w-10 h-10 rounded-full object-cover border bg-white"/>
+              <img src="${aluno.avatar || 'https://lh3.googleusercontent.com/aida-public/AB6AXuDRGSGbqGOo2dzNp40hZk4pp_0rVieA-Su6u1WdWdVVqvGIA6n7dJMIDQVg3vkTYKgYN5HRKv7SOzuV4CGLSmB4xKZHKFpq-2ab9UNYf9ye3MByCMdx_JIehrQjusuLvStYhxK5Qj2eZHDffXBfYxzFUFDsX7kk7oInOP0foJp972O4lAIpD8pOJMQ4ehoA3BKsZHDj0gIh6Fx7Dr-Uvdu89v6j1O2f_mCuy7lSXEnJdzNLXbaD9C36QemEJIA6ok8BwdRRm8oVmvA'}" alt="${aluno.nome}" class="w-10 h-10 rounded-full object-cover border bg-white"/>
               <div class="text-left">
-                <p class="font-bold text-primary">${aluno.nome}</p>
+                <p class="font-bold text-primary flex items-center gap-xs flex-wrap">${aluno.nome}${aluno.aee_atendido ? '<span class="px-xs py-0.5 rounded-full bg-secondary-container text-on-secondary-container text-label-sm font-bold">AEE</span>' : ''}</p>
                 <p class="text-label-sm text-on-surface-variant">CPF: ${aluno.cpf}</p>
               </div>
             </td>
-            <td class="px-md py-md font-medium text-body-sm text-left">${aluno.turma} (${aluno.turno})</td>
+            <td class="px-md py-md font-medium text-body-sm text-left">${turmaNome} (${aluno.turno || 'Manhã'})</td>
             <td class="px-md py-md text-right">
               <div class="flex justify-end gap-sm" onclick="event.stopPropagation()">
-                <button class="flex items-center gap-xs px-sm py-xs bg-surface-container-high text-primary text-label-sm font-bold rounded-lg hover:bg-primary hover:text-white transition-all" onclick="abrirFichaIndividual(${aluno.id})" title="Ficha Individual">
+                <button class="flex items-center gap-xs px-sm py-xs bg-surface-container-high text-primary text-label-sm font-bold rounded-lg hover:bg-primary hover:text-white transition-all" onclick="abrirFichaIndividual('${aluno.id}')" title="Ficha Individual">
                   <span class="material-symbols-outlined text-[16px]">visibility</span>
                   Ficha Individual
                 </button>
-                <button class="p-xs text-on-surface-variant hover:text-primary transition-colors" onclick="solicitarMudarTurma(${aluno.id})" title="Mudar Turma">
+                <button class="p-xs text-on-surface-variant hover:text-primary transition-colors" onclick="solicitarMudarTurma('${aluno.id}')" title="Mudar Turma">
                   <span class="material-symbols-outlined text-[18px]">swap_horiz</span>
                 </button>
-                <button class="p-xs text-on-surface-variant hover:text-primary transition-colors" onclick="solicitarEditarAluno(${aluno.id})" title="Editar Aluno">
+                <button class="p-xs text-on-surface-variant hover:text-primary transition-colors" onclick="solicitarEditarAluno('${aluno.id}')" title="Editar Aluno">
                   <span class="material-symbols-outlined text-[18px]">edit</span>
                 </button>
-                <button class="p-xs text-on-surface-variant hover:text-error transition-colors" onclick="solicitarExcluirAluno(${aluno.id})" title="Excluir Aluno">
+                <button class="p-xs text-on-surface-variant hover:text-error transition-colors" onclick="solicitarExcluirAluno('${aluno.id}')" title="Excluir Aluno">
                   <span class="material-symbols-outlined text-[18px]">delete</span>
                 </button>
               </div>
             </td>
           </tr>
-        `).join('');
+        `}).join('');
       };
 
-      // 4. Abertura e Gestão de Ficha Individual
       window.abrirFichaIndividual = function(alunoId) {
         const aluno = alunos.find(a => a.id === alunoId);
         if (!aluno) return;
 
+        const turmaObj = turmas.find(t => t.id === aluno.turma_id);
+        const turmaNome = turmaObj ? turmaObj.nome : "Sem Turma";
+
         // Preenche dados básicos da ficha
-        document.getElementById("ficha-avatar").src = aluno.avatar;
+        document.getElementById("ficha-avatar").src = aluno.avatar || 'https://lh3.googleusercontent.com/aida-public/AB6AXuDRGSGbqGOo2dzNp40hZk4pp_0rVieA-Su6u1WdWdVVqvGIA6n7dJMIDQVg3vkTYKgYN5HRKv7SOzuV4CGLSmB4xKZHKFpq-2ab9UNYf9ye3MByCMdx_JIehrQjusuLvStYhxK5Qj2eZHDffXBfYxzFUFDsX7kk7oInOP0foJp972O4lAIpD8pOJMQ4ehoA3BKsZHDj0gIh6Fx7Dr-Uvdu89v6j1O2f_mCuy7lSXEnJdzNLXbaD9C36QemEJIA6ok8BwdRRm8oVmvA';
         document.getElementById("ficha-nome").textContent = aluno.nome;
-        document.getElementById("ficha-matricula").textContent = `Matrícula: 2026.${aluno.id}089.12`;
-        document.getElementById("ficha-turno").textContent = aluno.turno;
-        document.getElementById("ficha-turma").textContent = aluno.turma;
+        document.getElementById("ficha-matricula").textContent = `Matrícula: 2026.ALUNO.${aluno.id.slice(0,4)}`;
+        document.getElementById("ficha-turno").textContent = aluno.turno || 'Manhã';
+        document.getElementById("ficha-turma").textContent = turmaNome;
         
-        document.getElementById("ficha-responsavel").textContent = `${aluno.nomeResponsavel} (${aluno.tipoResponsavel})`;
-        document.getElementById("ficha-contato").textContent = aluno.contato;
+        document.getElementById("ficha-responsavel").textContent = `${aluno.nome_responsavel || 'Não Cadastrado'} (${aluno.tipo_responsavel || 'Mãe'})`;
+        document.getElementById("ficha-contato").textContent = aluno.contato || 'Não Cadastrado';
         document.getElementById("ficha-email").textContent = aluno.email;
 
         // Transporte Escolar
         const transpEl = document.getElementById("ficha-transporte");
-        if (aluno.utilizaTransporte === "Sim") {
-          transpEl.textContent = `Sim — Rota: ${aluno.rota}`;
+        if (aluno.utiliza_transporte) {
+          transpEl.textContent = `Sim — Rota: ${aluno.rota || 'Não Informada'}`;
         } else {
           transpEl.textContent = "Não utiliza transporte escolar";
         }
 
-        // Frequência
-        document.getElementById("ficha-frequencia").textContent = aluno.frequencia || "100%";
-        document.getElementById("ficha-faltas").textContent = aluno.faltas || "00";
+        // Frequência padrão simulada
+        document.getElementById("ficha-frequencia").textContent = "95%";
+        document.getElementById("ficha-faltas").textContent = "02";
 
         // Projetos Ativos
         const projetosList = document.getElementById("ficha-projetos-list");
-        const projetos = aluno.projetos || ["Robótica Educacional"];
+        const projetos = ["Robótica Educacional"];
+        if (aluno.aee_atendido) {
+          projetos.unshift("Atendimento AEE");
+        }
         projetosList.innerHTML = projetos.map(proj => `
           <li class="flex items-center justify-between p-sm bg-surface-container-low rounded-lg">
             <span class="text-body-sm font-medium">${proj}</span>
@@ -1011,9 +1105,9 @@
           </li>
         `).join('');
 
-        // Histórico de Mudanças
+        // Histórico de Mudanças simulado
         const histList = document.getElementById("ficha-historico-list");
-        const historicos = aluno.historico || [{ desc: "Matrícula Efetuada", obs: "Ingresso na escola (Jan 2026)" }];
+        const historicos = [{ desc: "Matrícula Efetuada", obs: "Ingresso no SIGAEDU (Supabase)" }];
         histList.innerHTML = historicos.map(h => `
           <li class="flex items-start gap-sm">
             <div class="w-1 h-10 bg-outline-variant rounded-full mt-1"></div>
@@ -1024,25 +1118,19 @@
           </li>
         `).join('');
 
-        // Timeline de Ocorrências
+        // Timeline de Ocorrências simulada
         const ocoList = document.getElementById("ficha-ocorrencias-list");
-        const ocorrencias = aluno.ocorrencias || [
-          { titulo: "Matrícula Ativa", data: "01 Fev 2026", desc: "Aluno com documentação regularizada no SIGAEDU.", tipo: "Concluído" }
+        const ocorrencias = [
+          { titulo: "Matrícula Ativa", data: "01 Jun 2026", desc: "Aluno com documentação regularizada no SIGAEDU.", tipo: "Concluído" }
         ];
         ocoList.innerHTML = ocorrencias.map(o => {
           let badgeClass = "bg-white text-on-surface-variant border border-outline-variant";
-          if (o.tipo === "Destaque") badgeClass = "bg-secondary-container/30 text-secondary font-bold";
           if (o.tipo === "Concluído") badgeClass = "bg-green-100 text-green-700 font-bold border border-green-200";
-          if (o.tipo === "Pendente") badgeClass = "bg-error-container/30 text-error font-bold border border-error-container";
-
-          let icon = "star";
-          if (o.tipo === "Pendente") icon = "error";
-          if (o.tipo === "Concluído") icon = "check_circle";
 
           return `
             <div class="relative flex gap-md pl-xl">
               <div class="absolute left-0 top-1 w-11 h-11 bg-surface-container-highest rounded-full flex items-center justify-center z-10 border border-outline-variant">
-                <span class="material-symbols-outlined">${icon}</span>
+                <span class="material-symbols-outlined">check_circle</span>
               </div>
               <div class="flex-grow p-md bg-white rounded-xl border border-outline-variant text-left">
                 <div class="flex justify-between items-start mb-xs">
@@ -1050,20 +1138,17 @@
                   <span class="text-label-sm text-on-surface-variant">${o.data}</span>
                 </div>
                 <p class="text-body-sm text-on-surface-variant">${o.desc}</p>
-                <div class="mt-sm flex gap-xs">
-                  <span class="px-sm py-0.5 rounded-full text-label-sm ${badgeClass}">${o.tipo}</span>
-                </div>
               </div>
             </div>`;
         }).join('');
-
-        showFichaView();
+        
+        window.showFichaView();
       };
 
       // 5. Ações Administrativas sob Senha siga@EDU2026
       function verificarSenhaAdministrador(callback) {
-        const senha = prompt("Esta é uma ação restrita para administradores. Digite a senha de confirmação:");
-        if (senha === null) return; // cancelado
+        const senha = prompt("Esta é uma ação restrita. Digite a senha de acesso administrativo para confirmar:");
+        if (senha === null) return;
         
         if (senha === "siga@EDU2026") {
           callback();
@@ -1076,28 +1161,29 @@
         const aluno = alunos.find(a => a.id === alunoId);
         if (!aluno) return;
 
-        verificarSenhaAdministrador(() => {
-          const turmas = JSON.parse(localStorage.getItem('sigaedu_turmas')) || [];
+        verificarSenhaAdministrador(async () => {
           const opcoesValidas = turmas.map(t => t.nome);
           const opcoesStr = opcoesValidas.join(', ');
 
-          const novaTurma = prompt(`Mudar a turma do aluno ${aluno.nome}. Digite a nova turma (Opções: ${opcoesStr}):`, aluno.turma);
-          if (!novaTurma) return;
+          const turmaNomeSel = prompt(`Mudar a turma do aluno ${aluno.nome}. Digite a nova turma (Opções: ${opcoesStr}):`);
+          if (!turmaNomeSel) return;
 
-          if (opcoesValidas.includes(novaTurma)) {
-            const turmaAnterior = aluno.turma;
-            aluno.turma = novaTurma;
-            
-            // Adiciona no histórico
-            if (!aluno.historico) aluno.historico = [];
-            aluno.historico.unshift({
-              desc: `Turma ${turmaAnterior} → ${novaTurma}`,
-              obs: `Ajuste Administrativo (Senha Confirmada - Jun 2026)`
-            });
+          const turmaObj = turmas.find(t => t.nome.toLowerCase() === turmaNomeSel.toLowerCase());
+          if (turmaObj) {
+            try {
+              const { error } = await supabase
+                .from('alunos')
+                .update({ turma_id: turmaObj.id })
+                .eq('id', alunoId);
 
-            saveAlunos();
-            renderAlunosTable();
-            alert(`A turma de ${aluno.nome} foi alterada para ${novaTurma} com sucesso!`);
+              if (error) throw error;
+
+              aluno.turma_id = turmaObj.id;
+              renderAlunosTable();
+              alert(`A turma de ${aluno.nome} foi alterada para ${turmaObj.nome} com sucesso!`);
+            } catch (err) {
+              alert("Erro ao alterar turma no Supabase: " + err.message);
+            }
           } else {
             alert("Turma inválida! Nenhuma alteração foi realizada.");
           }
@@ -1112,39 +1198,42 @@
           editingAlunoId = alunoId;
           modalAlunoTitle.textContent = "Editar Aluno";
           
-          // Certifica-se de popular o select antes de preencher
           populateTurmas();
           
-          // Preenche campos do form
+          const turmaObj = turmas.find(t => t.id === aluno.turma_id);
+          const turmaNome = turmaObj ? turmaObj.nome : "";
+
           document.getElementById("aluno-nome").value = aluno.nome;
           document.getElementById("aluno-cpf").value = aluno.cpf;
-          document.getElementById("aluno-nascimento").value = aluno.dataNascimento;
-          document.getElementById("aluno-turno").value = aluno.turno;
-          document.getElementById("aluno-turma").value = aluno.turma;
+          document.getElementById("aluno-nascimento").value = aluno.data_nascimento;
+          document.getElementById("aluno-turno").value = aluno.turno || "Manhã";
+          document.getElementById("aluno-turma").value = turmaNome;
           document.getElementById("aluno-email").value = aluno.email;
-          document.getElementById("aluno-contato").value = aluno.contato;
+          document.getElementById("aluno-contato").value = aluno.contato || "";
           
-          responsavelTipoSelect.value = aluno.tipoResponsavel;
-          document.getElementById("aluno-responsavel-nome").value = aluno.nomeResponsavel;
+          responsavelTipoSelect.value = aluno.tipo_responsavel || "Mãe";
+          document.getElementById("aluno-responsavel-nome").value = aluno.nome_responsavel || "";
           
-          if (aluno.tipoResponsavel === "Responsável com Parentesco") {
+          if (aluno.tipo_responsavel === "Responsável com Parentesco") {
             parentescoContainer.classList.remove("hidden");
-            document.getElementById("aluno-responsavel-parentesco").value = aluno.parentescoResponsavel || "";
+            document.getElementById("aluno-responsavel-parentesco").value = aluno.parentesco_responsavel || "";
           } else {
             parentescoContainer.classList.add("hidden");
           }
 
-          transporteSelect.value = aluno.utilizaTransporte;
-          if (aluno.utilizaTransporte === "Sim") {
+          transporteSelect.value = aluno.utiliza_transporte ? "Sim" : "Não";
+          if (aluno.utiliza_transporte) {
             rotaContainer.classList.remove("hidden");
             document.getElementById("aluno-rota").value = aluno.rota || "";
           } else {
             rotaContainer.classList.add("hidden");
           }
 
+          preencherAeeNoFormulario(aluno);
+
           document.getElementById("aluno-senha").value = aluno.senha || "";
-          activeAvatar = aluno.avatar;
-          avatarPreview.src = activeAvatar;
+          activeAvatar = aluno.avatar || "";
+          avatarPreview.src = activeAvatar || 'https://lh3.googleusercontent.com/aida-public/AB6AXuDRGSGbqGOo2dzNp40hZk4pp_0rVieA-Su6u1WdWdVVqvGIA6n7dJMIDQVg3vkTYKgYN5HRKv7SOzuV4CGLSmB4xKZHKFpq-2ab9UNYf9ye3MByCMdx_JIehrQjusuLvStYhxK5Qj2eZHDffXBfYxzFUFDsX7kk7oInOP0foJp972O4lAIpD8pOJMQ4ehoA3BKsZHDj0gIh6Fx7Dr-Uvdu89v6j1O2f_mCuy7lSXEnJdzNLXbaD9C36QemEJIA6ok8BwdRRm8oVmvA';
 
           toggleModal("modal-aluno");
         });
@@ -1154,12 +1243,22 @@
         const aluno = alunos.find(a => a.id === alunoId);
         if (!aluno) return;
 
-        verificarSenhaAdministrador(() => {
+        verificarSenhaAdministrador(async () => {
           if (confirm(`Deseja realmente excluir permanentemente o registro de ${aluno.nome}?`)) {
-            alunos = alunos.filter(a => a.id !== alunoId);
-            saveAlunos();
-            renderAlunosTable();
-            alert(`Aluno ${aluno.nome} excluído da base escolar com sucesso.`);
+            try {
+              const { error } = await supabase
+                .from('alunos')
+                .delete()
+                .eq('id', alunoId);
+
+              if (error) throw error;
+
+              alunos = alunos.filter(a => a.id !== alunoId);
+              renderAlunosTable();
+              alert(`Aluno ${aluno.nome} excluído da base escolar com sucesso.`);
+            } catch (err) {
+              alert("Erro ao excluir aluno do Supabase: " + err.message);
+            }
           }
         });
       };
@@ -1173,19 +1272,19 @@
         avatarPreview.src = activeAvatar;
         parentescoContainer.classList.add("hidden");
         rotaContainer.classList.add("hidden");
-        // Popula as turmas no select antes de abrir
+        resetAeeFormulario();
         populateTurmas();
         toggleModal("modal-aluno");
       };
 
-      window.cadastrarOuEditarAluno = function(e) {
+      window.cadastrarOuEditarAluno = async function(e) {
         e.preventDefault();
         
         const nome = document.getElementById("aluno-nome").value.trim();
         const cpf = document.getElementById("aluno-cpf").value;
         const nascimento = document.getElementById("aluno-nascimento").value;
         const turno = document.getElementById("aluno-turno").value;
-        const turma = document.getElementById("aluno-turma").value;
+        const turmaNome = document.getElementById("aluno-turma").value;
         const email = document.getElementById("aluno-email").value.trim();
         const contato = document.getElementById("aluno-contato").value;
         
@@ -1196,85 +1295,96 @@
         const utilizaTransporte = transporteSelect.value;
         const rota = utilizaTransporte === "Sim" ? document.getElementById("aluno-rota").value.trim() : "";
         const senha = document.getElementById("aluno-senha").value;
+        const aee = getAeeDataFromForm();
 
-        // Validações básicas de e-mail institucional
         if (!email.endsWith("@aluno.seduc.pa.gov.br")) {
           alert("E-mail institucional inválido! Estudantes devem utilizar o domínio @aluno.seduc.pa.gov.br");
           return;
         }
 
-        if (editingAlunoId !== null) {
-          // Editando
-          const aluno = alunos.find(a => a.id === editingAlunoId);
-          if (aluno) {
-            aluno.nome = nome;
-            aluno.cpf = cpf;
-            aluno.dataNascimento = nascimento;
-            aluno.turno = turno;
-            aluno.turma = turma;
-            aluno.email = email;
-            aluno.contato = contato;
-            aluno.tipoResponsavel = responsavelTipo;
-            aluno.nomeResponsavel = responsavelNome;
-            aluno.parentescoResponsavel = parentesco;
-            aluno.utilizaTransporte = utilizaTransporte;
-            aluno.rota = rota;
-            aluno.senha = senha;
-            aluno.avatar = activeAvatar;
-          }
-          saveAlunos();
-          alert("Cadastro do aluno atualizado com sucesso!");
-        } else {
-          // Cadastrando Novo
-          const novoId = alunos.length > 0 ? Math.max(...alunos.map(a => a.id)) + 1 : 1;
-          const novoAluno = {
-            id: novoId,
-            nome,
-            cpf,
-            dataNascimento: nascimento,
-            turno,
-            turma,
-            email,
-            contato,
-            tipoResponsavel: responsavelTipo,
-            nomeResponsavel: responsavelNome,
-            parentescoResponsavel: parentesco,
-            utilizaTransporte,
-            rota,
-            senha,
-            avatar: activeAvatar,
-            frequencia: "100%",
-            faltas: "00",
-            projetos: ["Robótica Educacional"],
-            historico: [{ desc: "Matrícula Efetuada", obs: "Ingresso no SIGAEDU (Jun 2026)" }],
-            ocorrencias: [{ titulo: "Matrícula Ativa", data: "01 Jun 2026", desc: "Aluno registrado sob documentação regularizada no SIGAEDU.", tipo: "Concluído" }]
-          };
-          
-          alunos.push(novoAluno);
-          saveAlunos();
-          alert("Novo aluno cadastrado e matriculado com sucesso!");
-        }
+        const selectedTurmaObj = turmas.find(t => t.nome === turmaNome);
+        const turmaId = selectedTurmaObj ? selectedTurmaObj.id : null;
 
-        toggleModal("modal-aluno");
-        renderAlunosTable();
+        const alunoPayload = {
+          escola_id: escolaId,
+          turma_id: turmaId,
+          nome,
+          cpf,
+          data_nascimento: nascimento,
+          turno,
+          email,
+          contato,
+          tipo_responsavel: responsavelTipo,
+          nome_responsavel: responsavelNome,
+          parentesco_responsavel: parentesco,
+          utiliza_transporte: utilizaTransporte === "Sim",
+          rota,
+          senha,
+          avatar: activeAvatar,
+          aee_atendido: aee.atendido === "Sim"
+        };
+
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalBtnText = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = "Salvando...";
+
+        try {
+          if (editingAlunoId !== null) {
+            // Editando no Supabase
+            const { error } = await supabase
+              .from('alunos')
+              .update(alunoPayload)
+              .eq('id', editingAlunoId);
+
+            if (error) throw error;
+
+            // Atualiza na memória
+            const aIndex = alunos.findIndex(a => a.id === editingAlunoId);
+            if (aIndex !== -1) {
+              alunos[aIndex] = { ...alunos[aIndex], ...alunoPayload };
+            }
+            alert("Cadastro do aluno atualizado com sucesso!");
+          } else {
+            // Cadastrando Novo no Supabase
+            const { data: novoAlunoInserted, error } = await supabase
+              .from('alunos')
+              .insert(alunoPayload)
+              .select()
+              .single();
+
+            if (error) throw error;
+
+            alunos.push(novoAlunoInserted);
+            alert("Novo aluno cadastrado e matriculado com sucesso!");
+          }
+
+          toggleModal("modal-aluno");
+          renderAlunosTable();
+
+        } catch (err) {
+          alert("Erro ao salvar aluno no Supabase: " + err.message);
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalBtnText;
+        }
       };
 
-      window.importarAlunosExcel = function(input) {
+      // 7. Importar Alunos via Excel
+      window.importarAlunosExcel = async function(input) {
         if (!input.files || input.files.length === 0) return;
         
         const file = input.files[0];
         const reader = new FileReader();
         
-        reader.onload = function(e) {
+        reader.onload = async function(e) {
           try {
             const data = new Uint8Array(e.target.result);
             const workbook = XLSX.read(data, { type: 'array' });
             
-            // Lê a primeira planilha
             const firstSheetName = workbook.SheetNames[0];
             const worksheet = workbook.Sheets[firstSheetName];
             
-            // Converte para JSON
             const json = XLSX.utils.sheet_to_json(worksheet);
             
             if (json.length === 0) {
@@ -1282,112 +1392,101 @@
               return;
             }
             
-            // Valida cabeçalhos obrigatórios
             const firstRow = json[0];
             if (!("nome" in firstRow) || !("cpf" in firstRow) || !("turma" in firstRow) || !("email" in firstRow)) {
-              alert("Formato de planilha inválido! A planilha de alunos deve conter as colunas: nome, cpf, dataNascimento, turno, turma, email, tipoResponsavel, nomeResponsavel, contato, utilizaTransporte, rota, senha.");
+              alert("Formato inválido! Certifique-se de que a planilha contém as colunas: nome, cpf, turma, email.");
               return;
             }
             
-            let novosImportados = 0;
-            const turmasExistentes = JSON.parse(localStorage.getItem('sigaedu_turmas')) || [];
-            const nomesTurmas = turmasExistentes.map(t => t.nome);
-            
-            // Pool de imagens padrão para avatares mockados
             const avataresPadrao = [
               "https://lh3.googleusercontent.com/aida-public/AB6AXuAP80C3LDejN3T6NvYz6gSXVM6eNh_w661ejMGWGqh46GbnP5Y4nGI0NVcbYlrUCqcHq6m_kFkHMUlE6HPBnrZT2sbB-2GuVIg2O_s5vyGJ_QXMo7FuG9N1_cC11GGr5FgSBpkrV4nUHzhyRHPChCEhlU8GlQD1lWhYX-QZXXGSAnj9lMLWw-GQK93ZLVWe6l4zFskCnQtti35Audv4fhD-2Jk7GlOy0yYA15CCciBYzbAFzginJ6C7SsnRhZYCOn6gi434Xs5StE0",
-              "https://lh3.googleusercontent.com/aida-public/AB6AXuBzxb8h-o_07736HbmV6IZp3RwfLan-loB4beGk_d0rkKf5xQ0p4xPD_1-XaYzol6UIjoxxokk_adPSVhqKkABNGpKG6Hy95HH8ujPIGgEySVFIB0ZWrQTTvk_dqqg92n-XHryRVpRzh_jR5JJnkHvrGOAi5ZMhkw5BK2-9oH7AMT3GeFnqdXpunjIs7jowhIc2L34jw1vvSxmb9SqclR4YeFJ1o_ewrb5YuV1eCz-9cisW_VAq0tsGxw5FNbJSLMlI9w5sZI8avOg",
-              "https://lh3.googleusercontent.com/aida-public/AB6AXuBrSs0bTIeMbPpXPTtHua_P6xSNZhUKRnNal5YYDaQYpGFQRG-3hxPdhnN2gCo_t-kn4WCNwSi_MWtKaNeTDOMGCp0EJ6Z2I_FOd20XJMeDTQpSBt9i9kEeQC8BCM4KUT7ohOYY5m9zx-tBLEdfKQKChJ32q7XZdIZNcve2wDnKr7Z07f9eojzrntruPeOCOf-0-0KytQAfRVFqr8BaCeeLbi7SNlbGFDOwwgo6KQJ0KSEkJf0wavEZerQj8V2-TUC-czyBUo1pLHo",
-              "https://lh3.googleusercontent.com/aida-public/AB6AXuDA7EYgNhseWB_tiPsTgnyGVBYFit932u6Luo70-4-ZEvhkU0nsNCR2PqNrR-7Q5ALFSt7M_p9Zqv9TT-fVgLbBTaHROPVuMb7ubTSYe4eRLJEd4O61n82Do8t_VwiHDC1IeJPXoUJPZwphXyjda46RhU6wWvDouW8KOJvv-Pp9__4axG_5DCrFtTuEyTLGwJfdGS2uawrDV8P5zg_4-18CxIsb2RvP0V6D9hbF2g8g4MgZC47LwjumPSBdSyo4WXhkyWf1sFRMszk"
+              "https://lh3.googleusercontent.com/aida-public/AB6AXuBzxb8h-o_07736HbmV6IZp3RwfLan-loB4beGk_d0rkKf5xQ0p4xPD_1-XaYzol6UIjoxxokk_adPSVhqKkABNGpKG6Hy95HH8ujPIGgEySVFIB0ZWrQTTvk_dqqg92n-XHryRVpRzh_jR5JJnkHvrGOAi5ZMhkw5BK2-9oH7AMT3GeFnqdXpunjIs7jowhIc2L34jw1vvSxmb9SqclR4YeFJ1o_ewrb5YuV1eCz-9cisW_VAq0tsGxw5FNbJSLMlI9w5sZI8avOg"
             ];
             
-            json.forEach(row => {
+            const alunosParaInserir = [];
+            
+            for (let row of json) {
               const nome = String(row.nome || '').trim();
               const cpf = String(row.cpf || '').trim();
               const dataNascimento = String(row.dataNascimento || '2012-01-01').trim();
               const turno = String(row.turno || 'Manhã').trim();
-              const turma = String(row.turma || '').trim();
+              const turmaNome = String(row.turma || '').trim();
               const email = String(row.email || '').trim();
               const tipoResponsavel = String(row.tipoResponsavel || 'Mãe').trim();
               const nomeResponsavel = String(row.nomeResponsavel || 'Responsável').trim();
               const contato = String(row.contato || '(91) 99999-9999').trim();
-              const utilizaTransporte = String(row.utilizaTransporte || 'Não').trim();
+              const utilizaTransporteStr = String(row.utilizaTransporte || 'Não').trim();
               const rota = String(row.rota || '').trim();
               const senha = String(row.senha || 'aluno@sigaedu').trim();
+              const aeeAtendidoStr = String(row.aeeAtendido || 'Não').trim();
               
-              if (!nome || !cpf || !email) return;
-              
-              // Valida domínio de e-mail institucional
-              if (!email.endsWith("@aluno.seduc.pa.gov.br")) {
-                return; // Pula e-mails inválidos
+              if (!nome || !cpf || !email) continue;
+              if (!email.endsWith("@aluno.seduc.pa.gov.br")) continue;
+              if (alunos.some(a => a.cpf.replace(/\D/g, "") === cpf.replace(/\D/g, ""))) continue;
+
+              // Encontra ou cria a turma necessária no Supabase
+              let turmaObj = turmas.find(t => t.nome.toLowerCase() === turmaNome.toLowerCase());
+              if (!turmaObj && turmaNome) {
+                try {
+                  const { data: novaT, error } = await supabase
+                    .from('turmas')
+                    .insert({
+                      escola_id: escolaId,
+                      nome: turmaNome,
+                      turno: turno,
+                      tipo: "Regular",
+                      vagas: 35
+                    })
+                    .select()
+                    .single();
+                  
+                  if (error) throw error;
+                  turmaObj = novaT;
+                  turmas.push(novaT);
+                  populateTurmas();
+                } catch(err) {
+                  console.error("Erro ao criar turma sob demanda:", err);
+                  continue;
+                }
               }
-              
-              // Valida duplicidade por CPF
-              if (alunos.some(a => a.cpf.replace(/\D/g, "") === cpf.replace(/\D/g, ""))) {
-                return; // Pula CPFs duplicados
-              }
-              
-              // Se a turma importada não existir nas turmas ativas, cria a turma
-              if (turma && !nomesTurmas.includes(turma)) {
-                let classeTurno = "shift-morning";
-                if (turno === "Tarde") classeTurno = "shift-afternoon";
-                if (turno === "Noite") classeTurno = "shift-night";
-                
-                const novaT = {
-                  id: turmasExistentes.length > 0 ? Math.max(...turmasExistentes.map(t => t.id)) + 1 : 1,
-                  nome: turma,
-                  turno,
-                  tipo: "Regular",
-                  vagas: 35,
-                  alunosAtivos: 1,
-                  frequencia: 90,
-                  classeTurno
-                };
-                turmasExistentes.push(novaT);
-                nomesTurmas.push(turma);
-                localStorage.setItem('sigaedu_turmas', JSON.stringify(turmasExistentes));
-              }
-              
-              const novoAluno = {
-                id: alunos.length > 0 ? Math.max(...alunos.map(a => a.id)) + 1 : 1,
+
+              alunosParaInserir.push({
+                escola_id: escolaId,
+                turma_id: turmaObj ? turmaObj.id : null,
                 nome,
                 cpf,
-                dataNascimento,
+                data_nascimento: dataNascimento,
                 turno,
-                turma,
                 email,
                 contato,
-                tipoResponsavel,
-                nomeResponsavel,
-                utilizaTransporte,
+                tipo_responsavel: tipoResponsavel,
+                nome_responsavel: nomeResponsavel,
+                utiliza_transporte: utilizaTransporteStr.toLowerCase() === "sim",
                 rota,
                 senha,
-                avatar: avataresPadrao[Math.floor(Math.random() * avataresPadrao.length)],
-                frequencia: "95%",
-                faltas: "02",
-                projetos: ["Atividades Gerais"],
-                historico: [{ desc: "Matrícula Efetuada", obs: "Processado em lote via Excel (Jun 2026)" }],
-                ocorrencias: [{ titulo: "Matrícula Ativa", data: "01 Jun 2026", desc: "Registro inicial importado por planilha Excel.", tipo: "Concluído" }]
-              };
+                aee_atendido: aeeAtendidoStr.toLowerCase() === "sim",
+                avatar: avataresPadrao[Math.floor(Math.random() * avataresPadrao.length)]
+              });
+            }
+
+            if (alunosParaInserir.length > 0) {
+              const { data: novosAlunos, error } = await supabase
+                .from('alunos')
+                .insert(alunosParaInserir)
+                .select();
+                
+              if (error) throw error;
               
-              alunos.push(novoAluno);
-              novosImportados++;
-            });
-            
-            if (novosImportados > 0) {
-              saveAlunos();
-              populateTurmas();
+              alunos.push(...novosAlunos);
               renderAlunosTable();
-              alert(`${novosImportados} alunos foram matriculados e importados com sucesso a partir da planilha Excel!`);
+              alert(`${novosAlunos.length} alunos foram matriculados e importados com sucesso para o Supabase!`);
             } else {
-              alert("Nenhum aluno novo foi importado (todos os alunos já possuíam cadastro ativo ou e-mails/dados inválidos).");
+              alert("Nenhum aluno novo foi importado (todas já existem ou contêm dados inválidos).");
             }
             
           } catch(err) {
-            console.error(err);
-            alert("Erro ao decodificar a planilha Excel! Certifique-se de carregar um arquivo .xlsx válido.");
+            alert("Erro ao importar planilha de alunos: " + err.message);
           } finally {
-            // Limpa o input file
             input.value = "";
           }
         };
@@ -1395,26 +1494,8 @@
         reader.readAsArrayBuffer(file);
       };
 
-      // Inicialização da visão geral de alunos
-      populateTurmas();
-      renderAlunosTable();
-
-      // Checa redirecionamento de aluno específico via parâmetro da URL (ex: ?cpf=...)
-      const urlParams = new URLSearchParams(window.location.search);
-      const searchCpf = urlParams.get('cpf');
-      const searchId = urlParams.get('id');
-
-      if (searchCpf) {
-        const found = alunos.find(a => a.cpf.replace(/\D/g, "") === searchCpf.replace(/\D/g, ""));
-        if (found) {
-          abrirFichaIndividual(found.id);
-        }
-      } else if (searchId) {
-        const found = alunos.find(a => a.id == searchId);
-        if (found) {
-          abrirFichaIndividual(found.id);
-        }
-      }
+      // Inicialização
+      carregarDados();
     })();
   </script>
 </body></html>

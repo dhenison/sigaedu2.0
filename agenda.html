@@ -128,6 +128,10 @@
         }
     </style>
 </head>
+<script src="clean-demo-data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="supabase-init.js"></script>
 <body class="bg-background text-on-surface font-body-md min-h-screen flex">
 
 <!-- SideNavBar Componente Unificado -->
@@ -160,7 +164,11 @@
             <span class="material-symbols-outlined" data-icon="person">person</span>
             <span class="text-label-md font-label-md">Alunos</span>
         </a>
-        <a id="menu-calendario" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="calendario.html">
+      <a id="menu-sala-aee" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="sala_aee.html">
+        <span class="material-symbols-outlined" data-icon="psychology_alt">psychology_alt</span>
+        <span class="text-label-md font-label-md">Sala AEE</span>
+      </a>
+      <a id="menu-calendario" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="calendario.html">
             <span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
             <span class="text-label-md font-label-md">Calendário</span>
         </a>
@@ -405,7 +413,7 @@
 
             <div class="flex flex-col gap-xs col-span-1">
                 <label class="text-label-md font-label-md text-primary font-bold">Professor / Responsável</label>
-                <input class="border border-outline-variant rounded-lg p-sm text-body-sm focus:border-primary focus:ring-0" id="event-professor" placeholder="Ex: Prof. Ana Paula" type="text"/>
+                <input class="border border-outline-variant rounded-lg p-sm text-body-sm focus:border-primary focus:ring-0" id="event-professor" placeholder="Ex: Professor não cadastrado" type="text"/>
             </div>
             
             <!-- Multi-Class checklist (Replaces simple multi-select as requested) -->
@@ -484,6 +492,7 @@
             'dashboard.html': 'menu-dashboard',
             'turmas.html': 'menu-turmas',
             'fichadoaluno.html': 'menu-alunos',
+        'sala_aee.html': 'menu-sala-aee',
             'calendario.html': 'menu-calendario',
             'agenda.html': 'menu-agenda',
             'frequencia.html': 'menu-frequencia',
@@ -563,96 +572,20 @@
 
     // ==========================================================================
     // LÓGICA DE NEGÓCIO DE AGENDA ESCOLAR TOTALMENTE DINÂMICA E INTEGRADA
-    // ==========================================================================
-    (function() {
-        // Obter tabelas do localStorage
-        function getDb(key, defaultValue = []) {
-            try {
-                const data = localStorage.getItem(key);
-                return data ? JSON.parse(data) : defaultValue;
-            } catch(e) {
-                console.error("Erro ao ler localStorage: ", e);
-                return defaultValue;
-            }
+    // =======================    (async function() {
+        const supabase = window.supabaseClient;
+        const selectedEscola = window.selectedEscola;
+
+        if (!supabase || !selectedEscola) {
+            console.error("Supabase ou escola ativa não inicializados.");
+            return;
         }
 
-        let turmas = getDb('sigaedu_turmas', [
-            { id: 1, nome: "1º Ano A", turno: "Manhã", tipo: "Regular", vagas: 30, alunosAtivos: 28, frequencia: 92 },
-            { id: 2, nome: "9º Ano C", turno: "Tarde", tipo: "Fluxo", vagas: 25, alunosAtivos: 22, frequencia: 91 },
-            { id: 3, nome: "EJA Mod I", turno: "Noite", tipo: "EJA", vagas: 40, alunosAtivos: 35, frequencia: 81 }
-        ]);
+        const escolaId = selectedEscola.id;
 
-        if (!localStorage.getItem('sigaedu_turmas')) {
-            localStorage.setItem('sigaedu_turmas', JSON.stringify(turmas));
-        }
-
-        let defaultAgenda = [
-            {
-                id: "evt_1",
-                titulo: "Olimpíada Brasileira de Matemática (OBMEP)",
-                tipo: "Olimpíada",
-                data: "2026-06-24",
-                turno: "Matutino",
-                horario: "08:00 - 12:00",
-                professor: "Sistema (SIGAEDU)",
-                turmas: ["1º Ano A", "9º Ano C"],
-                descricao: "Aplicação da primeira fase da OBMEP para todos os alunos do Fundamental II e Ensino Médio. Trazer caneta preta ou azul.",
-                imagem: null,
-                status: "Confirmado",
-                destaque: true
-            },
-            {
-                id: "evt_2",
-                titulo: "Avaliação Mensal de Química - 2º Bimestre",
-                tipo: "Teste",
-                data: "2026-06-15",
-                turno: "Matutino",
-                horario: "07:30 - 09:10",
-                professor: "Prof. Ana Paula",
-                turmas: ["1º Ano A"],
-                descricao: "Conteúdo cobrado: Tabela Periódica, ligações químicas e balanceamento de equações. Estudar o capítulo 4 do livro didático.",
-                imagem: null,
-                status: "Confirmado",
-                destaque: false
-            },
-            {
-                id: "evt_3",
-                titulo: "Semana da Arte Moderna - Exposição Interna",
-                tipo: "Projeto",
-                data: "2026-06-18",
-                turno: "Vespertino",
-                horario: "Todo o dia",
-                professor: "Coord. Ricardo",
-                turmas: ["1º Ano A", "9º Ano C"],
-                descricao: "Exposição de quadros e manifestações artísticas idealizadas pelos alunos em homenagem ao movimento de 1922. Aberto para visitação da comunidade.",
-                imagem: "https://lh3.googleusercontent.com/aida-public/AB6AXuAj_lYDOJYI5RTbZOZb29NYokeQcJGzr-o0VVU_KgAP-cuG5KJhfr7pj7ee7EZdUluxBhsdRnP81tdqueOVEvANdb2AD0FXXzksHCDlrK3ILL64R1I11gq-tfDlEauTCKZ-t5WUoU7xUfEiUNoLzZlClQgKSMFU2S_oDC8t8XYKnLISi9c0nyEuwYHZWQvD-sDTlw8bdqyUd13PeJ7_oLVLPNq5UqSYQQ5xuvU39NSIlxQi-g3BOfbaC9jE4H1hVN47wpA3u5Mp0kk",
-                status: "Em Preparação",
-                destaque: false
-            },
-            {
-                id: "evt_4",
-                titulo: "Reunião de Pais e Mestres - Conselho de Classe",
-                tipo: "Reunião",
-                data: "2026-06-20",
-                turno: "Noturno",
-                horario: "19:00 - 20:30",
-                professor: "Dir. Marta",
-                turmas: ["EJA Mod I"],
-                descricao: "Alinhamento com pais e responsáveis sobre o andamento pedagógico do 1º Bimestre e consolidação de notas bimestrais.",
-                imagem: null,
-                status: "Confirmado",
-                destaque: false
-            }
-        ];
-
-        let agenda = getDb('sigaedu_agenda', []);
+        let turmas = [];
+        let agenda = [];
         
-        // Semeando a base se estiver vazia
-        if (agenda.length === 0) {
-            agenda = defaultAgenda;
-            localStorage.setItem('sigaedu_agenda', JSON.stringify(agenda));
-        }
-
         // Estado de Visualização
         let currentScope = 'Geral'; // 'Geral' ou 'Turma'
         let uploadedEventImage = null;
@@ -693,22 +626,78 @@
             }, 2500);
         }
 
+        // Buscar turmas e eventos do Supabase
+        async function carregarDados() {
+            try {
+                // 1. Carregar turmas
+                const { data: dbTurmas, error: errorTurmas } = await supabase
+                    .from('turmas')
+                    .select('*')
+                    .eq('escola_id', escolaId);
+
+                if (errorTurmas) throw errorTurmas;
+                turmas = dbTurmas;
+
+                // 2. Carregar agenda (excluindo configurações de calendário)
+                const { data: dbAgenda, error: errorAgenda } = await supabase
+                    .from('agenda')
+                    .select('*')
+                    .eq('escola_id', escolaId)
+                    .neq('tipo', 'ConfiguracaoCalendario');
+
+                if (errorAgenda) throw errorAgenda;
+
+                agenda = dbAgenda.map(item => {
+                    let details = {};
+                    try {
+                        details = JSON.parse(item.descricao);
+                    } catch(e) {
+                        details = {
+                            descricao: item.descricao,
+                            tipo: 'Atividades',
+                            turno: 'Geral',
+                            horario: 'Todo o dia',
+                            professor: 'Coordenação',
+                            status: 'Confirmado',
+                            destaque: false,
+                            turmas: []
+                        };
+                    }
+
+                    return {
+                        id: item.id,
+                        titulo: item.titulo,
+                        tipo: details.tipo || 'Atividades',
+                        data: item.data_evento,
+                        turno: details.turno || 'Geral',
+                        horario: details.horario || 'Todo o dia',
+                        professor: details.professor || 'Coordenação',
+                        descricao: details.descricao || '',
+                        turmas: details.turmas || [],
+                        imagem: item.imagem_url || details.imagem || null,
+                        status: details.status || 'Confirmado',
+                        destaque: details.destaque || false
+                    };
+                });
+
+                initializeFiltersAndForm();
+                renderAgenda();
+            } catch(err) {
+                console.error("Erro ao carregar dados do Supabase:", err);
+            }
+        }
+
         // Preencher seletores e checklists dinamicamente
         function initializeFiltersAndForm() {
-            // Seletor superior de Turmas
             filterTurma.innerHTML = '<option value="Todas">Todas as Turmas</option>';
-            
-            // Checklist no Modal de Novo Agendamento
             turmasChecklist.innerHTML = '';
 
             turmas.forEach(t => {
-                // Preencher filtro superior
                 const opt = document.createElement('option');
                 opt.value = t.nome;
                 opt.textContent = `${t.nome} (${t.turno})`;
                 filterTurma.appendChild(opt);
 
-                // Preencher Checklist de multiplas turmas
                 const label = document.createElement('label');
                 label.className = "flex items-center gap-xs cursor-pointer select-none hover:bg-white p-1 rounded-lg transition-colors";
                 label.innerHTML = `
@@ -719,7 +708,7 @@
             });
         }
 
-        // Retorna o ícone e gradiente HSL de preenchimento do card de acordo com o Tipo de Evento
+        // Retorna o ícone e gradiente HSL
         function getCoverFallback(type) {
             const types = {
                 'Prova': { icon: 'assignment', gradient: 'from-amber-600 to-amber-700 bg-amber-50 text-amber-700 border-amber-200' },
@@ -735,30 +724,22 @@
             return types[type] || { icon: 'event_note', gradient: 'from-zinc-700 to-zinc-900 bg-zinc-50 text-zinc-700 border-zinc-200' };
         }
 
-        // Renderizar a Agenda Escolar e Métricas de Resumo
+        // Renderizar a Agenda Escolar
         window.renderAgenda = function() {
-            agenda = getDb('sigaedu_agenda', []);
-
             const selTurno = filterTurno.value;
             const selTurma = filterTurma.value;
             const searchVal = globalSearch.value.trim().toLowerCase();
 
-            // Filtragem
             let filtered = agenda.filter(event => {
-                // Filtro por Turno
                 if (selTurno !== 'Todos' && event.turno !== selTurno) return false;
-                
-                // Filtro por Turma
                 if (selTurma !== 'Todas' && !event.turmas.includes(selTurma)) return false;
 
-                // Escopo "Por Minhas Turmas" (Simulação que mostra apenas eventos vinculados a turmas regulares cadastradas)
                 if (currentScope === 'Turma') {
                     const minhasTurmas = turmas.map(t => t.nome);
                     const overlaps = event.turmas.some(t => minhasTurmas.includes(t));
                     if (!overlaps) return false;
                 }
 
-                // Barra de Busca
                 if (searchVal) {
                     const matchesTitle = event.titulo.toLowerCase().includes(searchVal);
                     const matchesDesc = event.descricao.toLowerCase().includes(searchVal);
@@ -770,13 +751,8 @@
                 return true;
             });
 
-            // Ordenar por data mais próxima
             filtered.sort((a, b) => new Date(a.data) - new Date(b.data));
-
-            // Atualizar contagem no badge
             totalEventsBadge.textContent = `${filtered.length} Evento(s)`;
-
-            // Limpar feed anterior
             agendaFeed.innerHTML = '';
 
             if (filtered.length === 0) {
@@ -794,7 +770,6 @@
                     
                     const meta = getCoverFallback(evt.tipo);
                     
-                    // Render do thumbnail cover
                     let thumbnailHtml = '';
                     if (evt.imagem) {
                         thumbnailHtml = `
@@ -803,7 +778,6 @@
                             </div>
                         `;
                     } else {
-                        // Vector/Gradient cover fallback
                         thumbnailHtml = `
                             <div class="w-full md:w-24 h-20 rounded-lg bg-gradient-to-br ${meta.gradient} flex-shrink-0 flex items-center justify-center shadow-inner border border-outline-variant relative group-hover:scale-105 transition-transform duration-300">
                                 <span class="material-symbols-outlined text-white text-[32px] opacity-80" data-icon="${meta.icon}">${meta.icon}</span>
@@ -819,7 +793,6 @@
                         'Reunião': 'bg-zinc-50 text-zinc-700 border-zinc-200'
                     };
                     const typeBadgeClass = typeBadgeColors[evt.tipo] || 'bg-slate-50 text-slate-700 border-slate-200';
-
                     const classesBadges = evt.turmas.map(t => `<span class="bg-surface-container text-primary text-[10px] font-bold px-2 py-0.5 rounded-full border border-outline-variant/30 select-none">${t}</span>`).join(' ');
 
                     const card = document.createElement('div');
@@ -831,7 +804,7 @@
                         </div>
                         
                         ${thumbnailHtml}
-
+ 
                         <div class="flex-1 space-y-1 text-left min-w-0">
                             <div class="flex flex-wrap items-center gap-2">
                                 <span class="px-2.5 py-0.5 rounded-full border text-[10px] font-bold uppercase tracking-wider ${typeBadgeClass}">${evt.tipo}</span>
@@ -845,7 +818,7 @@
                                 <strong class="text-primary font-bold">Turmas:</strong> ${classesBadges}
                             </p>
                         </div>
-
+ 
                         <div class="flex items-center gap-lg select-none shrink-0 justify-between md:justify-end border-t md:border-t-0 border-outline-variant/30 pt-sm md:pt-0">
                             <div class="flex items-center gap-2">
                                 <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary overflow-hidden border border-outline-variant">
@@ -858,8 +831,7 @@
                             </div>
                             <span class="px-3 py-1 rounded-full text-[11px] font-extrabold border bg-emerald-50 text-emerald-700 border-emerald-200 tracking-wide">${evt.status}</span>
                         </div>
-
-                        <!-- Hover Actions -->
+ 
                         <div class="flex items-center gap-xs md:opacity-0 group-hover:opacity-100 transition-opacity absolute right-4 top-2 bg-white/90 p-1 rounded-lg border border-outline-variant/40 shadow-sm md:static md:border-0 md:bg-transparent md:shadow-none select-none">
                             <button onclick="editAgendaEvent('${evt.id}')" class="p-1 hover:bg-surface-container-high rounded-full transition-all text-on-surface-variant hover:text-primary" title="Editar Evento">
                                 <span class="material-symbols-outlined text-[18px]">edit</span>
@@ -874,14 +846,13 @@
             }
 
             renderTopHighlightAndMeters();
-        }
+        };
 
         // Renderizar Destaque e Contadores Bento
         function renderTopHighlightAndMeters() {
             const today = new Date();
             const twoWeeksLater = new Date(today.getTime() + (14 * 24 * 60 * 60 * 1000));
 
-            // Contadores de testes, reuniões e projetos nas próximas 2 semanas
             let tests = 0;
             let meetings = 0;
             let projects = 0;
@@ -899,10 +870,9 @@
             counterMeetings.textContent = `${meetings} Reunião${meetings !== 1 ? 'ões' : ''}`;
             counterProjects.textContent = `${projects} Projeto${projects !== 1 ? 's' : ''}`;
 
-            // Encontrar o evento destaque da agenda
             let highlight = agenda.find(e => e.destaque === true);
             if (!highlight && agenda.length > 0) {
-                highlight = agenda[0]; // fallback
+                highlight = agenda[0];
             }
 
             if (highlight) {
@@ -950,7 +920,6 @@
             document.getElementById("event-edit-id").value = "";
             document.getElementById("modal-agenda-title").textContent = "Novo Agendamento";
             
-            // Desmarcar todos os checkboxes de turmas
             const checkboxes = document.querySelectorAll(".class-checkbox");
             checkboxes.forEach(cb => cb.checked = false);
 
@@ -965,7 +934,7 @@
             clearEventImage();
         };
 
-        // Upload da Imagem com Redimensionamento e Compressão Inteligente
+        // Upload da Capa Otimizada
         window.handleEventImageUpload = function(input) {
             if (input.files && input.files[0]) {
                 const file = input.files[0];
@@ -978,7 +947,7 @@
                         const canvas = document.createElement('canvas');
                         let width = img.width;
                         let height = img.height;
-                        const maxDimension = 800; // Otimizado para cards e destaques
+                        const maxDimension = 800;
                         
                         if (width > height) {
                             if (width > maxDimension) {
@@ -998,11 +967,9 @@
                         const ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, width, height);
                         
-                        // Compressão JPEG alta qualidade (0.7)
                         const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
                         uploadedEventImage = compressedBase64;
                         
-                        // Tamanho aproximado base64
                         const compressedSizeKb = ((compressedBase64.length * 3) / 4 / 1024).toFixed(1);
 
                         imagePreview.src = compressedBase64;
@@ -1019,7 +986,7 @@
             }
         };
 
-        // Limpar Imagem do modal
+        // Limpar Imagem
         window.clearEventImage = function() {
             uploadedEventImage = null;
             document.getElementById("event-imagem").value = "";
@@ -1028,7 +995,7 @@
         };
 
         // Salvar Agendamento (Inserir ou Editar)
-        window.saveAgendaEvent = function(event) {
+        window.saveAgendaEvent = async function(event) {
             event.preventDefault();
 
             const editId = document.getElementById("event-edit-id").value;
@@ -1041,7 +1008,6 @@
             const descricao = document.getElementById("event-descricao").value.trim();
             const destaque = document.getElementById("event-destaque").checked;
 
-            // Coletar turmas selecionadas do checklist
             const checkedBoxes = document.querySelectorAll(".class-checkbox:checked");
             const selectedClasses = Array.from(checkedBoxes).map(cb => cb.value);
 
@@ -1050,63 +1016,82 @@
                 return;
             }
 
-            agenda = getDb('sigaedu_agenda', []);
+            const details = {
+                descricao: descricao || "Sem descrição informada.",
+                tipo: tipo,
+                turno: turno,
+                horario: horario || "Todo o dia",
+                professor: professor || "Coordenação",
+                status: "Confirmado",
+                destaque: destaque,
+                turmas: selectedClasses,
+                imagem: uploadedEventImage
+            };
 
-            if (destaque) {
-                // Desativar qualquer outro destaque anterior para manter apenas 1 ativo
-                agenda.forEach(e => e.destaque = false);
-            }
+            const payload = {
+                escola_id: escolaId,
+                titulo: titulo,
+                descricao: JSON.stringify(details),
+                data_evento: data,
+                imagem_url: uploadedEventImage || null,
+                turma_id: null
+            };
 
-            if (editId) {
-                // Editar existente
-                const evt = agenda.find(e => e.id === editId);
-                if (evt) {
-                    evt.titulo = titulo;
-                    evt.tipo = tipo;
-                    evt.data = data;
-                    evt.turno = turno;
-                    evt.horario = horario || "Todo o dia";
-                    evt.professor = professor || "Coordenação";
-                    evt.descricao = descricao || "Sem descrição informada.";
-                    evt.turmas = selectedClasses;
-                    evt.destaque = destaque;
-                    if (uploadedEventImage) {
-                        evt.imagem = uploadedEventImage;
+            const submitBtn = formAgenda.querySelector("button[type='submit']");
+            const originalText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = "Gravando...";
+
+            try {
+                if (destaque) {
+                    // Se for destaque, precisamos remover o destaque de outros eventos da escola
+                    const destaqueEventIds = agenda.filter(e => e.destaque).map(e => e.id);
+                    if (destaqueEventIds.length > 0) {
+                        for (let dId of destaqueEventIds) {
+                            const originalItem = dbAgendaRaw.find(x => x.id === dId);
+                            if (originalItem) {
+                                let origDetails = {};
+                                try { origDetails = JSON.parse(originalItem.descricao); } catch(e) {}
+                                origDetails.destaque = false;
+                                await supabase
+                                    .from('agenda')
+                                    .update({ descricao: JSON.stringify(origDetails) })
+                                    .eq('id', dId);
+                            }
+                        }
                     }
                 }
-                showToast("Agendamento atualizado com sucesso!", "edit_calendar", "#4ADE80");
-            } else {
-                // Criar Novo
-                const newEvt = {
-                    id: "evt_" + Date.now(),
-                    titulo: titulo,
-                    tipo: tipo,
-                    data: data,
-                    turno: turno,
-                    horario: horario || "Todo o dia",
-                    professor: professor || "Coordenação",
-                    descricao: descricao || "Sem descrição informada.",
-                    turmas: selectedClasses,
-                    imagem: uploadedEventImage,
-                    status: "Confirmado",
-                    destaque: destaque
-                };
-                agenda.unshift(newEvt);
-                showToast("Novo agendamento registrado com sucesso!", "event_available", "#4ADE80");
-            }
 
-            localStorage.setItem('sigaedu_agenda', JSON.stringify(agenda));
-            closeEventModal();
-            renderAgenda();
+                if (editId) {
+                    const { error } = await supabase
+                        .from('agenda')
+                        .update(payload)
+                        .eq('id', editId);
+                    if (error) throw error;
+                    showToast("Agendamento atualizado com sucesso!", "edit_calendar", "#4ADE80");
+                } else {
+                    const { error } = await supabase
+                        .from('agenda')
+                        .insert(payload);
+                    if (error) throw error;
+                    showToast("Novo agendamento registrado com sucesso!", "event_available", "#4ADE80");
+                }
+
+                closeEventModal();
+                await carregarDados();
+            } catch(err) {
+                alert("Erro ao salvar agendamento no Supabase: " + err.message);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            }
         };
 
         // Editar Agendamento
         window.editAgendaEvent = function(id) {
-            agenda = getDb('sigaedu_agenda', []);
             const evt = agenda.find(e => e.id === id);
             if (!evt) return;
 
-            // Abrir e preencher modal
             document.getElementById("event-edit-id").value = evt.id;
             document.getElementById("modal-agenda-title").textContent = "Editar Agendamento";
             
@@ -1119,7 +1104,6 @@
             document.getElementById("event-descricao").value = evt.descricao || "";
             document.getElementById("event-destaque").checked = evt.destaque || false;
 
-            // Marcar checkboxes de turmas envolvidas
             const checkboxes = document.querySelectorAll(".class-checkbox");
             checkboxes.forEach(cb => {
                 cb.checked = evt.turmas.includes(cb.value);
@@ -1138,23 +1122,20 @@
             modalAgenda.classList.remove('hidden');
         };
 
-        // Excluir Agendamento (Acesso restrito ao Criador ou Admin mediante Senha)
+        // Excluir Agendamento
         window.deleteAgendaEvent = function(id) {
-            agenda = getDb('sigaedu_agenda', []);
             const evt = agenda.find(e => e.id === id);
             if (!evt) return;
 
-            const activeUser = "Dhenison Carlos"; // Usuário logado administrador
+            const activeUser = "Dhenison Carlos";
 
-            // Se o criador do evento for o próprio usuário ativo
             if (evt.professor === activeUser) {
                 if (confirm(`Tem certeza que deseja excluir o agendamento "${evt.titulo}" criado por você?`)) {
                     performDeletion(id);
                 }
             } else {
-                // Se for outro criador, exige senha do Administrador
                 const password = prompt(`Ação Restrita! O agendamento "${evt.titulo}" foi registrado por "${evt.professor}".\nDigite a senha do Administrador para autorizar a exclusão:`);
-                if (password === null) return; // cancelou
+                if (password === null) return;
 
                 if (password === "siga@EDU2026" || password === "siga@EDU2026excluir") {
                     if (confirm(`Confirmar exclusão definitiva do agendamento "${evt.titulo}"?`)) {
@@ -1166,19 +1147,22 @@
             }
         };
 
-        function performDeletion(id) {
-            agenda = getDb('sigaedu_agenda', []);
-            agenda = agenda.filter(e => e.id !== id);
-            localStorage.setItem('sigaedu_agenda', JSON.stringify(agenda));
-            renderAgenda();
-            showToast("Agendamento removido do calendário escolar.", "delete", "#EF4444");
+        async function performDeletion(id) {
+            try {
+                const { error } = await supabase
+                    .from('agenda')
+                    .delete()
+                    .eq('id', id);
+                if (error) throw error;
+
+                showToast("Agendamento removido do calendário escolar.", "delete", "#EF4444");
+                await carregarDados();
+            } catch(err) {
+                alert("Erro ao excluir do Supabase: " + err.message);
+            }
         }
 
-        // Inicializar componentes
-        initializeFiltersAndForm();
-        renderAgenda();
-
-        // Configuração de Toggles de Escopo
+        // Toggles de Escopo
         const btnScopeAll = document.getElementById("btn-scope-all");
         const btnScopeTurma = document.getElementById("btn-scope-turma");
 
@@ -1196,11 +1180,21 @@
             renderAgenda();
         });
 
-        // Configuração dos Event Listeners de Filtro
         filterTurno.addEventListener('change', renderAgenda);
         filterTurma.addEventListener('change', renderAgenda);
         globalSearch.addEventListener('input', renderAgenda);
 
+        // Armazenar a referência aos dados brutos para desativar destaques antigos se necessário
+        let dbAgendaRaw = [];
+        // Intercepta a busca para popular dbAgendaRaw
+        const originalCarregar = carregarDados;
+        carregarDados = async function() {
+            const { data } = await supabase.from('agenda').select('*').eq('escola_id', escolaId);
+            dbAgendaRaw = data || [];
+            await originalCarregar();
+        };
+
+        await carregarDados();
     })();
 </script>
 </body>

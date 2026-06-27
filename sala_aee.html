@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html class="light" lang="pt-br">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>SIGAEDU - Sala AEE</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-container-high": "#ebe7e6",
+            "on-primary": "#ffffff",
+            "inverse-surface": "#313030",
+            "on-secondary-fixed-variant": "#544600",
+            "surface-bright": "#fdf8f8",
+            "surface-variant": "#e5e2e1",
+            "secondary-fixed": "#ffe16d",
+            "primary-container": "#1c1b1b",
+            "on-secondary-container": "#6e5c00",
+            "on-tertiary-fixed": "#191c1e",
+            "inverse-on-surface": "#f4f0ef",
+            "secondary": "#705d00",
+            "on-background": "#1c1b1b",
+            "surface-dim": "#ddd9d8",
+            "tertiary-container": "#191c1e",
+            "inverse-primary": "#c8c6c5",
+            "on-tertiary": "#ffffff",
+            "primary": "#000000",
+            "tertiary-fixed-dim": "#c4c7ca",
+            "surface": "#fdf8f8",
+            "on-primary-fixed-variant": "#474746",
+            "error": "#ba1a1a",
+            "outline": "#747878",
+            "surface-container-highest": "#e5e2e1",
+            "primary-fixed-dim": "#c8c6c5",
+            "surface-container-lowest": "#ffffff",
+            "primary-fixed": "#e5e2e1",
+            "secondary-fixed-dim": "#e9c400",
+            "on-primary-fixed": "#1c1b1b",
+            "on-secondary-fixed": "#221b00",
+            "surface-container-low": "#f7f3f2",
+            "surface-container": "#f1edec",
+            "tertiary": "#000000",
+            "on-error": "#ffffff",
+            "on-tertiary-fixed-variant": "#44474a",
+            "surface-tint": "#5f5e5e",
+            "error-container": "#ffdad6",
+            "on-primary-container": "#858383",
+            "on-tertiary-container": "#818487",
+            "secondary-container": "#fcd400",
+            "outline-variant": "#c4c7c7",
+            "background": "#fdf8f8",
+            "on-surface-variant": "#444748",
+            "on-secondary": "#ffffff",
+            "on-error-container": "#93000a",
+            "tertiary-fixed": "#e0e3e6",
+            "on-surface": "#1c1b1b"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "base": "8px",
+            "gutter": "24px",
+            "md": "24px",
+            "xl": "80px",
+            "container-max": "1440px",
+            "lg": "48px",
+            "sm": "12px",
+            "xs": "4px"
+          },
+          "fontFamily": {
+            "headline-lg": ["Inter"],
+            "headline-xl": ["Inter"],
+            "headline-md": ["Inter"],
+            "label-sm": ["Inter"],
+            "label-md": ["Inter"],
+            "headline-lg-mobile": ["Inter"],
+            "body-md": ["Inter"],
+            "body-lg": ["Inter"],
+            "body-sm": ["Inter"]
+          },
+          "fontSize": {
+            "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+            "headline-xl": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+            "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+            "label-sm": ["12px", {"lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "500"}],
+            "label-md": ["14px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+            "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+            "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+            "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+            "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+          }
+        },
+      },
+    }
+  </script>
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      overflow: hidden;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+    .cristalico {
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .aee-section { border: 1px solid #c4c7c7; border-radius: 8px; overflow: hidden; }
+    .aee-section-title { background: #d6e7f5; padding: 10px 12px; font-weight: 800; color: #1c1b1b; }
+    .aee-section-body { padding: 12px; display: grid; gap: 12px; background: #fff; }
+    .aee-field-label { display: block; margin-bottom: 4px; color: #444748; font-size: 13px; font-weight: 700; }
+    .aee-control { width: 100%; border: 1px solid #c4c7c7; border-radius: 6px; padding: 8px 10px; background: #fff; }
+  </style>
+</head>
+<script src="clean-demo-data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="supabase-init.js"></script>
+<body class="bg-background text-on-surface">
+
+  <!-- SideNavBar Componente Unificado -->
+  <aside id="sidebar" class="fixed left-0 top-0 bottom-0 z-50 flex flex-col p-sm pt-xl overflow-y-auto w-64 bg-white/70 backdrop-blur-xl border-r border-surface-variant dark:border-outline-variant shadow-md transition-transform duration-300 -translate-x-full md:translate-x-0">
+    <div class="px-sm mb-lg flex justify-between items-center">
+      <div class="flex items-center gap-sm">
+        <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-md">
+          <span class="material-symbols-outlined text-secondary-container" data-icon="school">school</span>
+        </div>
+        <div>
+          <h1 class="text-label-md font-bold text-primary tracking-tight leading-none">SIGAEDU</h1>
+          <p class="text-body-sm font-medium text-on-surface-variant">Gestão Acadêmica</p>
+        </div>
+      </div>
+      <button class="md:hidden p-1 text-on-surface hover:bg-surface-container-high rounded-full transition-colors" onclick="toggleSidebar()">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <nav class="flex-1 space-y-1">
+      <!-- Links Uniformes com Transições Suaves -->
+      <a id="menu-dashboard" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="dashboard.html">
+        <span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+        <span class="text-label-md font-label-md">Dashboard</span>
+      </a>
+      <a id="menu-turmas" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="turmas.html">
+        <span class="material-symbols-outlined" data-icon="groups">groups</span>
+        <span class="text-label-md font-label-md">Turmas</span>
+      </a>
+      <a id="menu-alunos" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="fichadoaluno.html">
+        <span class="material-symbols-outlined" data-icon="person">person</span>
+        <span class="text-label-md font-label-md">Alunos</span>
+      </a>
+      <a id="menu-sala-aee" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="sala_aee.html">
+        <span class="material-symbols-outlined" data-icon="psychology_alt">psychology_alt</span>
+        <span class="text-label-md font-label-md">Sala AEE</span>
+      </a>
+      <a id="menu-calendario" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="calendario.html">
+        <span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+        <span class="text-label-md font-label-md">Calendário</span>
+      </a>
+      <a id="menu-agenda" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="agenda.html">
+        <span class="material-symbols-outlined" data-icon="event_note">event_note</span>
+        <span class="text-label-md font-label-md">Agenda</span>
+      </a>
+      <a id="menu-frequencia" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="frequencia.html">
+        <span class="material-symbols-outlined" data-icon="fact_check">fact_check</span>
+        <span class="text-label-md font-label-md">Frequência</span>
+      </a>
+      <a id="menu-ocorrencias" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="ocorrencias.html">
+        <span class="material-symbols-outlined" data-icon="report_problem">report_problem</span>
+        <span class="text-label-md font-label-md">Ocorrências</span>
+      </a>
+      <a id="menu-solicitacoes" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="solicitacoes.html">
+        <span class="material-symbols-outlined" data-icon="task">task</span>
+        <span class="text-label-md font-label-md">Solicitações</span>
+      </a>
+      <a id="menu-whatsapp" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="whatsapp.html">
+        <span class="material-symbols-outlined" data-icon="message">message</span>
+        <span class="text-label-md font-label-md">Whatsapp</span>
+      </a>
+      <a id="menu-relatorios" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="relatorios.html">
+        <span class="material-symbols-outlined" data-icon="description">description</span>
+        <span class="text-label-md font-label-md">Relatórios</span>
+      </a>
+      <a id="menu-boletins" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="boletins.html">
+        <span class="material-symbols-outlined" data-icon="assignment_ind">assignment_ind</span>
+        <span class="text-label-md font-label-md">Boletins</span>
+      </a>
+      <a id="menu-usuarios" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="usuarios.html">
+        <span class="material-symbols-outlined" data-icon="manage_accounts">manage_accounts</span>
+        <span class="text-label-md font-label-md">Usuários</span>
+      </a>
+    </nav>
+    <div class="mt-xl border-t border-surface-variant/30 pt-md space-y-1">
+      <a id="menu-suporte" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="#">
+        <span class="material-symbols-outlined" data-icon="contact_support">contact_support</span>
+        <span class="text-label-md font-label-md">Suporte</span>
+      </a>
+      <a id="menu-configuracoes" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="#">
+        <span class="material-symbols-outlined" data-icon="settings">settings</span>
+        <span class="text-label-md font-label-md">Configurações</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- Overlay para Foco Mobile -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm hidden md:hidden" onclick="toggleSidebar()"></div>
+
+  <!-- Main Content Wrapper -->
+  <main class="md:ml-64 min-h-screen flex flex-col transition-all duration-300">
+    
+    <!-- Top Header (TopNavBar Shared Component Unificado) -->
+    <header class="fixed top-0 right-0 left-0 md:left-64 z-40 h-xl px-gutter flex justify-between items-center bg-white/70 backdrop-blur-xl dark:bg-surface-container/70 border-b border-surface-variant dark:border-outline-variant shadow-sm transition-all duration-300">
+      <div class="flex items-center gap-md">
+        <button class="md:hidden p-2 text-on-surface hover:bg-surface-container-high rounded-full transition-colors" onclick="toggleSidebar()">
+          <span class="material-symbols-outlined">menu</span>
+        </button>
+        <div class="hidden sm:flex items-center bg-surface-container-low rounded-full px-md py-2 w-96 border border-surface-variant/50 focus-within:border-primary transition-colors">
+          <span class="material-symbols-outlined text-on-surface-variant mr-sm">search</span>
+          <input class="bg-transparent border-none focus:ring-0 text-body-sm w-full p-0" placeholder="Pesquisar..." type="text"/>
+        </div>
+      </div>
+      <div class="flex items-center gap-md">
+        <div class="flex items-center gap-sm">
+          <button class="p-2 text-on-surface-variant hover:bg-surface-container-low transition-all duration-200 rounded-full relative hover:scale-105 active:scale-95">
+            <span class="material-symbols-outlined">notifications</span>
+            <span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full animate-pulse"></span>
+          </button>
+          <button class="p-2 text-on-surface-variant hover:bg-surface-container-low transition-all duration-200 rounded-full hover:scale-105 active:scale-95">
+            <span class="material-symbols-outlined">help</span>
+          </button>
+        </div>
+        <div class="h-8 w-[1px] bg-surface-variant hidden sm:block"></div>
+        <div class="flex items-center gap-sm pl-sm cursor-pointer hover:bg-surface-container-low p-xs rounded-xl transition-all duration-200">
+          <div class="text-right hidden sm:block">
+            <p class="text-label-md font-bold text-primary leading-none">Dhenison Carlos</p>
+            <p class="text-label-sm text-on-surface-variant">Administrador</p>
+          </div>
+          <img alt="Dhenison Carlos - Administrador" class="w-10 h-10 rounded-full object-cover border-2 border-secondary-container hover:scale-105 transition-transform duration-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRGSGbqGOo2dzNp40hZk4pp_0rVieA-Su6u1WdWdVVqvGIA6n7dJMIDQVg3vkTYKgYN5HRKv7SOzuV4CGLSmB4xKZHKFpq-2ab9UNYf9ye3MByCMdx_JIehrQjusuLvStYhxK5Qj2eZHDffXBfYxzFUFDsX7kk7oInOP0foJp972O4lAIpD8pOJMQ4ehoA3BKsZHDj0gIh6Fx7Dr-Uvdu89v6j1O2f_mCuy7lSXEnJdzNLXbaD9C36QemEJIA6ok8BwdRRm8oVmvA"/>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Canvas -->
+    <div class="mt-xl p-gutter flex-1 space-y-lg">
+      <div class="max-w-container-max mx-auto space-y-lg">
+        <section class="bg-white border border-surface-variant/30 rounded-xl shadow-sm p-lg">
+          <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-md">
+            <div class="space-y-xs">
+              <nav class="flex text-label-sm text-on-surface-variant gap-xs">
+                <span>Menu</span>
+                <span>/</span>
+                <span class="text-primary font-bold">Sala AEE</span>
+              </nav>
+              <h1 class="font-headline-lg text-headline-lg text-primary">Sala AEE</h1>
+              <p class="font-body-md text-body-md text-on-surface-variant max-w-3xl">
+                Cadastre alunos atendidos, tipificidades e documentos de acompanhamento: PEI, PAEE e Estudo de Caso.
+              </p>
+            </div>
+            <div class="grid grid-cols-3 gap-sm min-w-full lg:min-w-[420px]">
+              <div class="bg-surface-container-low border border-surface-variant rounded-xl p-sm">
+                <p class="text-label-sm text-on-surface-variant uppercase">Alunos AEE</p>
+                <p id="stat-aee-alunos" class="text-headline-md font-bold text-primary">0</p>
+              </div>
+              <div class="bg-surface-container-low border border-surface-variant rounded-xl p-sm">
+                <p class="text-label-sm text-on-surface-variant uppercase">Registros</p>
+                <p id="stat-aee-registros" class="text-headline-md font-bold text-primary">0</p>
+              </div>
+              <div class="bg-surface-container-low border border-surface-variant rounded-xl p-sm">
+                <p class="text-label-sm text-on-surface-variant uppercase">Tipificidades</p>
+                <p id="stat-aee-tipificidades" class="text-headline-md font-bold text-primary">0</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="grid grid-cols-1 xl:grid-cols-[420px_1fr] gap-lg">
+          <div class="bg-white border border-surface-variant/30 rounded-xl shadow-sm p-lg space-y-md">
+            <div class="flex flex-wrap gap-sm" role="tablist" aria-label="Tipo de documento AEE">
+              <button type="button" class="aee-tab px-md py-sm rounded-xl bg-secondary-container text-on-secondary-container font-bold" data-doc="PEI">PEI</button>
+              <button type="button" class="aee-tab px-md py-sm rounded-xl bg-surface-container-low text-on-surface-variant font-bold" data-doc="PAEE">PAEE</button>
+              <button type="button" class="aee-tab px-md py-sm rounded-xl bg-surface-container-low text-on-surface-variant font-bold" data-doc="Estudo de Caso">Estudo de Caso</button>
+            </div>
+
+            <form id="form-aee" class="space-y-md">
+              <input id="aee-registro-id" type="hidden"/>
+              <input id="aee-documento" type="hidden" value="PEI"/>
+
+              <label class="block">
+                <span class="text-label-md font-bold text-on-surface-variant">Aluno</span>
+                <select id="aee-aluno" required class="mt-xs w-full border border-outline-variant p-sm rounded-lg text-body-md bg-white"></select>
+              </label>
+
+              <div class="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-sm">
+                <label class="block">
+                  <span class="text-label-md font-bold text-on-surface-variant">Tipificidade</span>
+                  <select id="aee-tipificidade" required class="mt-xs w-full border border-outline-variant p-sm rounded-lg text-body-md bg-white"></select>
+                </label>
+                <label class="block">
+                  <span class="text-label-md font-bold text-on-surface-variant">Data</span>
+                  <input id="aee-data" type="date" required class="mt-xs w-full border border-outline-variant p-sm rounded-lg text-body-md bg-white"/>
+                </label>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-sm">
+                <label class="block">
+                  <span class="text-label-md font-bold text-on-surface-variant">Nova tipificidade</span>
+                  <input id="aee-nova-tipificidade" type="text" placeholder="Ex.: TEA, DI, baixa visão..." class="mt-xs w-full border border-outline-variant p-sm rounded-lg text-body-md bg-white"/>
+                </label>
+                <button type="button" id="btn-add-tipificidade" class="self-end px-md py-sm bg-primary text-on-primary rounded-xl font-bold hover:opacity-90 transition-opacity">
+                  Adicionar
+                </button>
+              </div>
+
+              <label class="block">
+                <span class="text-label-md font-bold text-on-surface-variant">Professor(a) / responsável pelo AEE</span>
+                <input id="aee-responsavel" type="text" required class="mt-xs w-full border border-outline-variant p-sm rounded-lg text-body-md bg-white"/>
+              </label>
+
+              <div id="aee-documento-campos" class="space-y-md"></div>
+
+              <div class="flex flex-col sm:flex-row gap-sm pt-sm">
+                <button type="submit" class="flex-1 px-md py-sm bg-secondary-container text-on-secondary-container rounded-xl font-bold hover:brightness-95 transition-all">
+                  Salvar cadastro
+                </button>
+                <button type="button" id="btn-aee-limpar" class="px-md py-sm border border-outline-variant rounded-xl font-bold text-on-surface-variant hover:bg-surface-container-low transition-colors">
+                  Limpar
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <div class="bg-white border border-surface-variant/30 rounded-xl shadow-sm p-lg space-y-md">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-md">
+              <div>
+                <h2 class="text-headline-md font-bold text-primary">Cadastros AEE</h2>
+                <p class="text-body-sm text-on-surface-variant">Histórico por aluno, documento e tipificidade.</p>
+              </div>
+              <div class="flex items-center bg-surface-container-low rounded-full px-md py-2 border border-surface-variant/50 w-full md:w-80">
+                <span class="material-symbols-outlined text-on-surface-variant mr-sm">search</span>
+                <input id="aee-busca" class="bg-transparent border-none focus:ring-0 text-body-sm w-full p-0" placeholder="Buscar aluno ou tipificidade..." type="text"/>
+              </div>
+            </div>
+
+            <div id="aee-lista" class="space-y-sm"></div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="w-full py-md px-gutter flex justify-between items-center mt-auto bg-transparent">
+      <div class="text-label-sm font-label-sm text-on-surface-variant">
+        Desenvolvido por Dhenison Carlos - 2026
+      </div>
+      <div class="flex gap-md">
+        <a class="text-label-sm font-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Termos de Uso</a>
+        <a class="text-label-sm font-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Privacidade</a>
+      </div>
+    </footer>
+
+  </main>
+
+  <script>
+    // Função para abrir/fechar a Sidebar no Mobile
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebar-overlay');
+      if (sidebar.classList.contains('-translate-x-full')) {
+        sidebar.classList.remove('-translate-x-full');
+        overlay.classList.remove('hidden');
+      } else {
+        sidebar.classList.add('-translate-x-full');
+        overlay.classList.add('hidden');
+      }
+    }
+
+    // Destacar automaticamente e imediatamente o link do menu ativo (sem esperar DOMContentLoaded)
+    (function() {
+      const path = window.location.pathname;
+      const page = path.split('/').pop() || 'unificado.html';
+      
+      const menuMap = {
+        'dashboard.html': 'menu-dashboard',
+        'turmas.html': 'menu-turmas',
+        'fichadoaluno.html': 'menu-alunos',
+        'sala_aee.html': 'menu-sala-aee',
+        'calendario.html': 'menu-calendario',
+        'agenda.html': 'menu-agenda',
+        'frequencia.html': 'menu-frequencia',
+        'ocorrencias.html': 'menu-ocorrencias',
+        'solicitacoes.html': 'menu-solicitacoes',
+        'whatsapp.html': 'menu-whatsapp',
+        'relatorios.html': 'menu-relatorios',
+        'boletins.html': 'menu-boletins',
+        'usuarios.html': 'menu-usuarios'
+      };
+      
+      const activeMenuId = menuMap[page];
+      if (activeMenuId) {
+        const activeLink = document.getElementById(activeMenuId);
+        if (activeLink) {
+          activeLink.classList.remove('text-on-surface-variant', 'hover:bg-surface-container-high', 'hover:scale-[1.02]');
+          activeLink.classList.add('bg-secondary-container', 'text-on-secondary-container', 'font-bold', 'scale-95', 'border-l-4', 'border-primary');
+        }
+      }
+    })();
+
+    // ==========================================================================
+    // SEGURANÇA E PROTEÇÃO DO CLIENTE (Anti-F12 / Anti-Inspect / Anti-Botão Direito)
+    // ==========================================================================
+    (function() {
+      // 1. Bloqueia o menu de contexto (clique com o botão direito)
+      document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+      });
+
+      // 2. Bloqueia teclas de atalho comuns de ferramentas do desenvolvedor
+      document.addEventListener('keydown', function(e) {
+        // F12 (123)
+        if (e.keyCode === 123) {
+          e.preventDefault();
+          return false;
+        }
+        // Ctrl+Shift+I (73)
+        if (e.ctrlKey && e.shiftKey && e.keyCode === 73) {
+          e.preventDefault();
+          return false;
+        }
+        // Ctrl+Shift+J (74)
+        if (e.ctrlKey && e.shiftKey && e.keyCode === 74) {
+          e.preventDefault();
+          return false;
+        }
+        // Ctrl+Shift+C (67)
+        if (e.ctrlKey && e.shiftKey && e.keyCode === 67) {
+          e.preventDefault();
+          return false;
+        }
+        // Ctrl+U (85)
+        if (e.ctrlKey && e.keyCode === 85) {
+          e.preventDefault();
+          return false;
+        }
+      });
+
+      // 3. Detecção activa de DevTools por debugger recursivo (trava se console estiver aberto)
+      setInterval(function() {
+        (function() {
+          const start = new Date();
+          debugger;
+          const end = new Date();
+          if (end - start > 100) {
+            // Se demorou muito por causa da pausa do debugger, limpa o console e avisa
+            console.clear();
+            document.body.innerHTML = `
+              <div class="fixed inset-0 bg-red-950 text-red-200 flex flex-col items-center justify-center p-md text-center z-[99999]">
+                <span class="material-symbols-outlined text-[64px] mb-md text-red-400">gavel</span>
+                <h1 class="text-headline-xl font-bold">Acesso Bloqueado</h1>
+                <p class="text-body-lg max-w-md mt-sm">O uso de Ferramentas de Desenvolvedor (F12) é estritamente proibido neste sistema para garantir a segurança dos dados escolares.</p>
+                <button onclick="window.location.reload()" class="mt-lg px-lg py-sm bg-red-600 text-white rounded-xl font-bold hover:bg-red-500 transition-colors">Recarregar Sistema</button>
+              </div>`;
+          }
+        })();
+      }, 1000);
+
+      // 4. Limpeza persistente do console
+      if (typeof console !== 'undefined') {
+        setInterval(function() {
+          console.clear();
+        }, 3000);
+      }
+    })();
+  </script>
+  <script>
+    if (false) (function() {
+      const STORAGE_REGISTROS = "sigaedu_aee_registros";
+      const STORAGE_TIPIFICIDADES = "sigaedu_aee_tipificidades";
+      const tipificidadesPadrao = [
+        "TEA - Transtorno do Espectro Autista",
+        "Deficiência Intelectual",
+        "Deficiência Física",
+        "Deficiência Auditiva",
+        "Deficiência Visual",
+        "Deficiência Múltipla",
+        "Altas Habilidades/Superdotação",
+        "TDAH",
+        "Dislexia",
+        "Outro"
+      ];
+
+      const form = document.getElementById("form-aee");
+      const tabs = document.querySelectorAll(".aee-tab");
+      const inputRegistroId = document.getElementById("aee-registro-id");
+      const inputDocumento = document.getElementById("aee-documento");
+      const selectAluno = document.getElementById("aee-aluno");
+      const selectTipificidade = document.getElementById("aee-tipificidade");
+      const inputData = document.getElementById("aee-data");
+      const inputResponsavel = document.getElementById("aee-responsavel");
+      const inputObjetivos = document.getElementById("aee-objetivos");
+      const inputEstrategias = document.getElementById("aee-estrategias");
+      const inputAvaliacao = document.getElementById("aee-avaliacao");
+      const inputNovaTipificidade = document.getElementById("aee-nova-tipificidade");
+      const inputBusca = document.getElementById("aee-busca");
+      const lista = document.getElementById("aee-lista");
+
+      function loadJson(key, fallback) {
+        try {
+          const value = JSON.parse(localStorage.getItem(key));
+          return Array.isArray(value) ? value : fallback;
+        } catch (error) {
+          return fallback;
+        }
+      }
+
+      function escapeHtml(value) {
+        return String(value || "")
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+
+      function getAlunos() {
+        return loadJson("sigaedu_alunos", []);
+      }
+
+      function getAlunosAee() {
+        return getAlunos().filter(aluno => aluno.aee && aluno.aee.atendido === "Sim");
+      }
+
+      function getAlunoTipificidades(aluno) {
+        const aee = aluno.aee || {};
+        const especificidades = Array.isArray(aee.especificidades) ? aee.especificidades : [];
+        return [...especificidades, aee.outraEspecificidade].filter(Boolean);
+      }
+
+      function getTipificidades() {
+        const stored = loadJson(STORAGE_TIPIFICIDADES, []);
+        const alunoTipificidades = getAlunosAee().flatMap(getAlunoTipificidades);
+        const merged = [...tipificidadesPadrao, ...stored, ...alunoTipificidades];
+        return [...new Set(merged)].sort((a, b) => a.localeCompare(b, "pt-BR"));
+      }
+
+      function getRegistros() {
+        return loadJson(STORAGE_REGISTROS, []);
+      }
+
+      function saveRegistros(registros) {
+        localStorage.setItem(STORAGE_REGISTROS, JSON.stringify(registros));
+      }
+
+      function setActiveDocumento(documento) {
+        inputDocumento.value = documento;
+        tabs.forEach(tab => {
+          const active = tab.dataset.doc === documento;
+          tab.classList.toggle("bg-secondary-container", active);
+          tab.classList.toggle("text-on-secondary-container", active);
+          tab.classList.toggle("bg-surface-container-low", !active);
+          tab.classList.toggle("text-on-surface-variant", !active);
+        });
+      }
+
+      function populateAlunos() {
+        const alunos = getAlunosAee().sort((a, b) => String(a.nome).localeCompare(String(b.nome), "pt-BR"));
+        if (!alunos.length) {
+          selectAluno.innerHTML = '<option value="">Nenhum aluno atendido pelo AEE</option>';
+          return;
+        }
+
+        selectAluno.innerHTML = '<option value="">Selecione o aluno</option>' + alunos.map(aluno => {
+          const turma = aluno.turma ? ` - ${aluno.turma}` : "";
+          return `<option value="${aluno.id}">${escapeHtml(aluno.nome)}${escapeHtml(turma)}</option>`;
+        }).join("");
+      }
+
+      function populateTipificidades() {
+        selectTipificidade.innerHTML = getTipificidades()
+          .map(tipo => `<option value="${escapeHtml(tipo)}">${escapeHtml(tipo)}</option>`)
+          .join("");
+      }
+
+      function resetForm() {
+        const currentDocumento = inputDocumento.value || "PEI";
+        inputRegistroId.value = "";
+        form.reset();
+        inputData.value = new Date().toISOString().slice(0, 10);
+        inputResponsavel.value = "Professor(a) AEE";
+        setActiveDocumento(currentDocumento);
+        if (selectTipificidade.options.length) selectTipificidade.selectedIndex = 0;
+      }
+
+      function getAlunoById(id) {
+        return getAlunosAee().find(aluno => String(aluno.id) === String(id));
+      }
+
+      function registroFromForm() {
+        const aluno = getAlunoById(selectAluno.value);
+        if (!aluno) {
+          alert("Selecione um aluno cadastrado para continuar.");
+          return null;
+        }
+
+        return {
+          id: inputRegistroId.value ? Number(inputRegistroId.value) : Date.now(),
+          alunoId: aluno.id,
+          alunoNome: aluno.nome,
+          alunoTurma: aluno.turma || "",
+          documento: inputDocumento.value,
+          tipificidade: selectTipificidade.value,
+          data: inputData.value,
+          responsavel: inputResponsavel.value.trim(),
+          objetivos: inputObjetivos.value.trim(),
+          estrategias: inputEstrategias.value.trim(),
+          avaliacao: inputAvaliacao.value.trim(),
+          atualizadoEm: new Date().toISOString()
+        };
+      }
+
+      function submitForm(event) {
+        event.preventDefault();
+        const registro = registroFromForm();
+        if (!registro) return;
+
+        const registros = getRegistros();
+        const index = registros.findIndex(item => Number(item.id) === Number(registro.id));
+        if (index >= 0) {
+          registros[index] = registro;
+        } else {
+          registros.unshift(registro);
+        }
+
+        saveRegistros(registros);
+        resetForm();
+        render();
+        alert("Cadastro da Sala AEE salvo com sucesso!");
+      }
+
+      function addTipificidade() {
+        const value = inputNovaTipificidade.value.trim();
+        if (!value) return;
+
+        const stored = loadJson(STORAGE_TIPIFICIDADES, []);
+        if (![...tipificidadesPadrao, ...stored].some(item => item.toLowerCase() === value.toLowerCase())) {
+          stored.push(value);
+          localStorage.setItem(STORAGE_TIPIFICIDADES, JSON.stringify(stored));
+        }
+
+        inputNovaTipificidade.value = "";
+        populateTipificidades();
+        selectTipificidade.value = value;
+        renderStats();
+      }
+
+      function editRegistro(id) {
+        const registro = getRegistros().find(item => Number(item.id) === Number(id));
+        if (!registro) return;
+
+        inputRegistroId.value = registro.id;
+        setActiveDocumento(registro.documento);
+        selectAluno.value = registro.alunoId;
+        selectTipificidade.value = registro.tipificidade;
+        inputData.value = registro.data;
+        inputResponsavel.value = registro.responsavel;
+        inputObjetivos.value = registro.objetivos;
+        inputEstrategias.value = registro.estrategias;
+        inputAvaliacao.value = registro.avaliacao || "";
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      function deleteRegistro(id) {
+        if (!confirm("Deseja excluir este cadastro da Sala AEE?")) return;
+        saveRegistros(getRegistros().filter(item => Number(item.id) !== Number(id)));
+        render();
+      }
+
+      function renderStats() {
+        const registros = getRegistros();
+        document.getElementById("stat-aee-alunos").textContent = getAlunosAee().length;
+        document.getElementById("stat-aee-registros").textContent = registros.length;
+        document.getElementById("stat-aee-tipificidades").textContent = getTipificidades().length;
+      }
+
+      function renderLista() {
+        const termo = inputBusca.value.trim().toLowerCase();
+        const alunosAee = getAlunosAee();
+        const registros = getRegistros().filter(item => alunosAee.some(aluno => String(aluno.id) === String(item.alunoId)));
+        const registrosFiltrados = registros.filter(item => {
+          const haystack = `${item.alunoNome} ${item.alunoTurma} ${item.documento} ${item.tipificidade}`.toLowerCase();
+          return haystack.includes(termo);
+        });
+        const alunoIdsComRegistro = new Set(registros.map(item => String(item.alunoId)));
+        const alunosSemRegistro = alunosAee.filter(aluno => {
+          if (alunoIdsComRegistro.has(String(aluno.id))) return false;
+          const tipificidades = getAlunoTipificidades(aluno).join(" ");
+          const haystack = `${aluno.nome} ${aluno.turma || ""} ${tipificidades}`.toLowerCase();
+          return haystack.includes(termo);
+        });
+
+        if (!registrosFiltrados.length && !alunosSemRegistro.length) {
+          lista.innerHTML = `
+            <div class="border border-dashed border-outline-variant rounded-xl p-lg text-center bg-surface-container-low">
+              <span class="material-symbols-outlined text-primary mb-sm">clinical_notes</span>
+              <p class="text-body-md font-bold text-primary">Nenhum aluno AEE encontrado</p>
+              <p class="text-body-sm text-on-surface-variant">Marque o aluno como atendido pelo AEE no cadastro de alunos para ele aparecer aqui.</p>
+            </div>`;
+          return;
+        }
+
+        const alunosMigradosHtml = alunosSemRegistro.map(aluno => {
+          const tipificidades = getAlunoTipificidades(aluno);
+          return `
+          <article class="border border-secondary-container rounded-xl p-md bg-secondary-container/10">
+            <div class="flex flex-col lg:flex-row lg:items-start justify-between gap-md">
+              <div class="space-y-xs">
+                <div class="flex flex-wrap items-center gap-sm">
+                  <span class="px-sm py-1 rounded-full bg-secondary-container text-on-secondary-container text-label-sm font-bold">Aluno AEE</span>
+                  ${(tipificidades.length ? tipificidades : ["Sem tipificidade informada"]).map(tipo => `<span class="px-sm py-1 rounded-full bg-white border border-surface-variant text-label-sm font-bold text-on-surface-variant">${escapeHtml(tipo)}</span>`).join("")}
+                </div>
+                <h3 class="text-body-lg font-bold text-primary">${escapeHtml(aluno.nome)}</h3>
+                <p class="text-body-sm text-on-surface-variant">${escapeHtml(aluno.turma || "Turma nao informada")} - Migrado do cadastro de alunos</p>
+              </div>
+              <button type="button" class="px-md py-sm rounded-xl bg-primary text-on-primary font-bold hover:opacity-90 transition-opacity" onclick="iniciarCadastroAeeAluno(${aluno.id})">
+                Cadastrar acompanhamento
+              </button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-sm mt-md">
+              <div class="bg-white border border-surface-variant rounded-xl p-sm">
+                <p class="text-label-sm font-bold text-on-surface-variant uppercase">Profissional</p>
+                <p class="text-body-sm text-on-surface mt-xs">${escapeHtml((aluno.aee || {}).profissional || "Nao informado")}</p>
+              </div>
+              <div class="bg-white border border-surface-variant rounded-xl p-sm">
+                <p class="text-label-sm font-bold text-on-surface-variant uppercase">Recursos/Apoios</p>
+                <p class="text-body-sm text-on-surface mt-xs">${escapeHtml((aluno.aee || {}).recursos || "Nao informado")}</p>
+              </div>
+              <div class="bg-white border border-surface-variant rounded-xl p-sm">
+                <p class="text-label-sm font-bold text-on-surface-variant uppercase">Observacoes</p>
+                <p class="text-body-sm text-on-surface mt-xs">${escapeHtml((aluno.aee || {}).observacoes || "Sem observacao inicial.")}</p>
+              </div>
+            </div>
+          </article>`;
+        }).join("");
+
+        const registrosHtml = registrosFiltrados.map(item => `
+          <article class="border border-surface-variant rounded-xl p-md bg-surface-container-low hover:bg-white transition-colors">
+            <div class="flex flex-col lg:flex-row lg:items-start justify-between gap-md">
+              <div class="space-y-xs">
+                <div class="flex flex-wrap items-center gap-sm">
+                  <span class="px-sm py-1 rounded-full bg-secondary-container text-on-secondary-container text-label-sm font-bold">${escapeHtml(item.documento)}</span>
+                  <span class="px-sm py-1 rounded-full bg-white border border-surface-variant text-label-sm font-bold text-on-surface-variant">${escapeHtml(item.tipificidade)}</span>
+                </div>
+                <h3 class="text-body-lg font-bold text-primary">${escapeHtml(item.alunoNome)}</h3>
+                <p class="text-body-sm text-on-surface-variant">${escapeHtml(item.alunoTurma || "Turma nao informada")} - ${new Date(item.data + "T00:00:00").toLocaleDateString("pt-BR")} - ${escapeHtml(item.responsavel)}</p>
+              </div>
+              <div class="flex gap-xs">
+                <button type="button" class="p-2 rounded-full hover:bg-secondary-container transition-colors" title="Editar" onclick="editarRegistroAee(${item.id})">
+                  <span class="material-symbols-outlined">edit</span>
+                </button>
+                <button type="button" class="p-2 rounded-full hover:bg-error-container text-error transition-colors" title="Excluir" onclick="excluirRegistroAee(${item.id})">
+                  <span class="material-symbols-outlined">delete</span>
+                </button>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-sm mt-md">
+              <div class="bg-white border border-surface-variant rounded-xl p-sm">
+                <p class="text-label-sm font-bold text-on-surface-variant uppercase">Objetivos</p>
+                <p class="text-body-sm text-on-surface mt-xs">${escapeHtml(item.objetivos)}</p>
+              </div>
+              <div class="bg-white border border-surface-variant rounded-xl p-sm">
+                <p class="text-label-sm font-bold text-on-surface-variant uppercase">Estrategias</p>
+                <p class="text-body-sm text-on-surface mt-xs">${escapeHtml(item.estrategias)}</p>
+              </div>
+              <div class="bg-white border border-surface-variant rounded-xl p-sm">
+                <p class="text-label-sm font-bold text-on-surface-variant uppercase">Avaliacao</p>
+                <p class="text-body-sm text-on-surface mt-xs">${escapeHtml(item.avaliacao || "Sem encaminhamento registrado.")}</p>
+              </div>
+            </div>
+          </article>
+        `).join("");
+
+        lista.innerHTML = alunosMigradosHtml + registrosHtml;
+      }
+
+      function render() {
+          renderStats();
+          renderLista();
+      }
+
+      tabs.forEach(tab => tab.addEventListener("click", () => setActiveDocumento(tab.dataset.doc)));
+      form.addEventListener("submit", submitForm);
+      document.getElementById("btn-add-tipificidade").addEventListener("click", addTipificidade);
+      document.getElementById("btn-aee-limpar").addEventListener("click", resetForm);
+      inputBusca.addEventListener("input", renderLista);
+
+      window.editarRegistroAee = editRegistro;
+      window.excluirRegistroAee = deleteRegistro;
+
+      carregarDados();
+    })();
+  </script>
+  <script>
+    (function() {
+      const STORAGE_TIPIFICIDADES = "sigaedu_aee_tipificidades";
+      const statusOptions = ["", "Sim", "Não", "Em Desenvolvimento", "Não Avaliado"];
+      const field = (id, label, type = "textarea", extra = {}) => ({ id, label, type, ...extra });
+      const matrix = (id, label, questions) => ({ id, label, type: "matrix", questions });
+      const schemas = {
+        "PEI": [
+          { title: "1. Identificação do estudante", fields: [
+            field("idade", "Idade", "text"), field("data_nascimento", "Data de nascimento", "date"),
+            field("ano_etapa", "Ano/Etapa", "text"), field("turma", "Turma", "text"),
+            field("ano_ingresso", "Ano de ingresso na escola", "text"), field("periodo_execucao", "Período de execução do plano", "text"),
+            field("atendido_aee", "Estudante atendido no AEE", "select", { options: ["Sim", "Não"] }),
+            field("outras_necessidades", "Outras necessidades educacionais específicas"),
+            field("local_aee", "Local do AEE", "select", { options: ["Sala de Recursos Multifuncionais", "Centro de Atendimento Educacional Especializado"] }),
+            field("qual_centro", "Centro de Atendimento Educacional Especializado - qual?", "text")
+          ]},
+          { title: "2. Indicadores para o Plano Educacional Individualizado", fields: [
+            field("problema_central", "Problema central"), field("causas", "Causas"), field("consequencias", "Consequências")
+          ]},
+          { title: "3. Relato do contexto familiar", fields: [
+            field("dados_responsaveis", "Dados dos responsáveis"), field("historico_vida", "Histórico de vida do estudante"),
+            field("expectativa_familiar", "Expectativa familiar (a curto, médio e longo prazo)")
+          ]},
+          { title: "4. Áreas de desenvolvimento", fields: [
+            field("percepcao", "Percepção"), field("atencao_concentracao", "Atenção / Concentração"), field("memoria", "Memória"),
+            field("linguagem", "Linguagem: oral / escrita / não verbal"), field("raciocinio", "Raciocínio lógico-matemático"),
+            field("psicomotores", "Aspectos psicomotores"), field("ava", "Atividade de Vida Autônoma - AVA"),
+            field("interpessoais", "Aspectos interpessoais, afetivos e sociais")
+          ]},
+          { title: "5. Ensino individualizado", fields: [
+            field("objetivos_aprendizagem", "A - Objetivos de aprendizagem/desenvolvimento (acadêmicos e socioemocionais)"),
+            field("avaliacao_aprendizagem", "B - Avaliação de aprendizagem (como o estudante será avaliado)"),
+            field("tipos_apoio", "C - Tipos de apoio"), field("projeto_vida", "D - Projeto de vida (quando estudante do Ensino Médio)")
+          ]}
+        ],
+        "PAEE": [
+          { title: "Identificação e composição do atendimento", fields: [
+            field("nome_escola", "Nome da escola", "text"), field("ano_ciclo", "Ano/Ciclo", "text"),
+            field("dias", "Dias do atendimento", "text"), field("horarios", "Horários", "text")
+          ]},
+          { title: "1. Período de execução do plano", fields: [field("periodo_execucao", "Período", "select", { options: ["Bimestral", "Trimestral", "Semestral"] })]},
+          { title: "2. Objetivos do plano (geral e específicos)", fields: [field("objetivos_plano", "Objetivos referentes às áreas do desenvolvimento e aprendizagem")]},
+          { title: "3. Atividades a serem desenvolvidas no AEE", fields: [field("atividades_aee", "Ações pedagógicas que serão desenvolvidas no AEE/SRM")]},
+          { title: "4. Articular as ações pedagógicas do AEE conforme a proposta pedagógica da escola", fields: [field("articulacao_pedagogica", "Programa ou proposta pedagógica e seus desdobramentos no AEE")]},
+          { title: "5. Seleção e adequações de materiais didáticos", fields: [field("materiais_didaticos", "Recursos didáticos e adequações conforme a necessidade específica")]},
+          { title: "6. Acompanhamento e avaliação dos resultados", fields: [field("acompanhamento_avaliacao", "Forma de acompanhamento e avaliação durante a aplicação do plano")]},
+          { title: "7. Resultados esperados diante dos objetivos do plano", fields: [field("resultados_esperados", "Resultados esperados no período de aplicação")]},
+          { title: "8. Reestruturação do plano", fields: [field("reestruturacao", "Resultados obtidos e aspectos que necessitam de reestruturação")]},
+          { title: "9. Ações complementares necessárias", fields: [field("acoes_complementares", "Parcerias, reuniões, formação continuada e estratégias no contexto escolar")]},
+          { title: "Acessibilidade curricular", fields: [
+            field("necessita_pei", "O estudante necessita de acessibilidade curricular (PEI)?", "select", { options: ["Sim", "Não"] }),
+            field("informacoes_complementares", "Informações complementares")
+          ]}
+        ],
+        "Estudo de Caso": [
+          { title: "1. Identificação do estudante", fields: [
+            field("data_nascimento", "Data de nascimento", "date"), field("idade", "Idade", "text"), field("responsavel_familiar", "Responsável", "text"),
+            field("telefone", "Telefone", "tel"), field("endereco", "Endereço", "text"), field("numero", "Nº", "text"), field("bairro", "Bairro", "text"),
+            field("complemento", "Complemento", "text"), field("cep", "CEP", "text"), field("cidade", "Cidade", "text"), field("estado", "Estado", "text")
+          ]},
+          { title: "2. Informações familiares", fields: [
+            field("genitor", "Genitor", "text"), field("genitor_profissao", "Profissão do genitor", "text"), field("genitor_telefone", "Telefone do genitor", "tel"), field("genitor_escolaridade", "Escolaridade do genitor", "text"),
+            field("genitora", "Genitora", "text"), field("genitora_profissao", "Profissão da genitora", "text"), field("genitora_telefone", "Telefone da genitora", "tel"), field("genitora_escolaridade", "Escolaridade da genitora", "text"),
+            field("outros_responsaveis", "Outros responsáveis"), field("parentesco", "Parentesco", "text"), field("endereco_residencial", "Endereço residencial", "text")
+          ]},
+          { title: "3. Escola atual (1ª matrícula - escolarização)", fields: [
+            field("escola_nome", "Nome da escola", "text"), field("escola_endereco", "Endereço", "text"), field("escola_telefone", "Telefone", "tel"), field("dre", "DRE", "text"),
+            field("diretor", "Diretor(a)", "text"), field("diretor_telefone", "Telefone do(a) diretor(a)", "tel"), field("ano_etapa", "Ano/Etapa", "text"), field("turma", "Turma", "text"),
+            field("turno", "Turno", "text"), field("quantidade_turma", "Quantidade de estudantes na turma", "number")
+          ]},
+          { title: "4. Unidade escolar atual (2ª matrícula - AEE)", fields: [
+            field("aee_unidade", "Nome da unidade", "text"), field("aee_telefone", "Telefone", "tel"), field("aee_endereco", "Endereço", "text"), field("ure_use", "URE/USE", "text"),
+            field("aee_bairro", "Bairro", "text"), field("aee_municipio", "Município", "text"), field("aee_ano_ingresso", "Ano de ingresso", "text"),
+            field("aee_idade_ingresso", "Idade no ingresso", "text"), field("aee_turma", "Turma", "text"), field("aee_turno", "Turno", "text"), field("aee_quantidade_turma", "Quantitativo da turma", "number")
+          ]},
+          { title: "5. Informação escolar (Histórico Escolar)", fields: [field("antecedentes_escolares", "Antecedentes relevantes - escolas de 1ª e 2ª matrícula")]},
+          { title: "6. Identificação das demandas iniciais para elegibilidade ao AEE", fields: [
+            field("necessidades_especificas", "6.1 Necessidade específica do estudante", "checks", { options: ["Deficiência Intelectual Leve", "Deficiência Intelectual Moderada", "Deficiência Intelectual Grave", "Deficiência Auditiva Leve", "Deficiência Auditiva Moderada", "Deficiência Auditiva Severa", "Deficiência Auditiva Profunda", "Surdez", "Deficiência Visual - Baixa Visão", "Deficiência Visual - Cegueira", "Surdocegueira", "Deficiência Física", "Deficiência Múltipla", "Transtorno do Espectro Autista - TEA", "Altas Habilidades ou Superdotação"] }),
+            field("necessidade_detalhes", "Especificação, uso de Libras e/ou nível de suporte"),
+            field("transtornos_aprendizagem", "6.2 Transtornos de aprendizagem", "checks", { options: ["Dislexia", "Discalculia", "Disgrafia", "TDAH", "TPAC", "TDA", "Outros"] }),
+            field("transtornos_detalhes", "Outros - especificar")
+          ]},
+          { title: "6.3 Área da saúde", fields: [
+            field("laudo_medico", "Possui laudo médico?", "select", { options: ["Sim", "Não"] }), field("cid", "CID do laudo", "text"),
+            field("processos_avaliativos", "Processos avaliativos na área médica para esclarecimento diagnóstico"),
+            field("problema_saude", "Possui problema de saúde?", "select", { options: ["Sim", "Não"] }), field("problema_saude_qual", "Qual problema de saúde e atenção necessária?"),
+            field("usa_medicacao", "Faz uso de medicação?", "select", { options: ["Sim", "Não"] }), field("medicacao", "Medicação e horários"),
+            field("restricao_alimentar", "Tem restrição alimentar?", "select", { options: ["Sim", "Não"] }), field("restricao_orientacao", "Orientação informada pela família")
+          ]},
+          { title: "7.1 Aspectos psicomotores", fields: [matrix("psicomotores", "Avaliação", ["Praxia global de acordo com a faixa etária", "Preensão regular do lápis ou caneta", "Dominância lateral", "Noção de direita e esquerda (lateralidade)", "Noção de esquema corporal", "Coordenação visomotora de acordo com a faixa etária"]), field("psicomotores_info", "Informações complementares")]},
+          { title: "7.2 Linguagem oral / comunicação", fields: [matrix("linguagem_oral", "Avaliação", ["Expressa-se através da fala", "Fala sem omissão ou trocas", "Articula as palavras adequadamente", "Discriminação fonemática adequada", "Vocabulário adequado para a faixa etária", "Compreensão de comandos", "Expressa pensamento de forma organizada", "Faz leitura", "Nomeia corretamente os objetos", "Interpreta textos", "Cria histórias", "Faz uso de sinais"]), field("linguagem_oral_info", "Informações complementares")]},
+          { title: "7.3 Linguagem escrita", fields: [matrix("linguagem_escrita", "Avaliação", ["Escrita de palavras e textos", "Distingue letras e números", "Produção textual espontânea", "Caligrafia compreensível", "Escrita espelhada", "Pontua e acentua conforme regras", "Trocas", "Inversões", "Omissões", "Aglutinações", "Repetições", "Substituições", "Acréscimos", "Organização sintática e semântica"]), field("linguagem_escrita_info", "Informações complementares")]},
+          { title: "7.4 Audição", fields: [matrix("audicao", "Avaliação", ["Escuta", "Compreende o que se fala", "Localiza fonte sonora no ambiente", "Costuma ouvir volumes baixos ou altos", "Existem sons que não agradam", "Existem sons que agradam"]), field("audicao_info", "Informações complementares")]},
+          { title: "7.5 Língua de sinais", fields: [matrix("libras", "Avaliação", ["Utiliza Libras para se comunicar", "Usa Libras fluentemente", "Associa Libras à Língua Portuguesa", "Utiliza a escrita da Língua Portuguesa"]), field("libras_info", "Informações complementares")]},
+          { title: "7.6 Visão", fields: [matrix("visao", "Avaliação", ["Realiza contato visual", "Percebe luminosidade/claro e escuro", "Percebe tamanho e cores", "Necessita fonte maior", "Aproxima recurso ao rosto", "Precisa de contraste de cor", "Lê somente com muita luminosidade", "Percebe figura-fundo"]), field("visao_info", "Informações complementares")]},
+          { title: "7.7 Tecnologia assistiva e comunicação alternativa", fields: [matrix("tecnologia_assistiva", "Avaliação", ["Expressa necessidades de forma não verbal", "Comunica-se com objetos concretos", "Utiliza pranchas de comunicação", "Utiliza computador nas atividades", "Utiliza outros recursos de tecnologia assistiva", "Utiliza óculos", "Utiliza código Braille", "Utiliza Reglete", "Utiliza Sorobã", "Utiliza Bengala", "Utiliza Lupa", "Utiliza material ampliado"]), field("tecnologia_info", "Informações complementares") ]},
+          { title: "7.8 Raciocínio lógico-matemático", fields: [matrix("raciocinio", "Avaliação", ["Reconhece números", "Faz contagem", "Faz cálculos simples sem material concreto", "Reconhece formas geométricas", "Organiza imagens conforme sequência dos fatos", "Correlaciona objetos de acordo com a função"]), field("raciocinio_info", "Informações complementares")]},
+          { title: "7.9 Atenção / concentração", fields: [matrix("atencao", "Avaliação", ["Mantém atenção durante atividades", "Distrai-se ou não finaliza atividades em grupo", "Necessita acompanhamento contínuo", "Permanece em sala durante as aulas"]), field("atencao_info", "Informações complementares")]},
+          { title: "7.10 Sociabilidade / afetividade", fields: [field("sociabilidade", "Comportamento com colegas e professores, afetividade, foco e possíveis reações agressivas")]},
+          { title: "7.11 Atividades de vida autônoma", fields: [matrix("vida_autonoma", "Avaliação", ["Alimenta-se, brinca, usa o banheiro e bebe água com autonomia", "Identifica situações de perigo"]), field("vida_autonoma_info", "Informações complementares")]},
+          { title: "7.12 Desenvolvimento cognitivo", fields: [matrix("desenvolvimento_cognitivo", "Avaliação", ["Habilidade acima da média", "Envolvimento com a tarefa", "Criatividade"]), field("cognitivo_info", "Informações suplementares")]},
+          { title: "7. Levantamento de demandas de apoios para o AEE", fields: [field("apoios_aee", "Apoios necessários", "checks", { options: ["Professor(a) de AEE (contraturno)", "Professor(a) Bilíngue", "Professor(a) de Língua Brasileira de Sinais - Libras", "Professor(a) de Língua Portuguesa para surdos", "Tradutor(a) Intérprete de Libras/Língua Portuguesa", "Guia-intérprete", "Braillista", "Acompanhante Especializado"] })]},
+          { title: "9. Estratégias e recursos de acessibilidade para eliminação das barreiras", fields: [
+            field("planos_recursos", "Necessidades", "checks", { options: ["Plano de AEE", "Plano Educacional Individualizado", "Recursos de acessibilidade para eliminação de barreiras", "Outros"] }),
+            field("objetivos_acessibilidade", "Objetivos")
+          ]},
+          { title: "10. Considerações finais", fields: [field("parecer_avaliativo", "Parecer avaliativo e encaminhamentos") ]}
+        ]
+      };
+
+      const form = document.getElementById("form-aee");
+      const tabs = document.querySelectorAll(".aee-tab");
+      const fieldsHost = document.getElementById("aee-documento-campos");
+      const inputDocumento = document.getElementById("aee-documento");
+      const inputRegistroId = document.getElementById("aee-registro-id");
+      const selectAluno = document.getElementById("aee-aluno");
+      const selectTipificidade = document.getElementById("aee-tipificidade");
+      const inputData = document.getElementById("aee-data");
+      const inputResponsavel = document.getElementById("aee-responsavel");
+      const inputNovaTipificidade = document.getElementById("aee-nova-tipificidade");
+      const inputBusca = document.getElementById("aee-busca");
+      const lista = document.getElementById("aee-lista");
+
+      const supabase = window.supabaseClient;
+      const selectedEscola = window.selectedEscola;
+
+      if (!supabase || !selectedEscola) {
+        console.error("Supabase ou escola ativa não inicializados.");
+      }
+
+      const escolaId = selectedEscola ? selectedEscola.id : null;
+
+      let alunos = [];
+      let dbRegistros = [];
+      let customTipificidades = [];
+
+      const load = (key, fallback = []) => { try { const value = JSON.parse(localStorage.getItem(key)); return Array.isArray(value) ? value : fallback; } catch (_) { return fallback; } };
+      const esc = value => String(value ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;");
+      
+      const alunosAee = () => alunos.filter(a => a.aee && a.aee.atendido === "Sim");
+      const alunoTipos = aluno => {
+        if (!aluno.aee) return [];
+        return [...(aluno.aee.especificidades || []), aluno.aee.outraEspecificidade].filter(Boolean);
+      };
+      const tiposPadrao = ["TEA - Transtorno do Espectro Autista", "Deficiência Intelectual", "Deficiência Física", "Deficiência Auditiva", "Deficiência Visual", "Deficiência Múltipla", "Altas Habilidades/Superdotação", "TDAH", "Dislexia", "Outro"];
+      const tipos = () => [...new Set([...tiposPadrao, ...customTipificidades, ...alunosAee().flatMap(alunoTipos)])].sort((a, b) => a.localeCompare(b, "pt-BR"));
+      const registros = () => dbRegistros;
+
+      async function carregarDados() {
+        if (!supabase || !escolaId) return;
+
+        try {
+          // 1. Carregar alunos
+          const { data: dbAlunos, error: errorAlunos } = await supabase
+            .from('alunos')
+            .select('*')
+            .eq('escola_id', escolaId);
+
+          if (errorAlunos) throw errorAlunos;
+          alunos = dbAlunos;
+
+          // 2. Carregar registros AEE
+          const { data: aeeDocs, error: errorAeeDocs } = await supabase
+            .from('aee_registros')
+            .select('*')
+            .eq('escola_id', escolaId)
+            .order('data', { ascending: false });
+
+          if (errorAeeDocs) throw errorAeeDocs;
+
+          // Join in memory to fetch student name and class
+          dbRegistros = aeeDocs.map(r => {
+            const studentObj = alunos.find(a => a.id === r.aluno_id);
+            return {
+              id: r.id,
+              alunoId: r.aluno_id,
+              alunoNome: studentObj ? studentObj.nome : 'Estudante Não Encontrado',
+              alunoTurma: studentObj ? studentObj.turma : 'Sem Turma',
+              documento: r.documento,
+              tipificidade: r.tipificidade,
+              data: r.data,
+              responsavel: r.responsavel,
+              campos: typeof r.campos === 'string' ? JSON.parse(r.campos) : (r.campos || {}),
+              atualizadoEm: r.created_at
+            };
+          });
+
+          // 3. Carregar tipificidades customizadas
+          customTipificidades = load(STORAGE_TIPIFICIDADES);
+
+          populate();
+          resetForm();
+          render();
+        } catch(err) {
+          console.error("Erro ao carregar dados AEE do Supabase:", err);
+        }
+      }
+
+      function controlHtml(item) {
+        const name = `campo-${item.id}`;
+        if (item.type === "select") return `<select class="aee-control" name="${name}"><option value="">Selecione</option>${item.options.map(o => `<option>${esc(o)}</option>`).join("")}</select>`;
+        if (item.type === "checks") return `<div class="grid grid-cols-1 sm:grid-cols-2 gap-xs">${item.options.map(o => `<label class="flex items-start gap-xs text-body-sm"><input type="checkbox" name="${name}" value="${esc(o)}" class="mt-1 rounded border-outline-variant"> <span>${esc(o)}</span></label>`).join("")}</div>`;
+        if (item.type === "matrix") return `<div class="space-y-xs">${item.questions.map((q, index) => `<div class="grid grid-cols-1 sm:grid-cols-[1fr_170px] gap-xs items-center"><span class="text-body-sm">${esc(q)}</span><select class="aee-control" name="${name}-${index}">${statusOptions.map(o => `<option>${esc(o)}</option>`).join("")}</select></div>`).join("")}</div>`;
+        if (item.type === "textarea") return `<textarea class="aee-control" name="${name}" rows="3"></textarea>`;
+        return `<input class="aee-control" name="${name}" type="${item.type || "text"}">`;
+      }
+
+      function renderSchema(documento, values = {}) {
+        fieldsHost.innerHTML = schemas[documento].map(section => `<section class="aee-section"><h3 class="aee-section-title">${esc(section.title)}</h3><div class="aee-section-body">${section.fields.map(item => `<div><label class="aee-field-label">${esc(item.label)}</label>${controlHtml(item)}</div>`).join("")}</div></section>`).join("");
+        schemas[documento].flatMap(s => s.fields).forEach(item => {
+          const value = values[item.id];
+          if (item.type === "checks") {
+            fieldsHost.querySelectorAll(`[name="campo-${item.id}"]`).forEach(el => el.checked = Array.isArray(value) && value.includes(el.value));
+          } else if (item.type === "matrix") {
+            item.questions.forEach((_, i) => { const el = fieldsHost.querySelector(`[name="campo-${item.id}-${i}"]`); if (el) el.value = value?.[i] || ""; });
+          } else {
+            const el = fieldsHost.querySelector(`[name="campo-${item.id}"]`); if (el) el.value = value ?? "";
+          }
+        });
+      }
+
+      function collectFields() {
+        const result = {};
+        schemas[inputDocumento.value].flatMap(s => s.fields).forEach(item => {
+          if (item.type === "checks") result[item.id] = [...fieldsHost.querySelectorAll(`[name="campo-${item.id}"]:checked`)].map(el => el.value);
+          else if (item.type === "matrix") result[item.id] = item.questions.map((_, i) => fieldsHost.querySelector(`[name="campo-${item.id}-${i}"]`)?.value || "");
+          else result[item.id] = fieldsHost.querySelector(`[name="campo-${item.id}"]`)?.value.trim() || "";
+        });
+        return result;
+      }
+
+      function setDocumento(documento, values = {}) {
+        inputDocumento.value = documento;
+        tabs.forEach(tab => {
+          const active = tab.dataset.doc === documento;
+          tab.classList.toggle("bg-secondary-container", active); tab.classList.toggle("text-on-secondary-container", active);
+          tab.classList.toggle("bg-surface-container-low", !active); tab.classList.toggle("text-on-surface-variant", !active);
+        });
+        renderSchema(documento, values);
+      }
+
+      function populate() {
+        const activeAlunos = alunosAee().sort((a, b) => String(a.nome).localeCompare(String(b.nome), "pt-BR"));
+        selectAluno.innerHTML = activeAlunos.length ? '<option value="">Selecione o aluno</option>' + activeAlunos.map(a => `<option value="${a.id}">${esc(a.nome)}${a.turma ? ` - ${esc(a.turma)}` : ""}</option>`).join("") : '<option value="">Nenhum aluno atendido pelo AEE</option>';
+        selectTipificidade.innerHTML = tipos().map(t => `<option value="${esc(t)}">${esc(t)}</option>`).join("");
+      }
+
+      function resetForm() {
+        const doc = inputDocumento.value || "PEI";
+        form.reset(); inputRegistroId.value = ""; inputData.value = new Date().toISOString().slice(0, 10); inputResponsavel.value = "Professor(a) AEE";
+        setDocumento(doc);
+      }
+
+      function prefillAluno() {
+        const aluno = alunosAee().find(a => String(a.id) === String(selectAluno.value));
+        if (!aluno) return;
+        const values = {};
+        const doc = inputDocumento.value;
+        if (doc === "PEI") Object.assign(values, { data_nascimento: aluno.dataNascimento || aluno.nascimento || "", ano_etapa: aluno.serie || aluno.ano || "", turma: aluno.turma || "", atendido_aee: "Sim", outras_necessidades: alunoTipos(aluno).join(", ") });
+        if (doc === "PAEE") Object.assign(values, { ano_ciclo: aluno.serie || aluno.ano || aluno.turma || "" });
+        if (doc === "Estudo de Caso") Object.assign(values, { data_nascimento: aluno.dataNascimento || aluno.nascimento || "", responsavel_familiar: aluno.responsavel || "", telefone: aluno.telefone || "", endereco: aluno.endereco || "", ano_etapa: aluno.serie || aluno.ano || "", turma: aluno.turma || "", necessidades_especificas: alunoTipos(aluno) });
+        renderSchema(doc, values);
+        const ts = alunoTipos(aluno); if (ts.length) selectTipificidade.value = ts[0];
+        inputResponsavel.value = (aluno.aee && aluno.aee.profissional) ? aluno.aee.profissional : inputResponsavel.value;
+      }
+
+      async function submit(event) {
+        event.preventDefault();
+        const aluno = alunosAee().find(a => String(a.id) === String(selectAluno.value));
+        if (!aluno) return alert("Selecione um aluno atendido pelo AEE.");
+
+        const recordId = inputRegistroId.value || null;
+        const payload = {
+          escola_id: escolaId,
+          aluno_id: aluno.id,
+          documento: inputDocumento.value,
+          tipificidade: selectTipificidade.value,
+          data: inputData.value,
+          responsavel: inputResponsavel.value.trim(),
+          campos: collectFields()
+        };
+
+        const submitBtn = form.querySelector("button[type='submit']");
+        const originalText = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = "Salvando...";
+
+        try {
+          if (recordId) {
+            const { error } = await supabase
+              .from('aee_registros')
+              .update(payload)
+              .eq('id', recordId);
+            if (error) throw error;
+          } else {
+            const { error } = await supabase
+              .from('aee_registros')
+              .insert(payload);
+            if (error) throw error;
+          }
+
+          alert("Documento AEE salvo com sucesso no Supabase!");
+          await carregarDados();
+        } catch(err) {
+          alert("Erro ao salvar documento AEE no Supabase: " + err.message);
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalText;
+        }
+      }
+
+      function valueHtml(item, value) {
+        if (item.type === "checks") return item.options.map(o => `${Array.isArray(value) && value.includes(o) ? "☒" : "☐"} ${esc(o)}`).join("<br>");
+        if (item.type === "matrix") return `<table>${item.questions.map((q, i) => `<tr><td>${esc(q)}</td><td class="status">${esc(value?.[i] || "Não informado")}</td></tr>`).join("")}</table>`;
+        return esc(value || "").replaceAll("\n", "<br>") || "&nbsp;";
+      }
+
+      function imprimir(id) {
+        const item = registros().find(r => String(r.id) === String(id)); if (!item) return;
+        const title = item.documento === "PEI" ? "PLANO EDUCACIONAL INDIVIDUALIZADO - PEI" : item.documento === "PAEE" ? "PLANO DE ATENDIMENTO EDUCACIONAL ESPECIALIZADO - PAEE" : "ESTUDO DE CASO";
+        const sections = schemas[item.documento].map(section => `<section><h2>${esc(section.title)}</h2>${section.fields.map(f => `<div class="row"><strong>${esc(f.label)}</strong><div>${valueHtml(f, item.campos?.[f.id])}</div></div>`).join("")}</section>`).join("");
+        const win = window.open("", "_blank");
+        win.document.write(`<!doctype html><html lang="pt-br"><head><meta charset="utf-8"><title>${esc(title)}</title><style>@page{size:A4;margin:14mm}*{box-sizing:border-box}body{font-family:Arial,sans-serif;color:#111;font-size:11px;margin:0}.header{text-align:center;margin-bottom:12px}.header p{margin:2px}.header h1{font-family:Georgia,serif;font-size:18px;margin:12px 0;background:#d6e7f5;border:1px solid #222;padding:8px}section{border:1px solid #333;margin:0 0 10px;break-inside:auto}h2{font-family:Georgia,serif;font-size:12px;text-transform:uppercase;background:#d6e7f5;margin:0;padding:6px;border-bottom:1px solid #333}.row{display:grid;grid-template-columns:34% 66%;border-bottom:1px solid #777;min-height:28px}.row:last-child{border-bottom:0}.row>strong,.row>div{padding:6px}.row>strong{border-right:1px solid #777}table{width:100%;border-collapse:collapse}td{border:1px solid #999;padding:4px}.status{width:130px}.meta{display:grid;grid-template-columns:1fr 1fr;border:1px solid #333;margin-bottom:10px}.meta div{padding:6px;border-bottom:1px solid #777}.signatures{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:45px;text-align:center}.line{border-top:1px solid #111;padding-top:5px}@media print{button{display:none}}</style></head><body><div class="header"><p>GOVERNO DO ESTADO DO PARÁ</p><p>SECRETARIA DE ESTADO DE EDUCAÇÃO</p><p>SECRETARIA ADJUNTA DE EDUCAÇÃO BÁSICA</p><p>DIRETORIA DE EDUCAÇÃO ESPECIAL INCLUSIVA</p><h1>${esc(title)}</h1></div><div class="meta"><div><strong>Estudante:</strong> ${esc(item.alunoNome)}</div><div><strong>Turma:</strong> ${esc(item.alunoTurma)}</div><div><strong>Tipificidade:</strong> ${esc(item.tipificidade)}</div><div><strong>Data:</strong> ${new Date(item.data + "T00:00:00").toLocaleDateString("pt-BR")}</div><div><strong>Professor(a)/responsável:</strong> ${esc(item.responsavel)}</div><div><strong>Atendimento AEE:</strong> Sim</div></div>${sections}<div class="signatures"><div class="line">Assinatura do(a) Professor(a) do AEE</div><div class="line">Assinatura da Equipe Pedagógica</div><div class="line">Assinatura do responsável pelo estudante</div><div class="line">Assinatura da Direção</div></div><script>window.onload=()=>window.print()<\/script></body></html>`);
+        win.document.close();
+      }
+
+      function edit(id) {
+        const item = registros().find(r => String(r.id) === String(id)); if (!item) return;
+        inputRegistroId.value = item.id; setDocumento(item.documento, item.campos || {}); selectAluno.value = item.alunoId; selectTipificidade.value = item.tipificidade; inputData.value = item.data; inputResponsavel.value = item.responsavel; window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      async function remove(id) { 
+        if (confirm("Deseja excluir este documento AEE?")) {
+          try {
+            const { error } = await supabase
+              .from('aee_registros')
+              .delete()
+              .eq('id', id);
+            if (error) throw error;
+            alert("Documento AEE excluído com sucesso!");
+            await carregarDados();
+          } catch(err) {
+            alert("Erro ao excluir do Supabase: " + err.message);
+          }
+        } 
+      }
+
+      function render() {
+        const students = alunosAee(); const items = registros().filter(r => students.some(a => String(a.id) === String(r.alunoId))); const term = inputBusca.value.trim().toLowerCase();
+        document.getElementById("stat-aee-alunos").textContent = students.length; document.getElementById("stat-aee-registros").textContent = items.length; document.getElementById("stat-aee-tipificidades").textContent = tipos().length;
+        const filteredStudents = students.filter(a => {
+          const studentDocs = items.filter(r => String(r.alunoId) === String(a.id));
+          return `${a.nome} ${a.turma || ""} ${alunoTipos(a).join(" ")} ${studentDocs.map(r => `${r.documento} ${r.tipificidade}`).join(" ")}`.toLowerCase().includes(term);
+        });
+        const requiredDocs = ["PEI", "PAEE", "Estudo de Caso"];
+        lista.innerHTML = filteredStudents.map(a => {
+          const studentDocs = items.filter(r => String(r.alunoId) === String(a.id));
+          const latestByType = Object.fromEntries(requiredDocs.map(doc => {
+            const matches = studentDocs.filter(r => r.documento === doc).sort((x, y) => String(y.atualizadoEm || "").localeCompare(String(x.atualizadoEm || "")));
+            return [doc, matches[0]];
+          }));
+          const completed = requiredDocs.filter(doc => latestByType[doc]).length;
+          return `<article class="border border-surface-variant rounded-xl p-md bg-surface-container-low">
+            <div class="flex flex-col md:flex-row md:items-start justify-between gap-md mb-md">
+              <div>
+                <div class="flex flex-wrap gap-xs items-center">
+                  <span class="px-sm py-1 rounded-full bg-secondary-container text-label-sm font-bold">Aluno AEE</span>
+                  <span class="px-sm py-1 rounded-full ${completed === 3 ? "bg-green-100 text-green-800" : "bg-white border border-surface-variant text-on-surface-variant"} text-label-sm font-bold">${completed}/3 documentos</span>
+                </div>
+                <h3 class="text-body-lg font-bold mt-xs">${esc(a.nome)}</h3>
+                <p class="text-body-sm text-on-surface-variant">${esc(a.turma || "Turma não informada")} - ${esc(alunoTipos(a).join(", ") || "Tipificidade não informada")}</p>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-sm">
+              ${requiredDocs.map(doc => {
+                const record = latestByType[doc];
+                return `<section class="bg-white border ${record ? "border-green-300" : "border-outline-variant"} rounded-lg p-sm">
+                  <div class="flex items-start justify-between gap-sm">
+                    <div>
+                      <p class="text-label-md font-bold">${esc(doc)}</p>
+                      <p class="text-label-sm ${record ? "text-green-700" : "text-error"} font-bold mt-xs">${record ? "Preenchido" : "Pendente"}</p>
+                    </div>
+                    <span class="material-symbols-outlined ${record ? "text-green-700" : "text-on-surface-variant"}">${record ? "task_alt" : "pending_actions"}</span>
+                  </div>
+                  ${record ? `<p class="text-label-sm text-on-surface-variant mt-sm">Atualizado em ${new Date(record.data + "T00:00:00").toLocaleDateString("pt-BR")}</p>` : `<p class="text-label-sm text-on-surface-variant mt-sm">Documento obrigatório para este aluno.</p>`}
+                  <div class="flex items-center gap-xs mt-sm">
+                    ${record ? `<button type="button" class="p-2 rounded-full hover:bg-secondary-container" title="Imprimir ${esc(doc)}" onclick="imprimirRegistroAee('${record.id}')"><span class="material-symbols-outlined">print</span></button><button type="button" class="p-2 rounded-full hover:bg-secondary-container" title="Editar ${esc(doc)}" onclick="editarRegistroAee('${record.id}')"><span class="material-symbols-outlined">edit</span></button><button type="button" class="p-2 rounded-full hover:bg-error-container text-error" title="Excluir ${esc(doc)}" onclick="excluirRegistroAee('${record.id}')"><span class="material-symbols-outlined">delete</span></button>` : `<button type="button" class="px-sm py-2 bg-primary text-white rounded-lg text-label-sm font-bold" onclick="iniciarCadastroAeeAluno('${a.id}', '${doc}')">Preencher ${esc(doc)}</button>`}
+                  </div>
+                </section>`;
+              }).join("")}
+            </div>
+          </article>`;
+        }).join("") || `<div class="border border-dashed border-outline-variant rounded-xl p-lg text-center"><p class="font-bold">Nenhum aluno AEE encontrado</p><p class="text-body-sm text-on-surface-variant">Somente alunos marcados como atendidos pelo AEE aparecem nesta sala.</p></div>`;
+      }
+
+      tabs.forEach(tab => tab.addEventListener("click", () => setDocumento(tab.dataset.doc)));
+      selectAluno.addEventListener("change", prefillAluno); form.addEventListener("submit", submit); inputBusca.addEventListener("input", render);
+      document.getElementById("btn-aee-limpar").addEventListener("click", resetForm);
+      document.getElementById("btn-add-tipificidade").addEventListener("click", () => { const value = inputNovaTipificidade.value.trim(); if (!value) return; const stored = load(STORAGE_TIPIFICIDADES); if (!stored.some(t => t.toLowerCase() === value.toLowerCase())) stored.push(value); localStorage.setItem(STORAGE_TIPIFICIDADES, JSON.stringify(stored)); inputNovaTipificidade.value = ""; customTipificidades = stored; populate(); selectTipificidade.value = value; render(); });
+      window.editarRegistroAee = edit; window.excluirRegistroAee = remove; window.imprimirRegistroAee = imprimir;
+      window.iniciarCadastroAeeAluno = (id, documento = "PEI") => { setDocumento(documento); resetForm(); selectAluno.value = id; prefillAluno(); window.scrollTo({ top: 0, behavior: "smooth" }); };
+
+      carregarDados();
+    })();
+  </script>
+</body>
+</html>

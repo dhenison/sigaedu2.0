@@ -130,6 +130,10 @@
         }
     </script>
 </head>
+<script src="clean-demo-data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="supabase-init.js"></script>
 <body class="bg-background text-on-surface font-body-md overflow-x-hidden">
 <!-- SideNavBar Componente Unificado -->
 <aside id="sidebar" class="fixed left-0 top-0 bottom-0 z-50 flex flex-col p-sm pt-xl overflow-y-auto w-64 bg-white/70 backdrop-blur-xl border-r border-surface-variant dark:border-outline-variant shadow-md transition-transform duration-300 -translate-x-full md:translate-x-0">
@@ -160,6 +164,10 @@
       <a id="menu-alunos" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="fichadoaluno.html">
         <span class="material-symbols-outlined" data-icon="person">person</span>
         <span class="text-label-md font-label-md">Alunos</span>
+      </a>
+      <a id="menu-sala-aee" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="sala_aee.html">
+        <span class="material-symbols-outlined" data-icon="psychology_alt">psychology_alt</span>
+        <span class="text-label-md font-label-md">Sala AEE</span>
       </a>
       <a id="menu-calendario" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="calendario.html">
         <span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
@@ -529,6 +537,7 @@
         'dashboard.html': 'menu-dashboard',
         'turmas.html': 'menu-turmas',
         'fichadoaluno.html': 'menu-alunos',
+        'sala_aee.html': 'menu-sala-aee',
         'calendario.html': 'menu-calendario',
         'agenda.html': 'menu-agenda',
         'frequencia.html': 'menu-frequencia',
@@ -645,10 +654,22 @@
     (function() {
       // Estado Geral
       let occurrences = [];
+      let turmas = [];
+      let alunos = [];
       let selectedInvolvedStudents = [];
       let activeOccurrenceForTreatment = null;
       let uploadedSignedDoc = null;
       let uploadedEvidenceImage = null; // Nova variável para imagem de evidência
+
+      const supabase = window.supabaseClient;
+      const selectedEscola = window.selectedEscola;
+
+      if (!supabase || !selectedEscola) {
+        console.error("Supabase ou escola ativa não inicializados.");
+        return;
+      }
+      
+      const escolaId = selectedEscola.id;
 
       // Elementos do DOM
       const occurrencesTableBody = document.getElementById("occurrences-table-body");
@@ -660,13 +681,55 @@
       const statsIncidencia = document.getElementById("stats-incidencia");
       const statsIncidenciaSub = document.getElementById("stats-incidencia-sub");
 
-      // Inicialização do Banco Local de Ocorrências
-      function loadOccurrencesDb() {
-        occurrences = JSON.parse(localStorage.getItem('sigaedu_ocorrencias')) || [];
-      }
-      
-      function saveOccurrencesDb() {
-        localStorage.setItem('sigaedu_ocorrencias', JSON.stringify(occurrences));
+      // Busca dados do Supabase
+      async function carregarDados() {
+        try {
+          // 1. Busca turmas
+          const { data: dbTurmas, error: errorTurmas } = await supabase
+            .from('turmas')
+            .select('*')
+            .eq('escola_id', escolaId);
+
+          if (errorTurmas) throw errorTurmas;
+          turmas = dbTurmas;
+
+          // 2. Busca alunos
+          const { data: dbAlunos, error: errorAlunos } = await supabase
+            .from('alunos')
+            .select('*')
+            .eq('escola_id', escolaId);
+
+          if (errorAlunos) throw errorAlunos;
+          alunos = dbAlunos;
+
+          // 3. Busca ocorrências
+          const { data: dbOccurrences, error: errorOccurrences } = await supabase
+            .from('ocorrencias')
+            .select('*')
+            .eq('escola_id', escolaId)
+            .order('data', { ascending: false });
+
+          if (errorOccurrences) throw errorOccurrences;
+
+          // Associa detalhes das turmas e alunos em memória
+          occurrences = dbOccurrences.map(oco => {
+            const student = alunos.find(a => a.id === oco.aluno_id);
+            const turma = turmas.find(t => t.id === oco.turma_id);
+            
+            return {
+              ...oco,
+              studentName: student ? student.nome : 'Estudante Removido',
+              studentCpf: student ? student.cpf : '',
+              studentAvatar: student ? student.avatar : '',
+              turmaNome: turma ? turma.nome : 'Sem Turma'
+            };
+          });
+
+          renderOccurrencesTable();
+          renderOccurrenceStats();
+        } catch(err) {
+          console.error("Erro ao carregar ocorrências/turmas/alunos do Supabase:", err);
+        }
       }
 
       // Preencher turmas com base no Turno
@@ -675,8 +738,7 @@
         const turnoSelect = document.getElementById("new-oco-turno");
         const selectedTurno = turnoSelect.value;
         
-        const turmasDb = JSON.parse(localStorage.getItem('sigaedu_turmas')) || [];
-        const filtered = turmasDb.filter(t => t.turno.toLowerCase() === selectedTurno.toLowerCase());
+        const filtered = turmas.filter(t => t.turno.toLowerCase() === selectedTurno.toLowerCase());
         
         turmaSelect.innerHTML = "";
         if (filtered.length === 0) {
@@ -687,7 +749,7 @@
         } else {
           filtered.forEach(t => {
             const opt = document.createElement("option");
-            opt.value = t.nome;
+            opt.value = t.id; // UUID da turma
             opt.textContent = t.nome;
             turmaSelect.appendChild(opt);
           });
@@ -699,8 +761,7 @@
 
       // Controlar habilitação e renderização da lista de alunos daquela turma (Filtro Direto)
       window.filterStudentsForOccurrence = function() {
-        const selectedTurno = document.getElementById("new-oco-turno").value;
-        const selectedTurma = document.getElementById("new-oco-turma").value;
+        const selectedTurmaId = document.getElementById("new-oco-turma").value;
         const selectorPanel = document.getElementById("new-oco-student-selector-panel");
         const listContainer = document.getElementById("new-oco-students-list-container");
         
@@ -709,14 +770,10 @@
         renderInvolvedTags();
         document.getElementById("new-oco-student-filter-input").value = "";
         
-        if (selectedTurma && selectedTurma !== "Nenhuma turma disponível" && selectedTurma !== "") {
+        if (selectedTurmaId && selectedTurmaId !== "Nenhuma turma disponível" && selectedTurmaId !== "") {
           selectorPanel.classList.remove("hidden");
           
-          const alunosDb = JSON.parse(localStorage.getItem('sigaedu_alunos')) || [];
-          const classStudents = alunosDb.filter(a => 
-            a.turno.toLowerCase() === selectedTurno.toLowerCase() &&
-            a.turma.toLowerCase() === selectedTurma.toLowerCase()
-          );
+          const classStudents = alunos.filter(a => a.turma_id === selectedTurmaId);
           
           if (classStudents.length === 0) {
             listContainer.innerHTML = `<div class="col-span-2 p-4 text-center text-body-sm text-on-surface-variant italic bg-white rounded-xl">Nenhum aluno cadastrado nesta turma</div>`;
@@ -742,7 +799,7 @@
           return `
             <div onclick="toggleInvolvedStudent('${a.cpf}', '${a.nome}')" id="sel-student-${a.cpf}" class="p-2 border rounded-xl flex items-center justify-between cursor-pointer transition-all duration-200 gap-sm ${activeClass}">
               <div class="flex items-center gap-sm min-w-0">
-                <img src="${a.avatar}" class="w-8 h-8 rounded-full object-cover border border-outline-variant shrink-0 bg-white"/>
+                <img src="${a.avatar || 'https://lh3.googleusercontent.com/aida-public/AB6AXuDRGSGbqGOo2dzNp40hZk4pp_0rVieA-Su6u1WdWdVVqvGIA6n7dJMIDQVg3vkTYKgYN5HRKv7SOzuV4CGLSmB4xKZHKFpq-2ab9UNYf9ye3MByCMdx_JIehrQjusuLvStYhxK5Qj2eZHDffXBfYxzFUFDsX7kk7oInOP0foJp972O4lAIpD8pOJMQ4ehoA3BKsZHDj0gIh6Fx7Dr-Uvdu89v6j1O2f_mCuy7lSXEnJdzNLXbaD9C36QemEJIA6ok8BwdRRm8oVmvA'}" class="w-8 h-8 rounded-full object-cover border border-outline-variant shrink-0 bg-white"/>
                 <span class="text-[13px] font-bold truncate ${activeTextClass}">${a.nome}</span>
               </div>
               <span class="material-symbols-outlined text-[18px] shrink-0">${checkIcon}</span>
@@ -754,14 +811,11 @@
       // Filtrar a lista reativamente pelo input de busca de nomes
       window.filterClassStudentsList = function() {
         const filterVal = document.getElementById("new-oco-student-filter-input").value.trim().toLowerCase();
-        const selectedTurno = document.getElementById("new-oco-turno").value;
-        const selectedTurma = document.getElementById("new-oco-turma").value;
+        const selectedTurmaId = document.getElementById("new-oco-turma").value;
         const listContainer = document.getElementById("new-oco-students-list-container");
         
-        const alunosDb = JSON.parse(localStorage.getItem('sigaedu_alunos')) || [];
-        const filtered = alunosDb.filter(a => 
-          a.turno.toLowerCase() === selectedTurno.toLowerCase() &&
-          a.turma.toLowerCase() === selectedTurma.toLowerCase() &&
+        const filtered = alunos.filter(a => 
+          a.turma_id === selectedTurmaId &&
           a.nome.toLowerCase().includes(filterVal)
         );
         
@@ -782,14 +836,11 @@
         }
         
         // Re-renderizar marcas visuais no seletor
-        const selectedTurno = document.getElementById("new-oco-turno").value;
-        const selectedTurma = document.getElementById("new-oco-turma").value;
+        const selectedTurmaId = document.getElementById("new-oco-turma").value;
         const filterVal = document.getElementById("new-oco-student-filter-input").value.trim().toLowerCase();
         
-        const alunosDb = JSON.parse(localStorage.getItem('sigaedu_alunos')) || [];
-        const currentList = alunosDb.filter(a => 
-          a.turno.toLowerCase() === selectedTurno.toLowerCase() &&
-          a.turma.toLowerCase() === selectedTurma.toLowerCase() &&
+        const currentList = alunos.filter(a => 
+          a.turma_id === selectedTurmaId &&
           a.nome.toLowerCase().includes(filterVal)
         );
         
@@ -802,14 +853,11 @@
         selectedInvolvedStudents = selectedInvolvedStudents.filter(s => s.cpf !== cpf);
         
         // Re-renderiza a listagem mantendo o estado
-        const selectedTurno = document.getElementById("new-oco-turno").value;
-        const selectedTurma = document.getElementById("new-oco-turma").value;
+        const selectedTurmaId = document.getElementById("new-oco-turma").value;
         const filterVal = document.getElementById("new-oco-student-filter-input").value.trim().toLowerCase();
         
-        const alunosDb = JSON.parse(localStorage.getItem('sigaedu_alunos')) || [];
-        const currentList = alunosDb.filter(a => 
-          a.turno.toLowerCase() === selectedTurno.toLowerCase() &&
-          a.turma.toLowerCase() === selectedTurma.toLowerCase() &&
+        const currentList = alunos.filter(a => 
+          a.turma_id === selectedTurmaId &&
           a.nome.toLowerCase().includes(filterVal)
         );
         
@@ -868,12 +916,11 @@
       };
 
       // Salvar registro de nova ocorrência
-      window.saveNewOccurrence = function(event) {
+      window.saveNewOccurrence = async function(event) {
         event.preventDefault();
         
         const tipo = document.getElementById("new-oco-tipo").value;
-        const turno = document.getElementById("new-oco-turno").value;
-        const turma = document.getElementById("new-oco-turma").value;
+        const turmaId = document.getElementById("new-oco-turma").value;
         const dataOcorrencia = document.getElementById("new-oco-data").value;
         const relato = document.getElementById("new-oco-relato").value;
         
@@ -881,60 +928,49 @@
           alert("Por favor, selecione pelo menos um aluno envolvido nesta ocorrência.");
           return;
         }
-        
-        const newOco = {
-          id: "oco_" + Date.now(),
-          tipo: tipo,
-          turno: turno,
-          turma: turma,
-          alunosEnvolvidos: selectedInvolvedStudents,
-          dataOcorrencia: dataOcorrencia,
-          dataRegistro: new Date().toISOString().split('T')[0],
-          relato: relato,
-          autor: "Dhenison Carlos", // Usuário logado
-          status: "Pendente",
-          resposta: "",
-          arquivoAssinado: null,
-          evidencia: uploadedEvidenceImage // Salva a foto/anexo
-        };
-        
-        // 1. Salvar na lista de ocorrências
-        occurrences.unshift(newOco);
-        saveOccurrencesDb();
-        
-        // 2. Propagar para a ficha individual do Aluno (sigaedu_alunos)
-        const alunosDb = JSON.parse(localStorage.getItem('sigaedu_alunos')) || [];
-        const formattedDate = dataOcorrencia.split("-").reverse().join("/");
-        
-        selectedInvolvedStudents.forEach(env => {
-          const student = alunosDb.find(a => a.cpf === env.cpf);
-          if (student) {
-            if (!student.ocorrencias) {
-              student.ocorrencias = [];
-            }
-            student.ocorrencias.unshift({
-              id: newOco.id,
-              titulo: newOco.tipo,
-              data: formattedDate,
-              desc: relato,
-              tipo: "Pendente"
-            });
-          }
+
+        const ocoInsertions = selectedInvolvedStudents.map(student => {
+          const studentObj = alunos.find(a => a.cpf === student.cpf);
+          return {
+            escola_id: escolaId,
+            aluno_id: studentObj.id,
+            turma_id: turmaId,
+            data: dataOcorrencia,
+            tipo: tipo,
+            descricao: relato,
+            responsavel: 'Dhenison Carlos', // Usuário Master
+            status: 'Pendente'
+          };
         });
-        localStorage.setItem('sigaedu_alunos', JSON.stringify(alunosDb));
-        
-        // Reset formulário e evidência
-        document.getElementById("form-new-occurrence").reset();
-        selectedInvolvedStudents = [];
-        renderInvolvedTags();
-        clearNewOcoImage();
-        toggleModal("modal-new-occurrence");
-        
-        // Atualizar listagem e métricas
-        renderOccurrencesTable();
-        renderOccurrenceStats();
-        
-        alert("Ocorrência criada com sucesso e vinculada diretamente à ficha individual de cada estudante envolvido!");
+
+        const submitBtn = document.querySelector("#form-new-occurrence button[type='submit']");
+        const originalText = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = "Gravando...";
+
+        try {
+          const { error } = await supabase
+            .from('ocorrencias')
+            .insert(ocoInsertions);
+
+          if (error) throw error;
+
+          alert("Ocorrência(s) registrada(s) com sucesso no Supabase!");
+          
+          // Reset formulário e estado local
+          document.getElementById("form-new-occurrence").reset();
+          selectedInvolvedStudents = [];
+          renderInvolvedTags();
+          clearNewOcoImage();
+          toggleModal("modal-new-occurrence");
+
+          await carregarDados();
+        } catch(err) {
+          alert("Erro ao salvar ocorrência no Supabase: " + err.message);
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalText;
+        }
       };
 
       // Tratar Ocorrência (Solicitação sob Confirmação de Senha)
@@ -957,22 +993,15 @@
         activeOccurrenceForTreatment = oco;
         uploadedSignedDoc = oco.arquivoAssinado || null;
         
-        document.getElementById("handle-oco-resumo-titulo").textContent = `${oco.tipo} - ${oco.turma} (${oco.turno})`;
-        document.getElementById("handle-oco-data").textContent = oco.dataOcorrencia.split("-").reverse().join("/");
-        document.getElementById("handle-oco-autor").textContent = oco.autor;
-        document.getElementById("handle-oco-alunos").innerHTML = oco.alunosEnvolvidos.map(a => `<a href="fichadoaluno.html?cpf=${a.cpf}" class="hover:underline hover:text-primary transition-all text-primary font-bold" title="Ver ficha individual de ${a.nome}">${a.nome}</a>`).join(", ");
-        document.getElementById("handle-oco-relato").textContent = oco.relato;
-        document.getElementById("handle-oco-resposta").value = oco.resposta || "";
+        document.getElementById("handle-oco-resumo-titulo").textContent = `${oco.tipo} - ${oco.turmaNome}`;
+        document.getElementById("handle-oco-data").textContent = oco.data.split("-").reverse().join("/");
+        document.getElementById("handle-oco-autor").textContent = oco.responsavel;
+        document.getElementById("handle-oco-alunos").innerHTML = `<a href="fichadoaluno.html?id=${oco.aluno_id}" class="hover:underline hover:text-primary transition-all text-primary font-bold" title="Ver ficha individual de ${oco.studentName}">${oco.studentName}</a>`;
+        document.getElementById("handle-oco-relato").textContent = oco.descricao;
+        document.getElementById("handle-oco-resposta").value = oco.providencias || "";
         
-        // Exibir evidência se houver
-        const evidenceContainer = document.getElementById("handle-oco-evidencia-container");
-        if (oco.evidencia && oco.evidencia.data) {
-          document.getElementById("handle-oco-evidencia-img").src = oco.evidencia.data;
-          document.getElementById("handle-oco-evidencia-link").href = oco.evidencia.data;
-          evidenceContainer.classList.remove("hidden");
-        } else {
-          evidenceContainer.classList.add("hidden");
-        }
+        // Exibir evidência (ocultado para a demo web)
+        document.getElementById("handle-oco-evidencia-container").classList.add("hidden");
         
         // Reset Dropzone UI
         const icon = document.getElementById("signed-doc-icon");
@@ -1001,23 +1030,8 @@
         if (!activeOccurrenceForTreatment) return;
         const oco = activeOccurrenceForTreatment;
         const printWindow = window.open("", "_blank");
-        const formattedDate = oco.dataOcorrencia.split("-").reverse().join("/");
-        const formattedRegDate = oco.dataRegistro.split("-").reverse().join("/");
-        
-        const alunosStr = oco.alunosEnvolvidos.map(a => `${a.nome} (CPF: ${a.cpf})`).join(", ");
-        
-        // Se houver evidência anexada, renderiza no documento de impressão
-        let evidenceHtmlMarkup = "";
-        if (oco.evidencia && oco.evidencia.data) {
-          evidenceHtmlMarkup = `
-            <div class="section">
-              <div class="section-title">Anexo / Evidência da Ocorrência</div>
-              <div class="description-box" style="text-align: center; min-height: auto; padding: 15px 0;">
-                <img src="${oco.evidencia.data}" style="max-width: 450px; max-height: 250px; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0,0,0,0.05);"/>
-              </div>
-            </div>
-          `;
-        }
+        const formattedDate = oco.data.split("-").reverse().join("/");
+        const formattedRegDate = new Date(oco.created_at).toLocaleDateString('pt-BR');
         
         const html = `
           <!DOCTYPE html>
@@ -1026,7 +1040,7 @@
             <title>Termo de Ocorrência Disciplinar - SIGAEDU</title>
             <style>
               body {
-                font-family: 'Helvetica Neue', Arial, sans-serif;
+                font-family: Arial, sans-serif;
                 color: #333;
                 margin: 40px;
                 line-height: 1.6;
@@ -1039,34 +1053,22 @@
               }
               .logo {
                 font-size: 26px;
-                font-weight: 900;
-                letter-spacing: -1px;
-                color: #000;
-              }
-              .sub-logo {
-                font-size: 13px;
-                color: #555;
-                text-transform: uppercase;
-                margin-top: 5px;
+                font-weight: bold;
               }
               .title {
-                font-size: 18px;
+                font-size: 16px;
                 font-weight: bold;
-                text-transform: uppercase;
-                margin-top: 15px;
                 text-align: center;
                 background: #f4f4f4;
                 padding: 10px;
+                margin-top: 15px;
                 border: 1px solid #ccc;
-                letter-spacing: 0.5px;
               }
               .section {
                 margin-bottom: 25px;
               }
               .section-title {
                 font-weight: bold;
-                font-size: 13px;
-                text-transform: uppercase;
                 border-bottom: 2px solid #ddd;
                 padding-bottom: 4px;
                 margin-bottom: 10px;
@@ -1075,21 +1077,12 @@
                 display: grid;
                 grid-template-columns: 1fr 1fr;
                 gap: 15px;
-                margin-bottom: 15px;
-              }
-              .field {
-                font-size: 13.5px;
-              }
-              .field strong {
-                color: #000;
               }
               .description-box {
                 border: 1px solid #ddd;
                 padding: 15px;
-                border-radius: 5px;
                 background: #fafafa;
-                min-height: 100px;
-                font-size: 13.5px;
+                min-height: 80px;
               }
               .signatures {
                 margin-top: 60px;
@@ -1104,24 +1097,12 @@
                 padding-top: 5px;
                 font-size: 12px;
               }
-              .footer {
-                margin-top: 70px;
-                text-align: center;
-                font-size: 10px;
-                color: #888;
-                border-top: 1px solid #eee;
-                padding-top: 10px;
-              }
-              @media print {
-                body { margin: 15px; }
-                button { display: none; }
-              }
             </style>
           </head>
           <body>
             <div class="header">
               <div class="logo">SIGAEDU</div>
-              <div class="sub-logo">Sistema Integrado de Gestão Acadêmica Escolar</div>
+              <div>Sistema Integrado de Gestão Acadêmica Escolar</div>
             </div>
             
             <div class="title">TERMO DE REGISTRO DE OCORRÊNCIA DISCIPLINAR</div>
@@ -1129,49 +1110,33 @@
             <div class="section" style="margin-top: 25px;">
               <div class="section-title">Dados Gerais</div>
               <div class="grid">
-                <div class="field"><strong>Protocolo:</strong> #${oco.id.replace("oco_", "")}</div>
-                <div class="field"><strong>Tipo da Ocorrência:</strong> ${oco.tipo}</div>
-                <div class="field"><strong>Data da Ocorrência:</strong> ${formattedDate}</div>
-                <div class="field"><strong>Data do Registro:</strong> ${formattedRegDate}</div>
-                <div class="field"><strong>Turma / Turno:</strong> ${oco.turma} (${oco.turno})</div>
-                <div class="field"><strong>Autor do Registro:</strong> ${oco.autor}</div>
+                <div><strong>Protocolo:</strong> #${oco.id.slice(0, 8)}</div>
+                <div><strong>Tipo da Ocorrência:</strong> ${oco.tipo}</div>
+                <div><strong>Data da Ocorrência:</strong> ${formattedDate}</div>
+                <div><strong>Data do Registro:</strong> ${formattedRegDate}</div>
+                <div><strong>Turma:</strong> ${oco.turmaNome}</div>
+                <div><strong>Autor do Registro:</strong> ${oco.responsavel}</div>
               </div>
             </div>
             
             <div class="section">
-              <div class="section-title">Alunos Envolvidos</div>
-              <div class="field">
-                <strong>Estudantes:</strong> ${alunosStr}
-              </div>
+              <div class="section-title">Aluno Envolvido</div>
+              <div><strong>Estudante:</strong> ${oco.studentName} (CPF: ${oco.studentCpf})</div>
             </div>
             
             <div class="section">
               <div class="section-title">Relato dos Fatos</div>
-              <div class="description-box">
-                ${oco.relato}
-              </div>
+              <div class="description-box">${oco.descricao}</div>
             </div>
-            
-            ${evidenceHtmlMarkup}
             
             <div class="section">
               <div class="section-title">Medidas Aplicadas e Acompanhamento</div>
-              <div class="description-box" style="min-height: 80px;">
-                ${oco.resposta || "Aguardando definição ou tratamento formal."}
-              </div>
+              <div class="description-box">${oco.providencias || "Aguardando definição ou tratamento formal."}</div>
             </div>
             
             <div class="signatures">
-              <div>
-                <div class="sig-line">Assinatura do Autor / Servidor Responsável</div>
-              </div>
-              <div>
-                <div class="sig-line">Assinatura do(a) Aluno(a) / Responsável</div>
-              </div>
-            </div>
-            
-            <div class="footer">
-              Documento emitido eletronicamente pelo SIGAEDU em ${new Date().toLocaleDateString('pt-BR')} às ${new Date().toLocaleTimeString('pt-BR')}.
+              <div><div class="sig-line">Assinatura do Autor / Servidor Responsável</div></div>
+              <div><div class="sig-line">Assinatura do(a) Aluno(a) / Responsável</div></div>
             </div>
             
             <script>
@@ -1215,7 +1180,7 @@
       };
 
       // Salvar Tratamento de Ocorrência
-      window.finalizarTratamentoOcorrencia = function() {
+      window.finalizarTratamentoOcorrencia = async function() {
         if (!activeOccurrenceForTreatment) return;
         
         const ocoId = activeOccurrenceForTreatment.id;
@@ -1225,37 +1190,27 @@
           alert("Por favor, relate as medidas aplicadas e o tratamento tomado.");
           return;
         }
-        
-        // 1. Atualizar no banco de ocorrências
-        const oco = occurrences.find(o => o.id === ocoId);
-        if (oco) {
-          oco.resposta = resposta;
-          oco.status = "Tratada";
-          oco.arquivoAssinado = uploadedSignedDoc;
+
+        try {
+          const { error } = await supabase
+            .from('ocorrencias')
+            .update({
+              status: 'Tratada',
+              providencias: resposta
+            })
+            .eq('id', ocoId);
+
+          if (error) throw error;
+
+          alert("Ocorrência tratada, homologada e arquivada com sucesso!");
+          toggleModal("modal-handle-occurrence");
+          activeOccurrenceForTreatment = null;
+          uploadedSignedDoc = null;
+
+          await carregarDados();
+        } catch(err) {
+          alert("Erro ao salvar tratamento no Supabase: " + err.message);
         }
-        saveOccurrencesDb();
-        
-        // 2. Propagar para a Ficha individual do aluno
-        const alunosDb = JSON.parse(localStorage.getItem('sigaedu_alunos')) || [];
-        alunosDb.forEach(student => {
-          if (student.ocorrencias) {
-            const stOco = student.ocorrencias.find(o => o.id === ocoId);
-            if (stOco) {
-              stOco.tipo = "Concluído"; // muda badge para verde na ficha
-              stOco.desc = `${stOco.desc} | Acompanhamento: ${resposta} (Termo assinado anexado)`;
-            }
-          }
-        });
-        localStorage.setItem('sigaedu_alunos', JSON.stringify(alunosDb));
-        
-        toggleModal("modal-handle-occurrence");
-        activeOccurrenceForTreatment = null;
-        uploadedSignedDoc = null;
-        
-        renderOccurrencesTable();
-        renderOccurrenceStats();
-        
-        alert("Ocorrência tratada, homologada e arquivada com sucesso!");
       };
 
       // Exclusão de Ocorrência
@@ -1264,8 +1219,8 @@
         if (!oco) return;
         
         // Regra de Negócio: Excluir somente quem criou (Dhenison Carlos) ou o admin geral sob confirmação de senha
-        if (oco.autor === "Dhenison Carlos") {
-          if (confirm(`Tem certeza que deseja excluir permanentemente o registro de ocorrência de ${oco.alunosEnvolvidos.map(a => a.nome).join(', ')}?`)) {
+        if (oco.responsavel === "Dhenison Carlos" || oco.responsavel === "Sistema (SIGAEDU)") {
+          if (confirm(`Tem certeza que deseja excluir permanentemente o registro de ocorrência de ${oco.studentName}?`)) {
             excluirOcorrencia(ocoId);
           }
         } else {
@@ -1282,24 +1237,20 @@
         }
       };
 
-      function excluirOcorrencia(ocoId) {
-        // 1. Remover do banco local de ocorrências
-        occurrences = occurrences.filter(o => o.id !== ocoId);
-        saveOccurrencesDb();
-        
-        // 2. Remover das fichas individuais de alunos
-        const alunosDb = JSON.parse(localStorage.getItem('sigaedu_alunos')) || [];
-        alunosDb.forEach(student => {
-          if (student.ocorrencias) {
-            student.ocorrencias = student.ocorrencias.filter(o => o.id !== ocoId);
-          }
-        });
-        localStorage.setItem('sigaedu_alunos', JSON.stringify(alunosDb));
-        
-        renderOccurrencesTable();
-        renderOccurrenceStats();
-        
-        alert("Ocorrência removida permanentemente do histórico e das fichas individuais de alunos.");
+      async function excluirOcorrencia(ocoId) {
+        try {
+          const { error } = await supabase
+            .from('ocorrencias')
+            .delete()
+            .eq('id', ocoId);
+
+          if (error) throw error;
+
+          alert("Ocorrência removida permanentemente do Supabase.");
+          await carregarDados();
+        } catch(err) {
+          alert("Erro ao excluir ocorrência no Supabase: " + err.message);
+        }
       }
 
       // Renderizar Ocorrências na Tabela
@@ -1308,8 +1259,8 @@
         
         const filtradas = occurrences.filter(o => {
           const matchesQuery = o.tipo.toLowerCase().includes(query) || 
-                               o.relato.toLowerCase().includes(query) ||
-                               o.alunosEnvolvidos.some(a => a.nome.toLowerCase().includes(query));
+                               o.descricao.toLowerCase().includes(query) ||
+                               o.studentName.toLowerCase().includes(query);
           return matchesQuery;
         });
         
@@ -1326,28 +1277,25 @@
         }
         
         filtradas.forEach(o => {
-          const formattedDate = o.dataOcorrencia.split("-").reverse().join("/");
+          const formattedDate = o.data.split("-").reverse().join("/");
           const statusClass = o.status === "Pendente" 
             ? "text-error font-bold" 
             : "text-emerald-600 font-bold";
           const dotClass = o.status === "Pendente" ? "bg-error animate-pulse" : "bg-emerald-600";
           
-          const names = o.alunosEnvolvidos.map(a => a.nome).join(", ");
-          const displayLinks = o.alunosEnvolvidos.map(a => 
-            `<a href="fichadoaluno.html?cpf=${a.cpf}" class="hover:underline hover:text-primary transition-all text-primary" title="Ver ficha individual de ${a.nome}">${a.nome}</a>`
-          ).join(", ");
+          const displayLinks = `<a href="fichadoaluno.html?id=${o.aluno_id}" class="hover:underline hover:text-primary transition-all text-primary font-bold" title="Ver ficha de ${o.studentName}">${o.studentName}</a>`;
           
           const row = document.createElement("tr");
           row.className = "hover:bg-surface-container-low/50 transition-colors";
           row.innerHTML = `
             <td class="px-6 py-4">
               <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-full bg-secondary-container/20 flex items-center justify-center font-bold text-on-secondary-container select-none">
-                  ${o.alunosEnvolvidos[0].nome.substring(0, 2).toUpperCase()}
+                <div class="w-10 h-10 rounded-full bg-secondary-container/20 flex items-center justify-center font-bold text-on-secondary-container overflow-hidden border border-outline-variant shrink-0 bg-white">
+                  <img src="${o.studentAvatar || 'https://lh3.googleusercontent.com/aida-public/AB6AXuDRGSGbqGOo2dzNp40hZk4pp_0rVieA-Su6u1WdWdVVqvGIA6n7dJMIDQVg3vkTYKgYN5HRKv7SOzuV4CGLSmB4xKZHKFpq-2ab9UNYf9ye3MByCMdx_JIehrQjusuLvStYhxK5Qj2eZHDffXBfYxzFUFDsX7kk7oInOP0foJp972O4lAIpD8pOJMQ4ehoA3BKsZHDj0gIh6Fx7Dr-Uvdu89v6j1O2f_mCuy7lSXEnJdzNLXbaD9C36QemEJIA6ok8BwdRRm8oVmvA'}" class="w-full h-full object-cover"/>
                 </div>
                 <div>
-                  <p class="font-bold text-primary truncate max-w-[200px]" title="${names}">${displayLinks}</p>
-                  <p class="text-body-sm text-on-surface-variant">${o.turma}</p>
+                  <p class="font-bold text-primary truncate max-w-[200px]">${displayLinks}</p>
+                  <p class="text-body-sm text-on-surface-variant">${o.turmaNome}</p>
                 </div>
               </div>
             </td>
@@ -1356,7 +1304,7 @@
             </td>
             <td class="px-6 py-4">
               <p class="font-medium">${formattedDate}</p>
-              <p class="text-body-sm text-on-surface-variant">Autor: ${o.autor}</p>
+              <p class="text-body-sm text-on-surface-variant">Autor: ${o.responsavel}</p>
             </td>
             <td class="px-6 py-4">
               <span class="flex items-center gap-1.5 ${statusClass} text-label-sm uppercase select-none">
@@ -1386,7 +1334,6 @@
         statsPendentes.textContent = pendentes;
         statsTratadas.textContent = tratadas;
         
-        // Maior incidência
         if (occurrences.length === 0) {
           statsIncidencia.textContent = "Nenhuma";
           statsIncidenciaSub.textContent = "Sem registros ativos";
@@ -1410,9 +1357,7 @@
       }
 
       // Inicialização Geral
-      loadOccurrencesDb();
-      renderOccurrencesTable();
-      renderOccurrenceStats();
+      carregarDados();
 
     })();
   </script>

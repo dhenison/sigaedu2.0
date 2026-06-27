@@ -123,6 +123,10 @@
         input:focus, select:focus { outline: none; border-color: #000000 !important; }
     </style>
 </head>
+<script src="clean-demo-data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="supabase-init.js"></script>
 <body class="bg-background text-on-surface">
 <!-- Top Header (TopNavBar Shared Component Unificado) -->
 <header class="fixed top-0 right-0 left-0 md:left-64 z-40 h-xl px-gutter flex justify-between items-center bg-white/70 backdrop-blur-xl dark:bg-surface-container/70 border-b border-surface-variant dark:border-outline-variant shadow-sm transition-all duration-300">
@@ -184,6 +188,10 @@
       <a id="menu-alunos" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="fichadoaluno.html">
         <span class="material-symbols-outlined" data-icon="person">person</span>
         <span class="text-label-md font-label-md">Alunos</span>
+      </a>
+      <a id="menu-sala-aee" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="sala_aee.html">
+        <span class="material-symbols-outlined" data-icon="psychology_alt">psychology_alt</span>
+        <span class="text-label-md font-label-md">Sala AEE</span>
       </a>
       <a id="menu-calendario" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="calendario.html">
         <span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
@@ -332,63 +340,7 @@
 </tr>
 </thead>
 <tbody class="divide-y divide-surface-variant">
-<tr class="hover:bg-surface-container-lowest transition-colors cursor-pointer group" onclick="openDetails('1º Ano A')">
-<td class="px-md py-md font-bold text-primary">1º Ano A</td>
-<td class="px-md py-md">
-<span class="px-sm py-xs rounded-full text-label-sm font-bold shift-morning">Manhã</span>
-</td>
-<td class="px-md py-md text-body-sm">Regular</td>
-<td class="px-md py-md text-body-sm">30</td>
-<td class="px-md py-md text-body-sm">28/30</td>
-<td class="px-md py-md text-right">
-<div class="flex justify-end gap-sm" onclick="event.stopPropagation()">
-<button class="p-xs text-on-surface-variant hover:text-primary transition-colors tooltip" title="Editar Turma">
-<span class="material-symbols-outlined text-[18px]">admin_panel_settings</span>
-</button>
-<button class="p-xs text-on-surface-variant hover:text-error transition-colors" title="Excluir Turma">
-<span class="material-symbols-outlined text-[18px]">lock_reset</span>
-</button>
-</div>
-</td>
-</tr>
-<tr class="hover:bg-surface-container-lowest transition-colors cursor-pointer" onclick="openDetails('9º Ano C')">
-<td class="px-md py-md font-bold text-primary">9º Ano C</td>
-<td class="px-md py-md">
-<span class="px-sm py-xs rounded-full text-label-sm font-bold shift-afternoon">Tarde</span>
-</td>
-<td class="px-md py-md text-body-sm">Fluxo</td>
-<td class="px-md py-md text-body-sm">25</td>
-<td class="px-md py-md text-body-sm">22/25</td>
-<td class="px-md py-md text-right">
-<div class="flex justify-end gap-sm" onclick="event.stopPropagation()">
-<button class="p-xs text-on-surface-variant hover:text-primary transition-colors">
-<span class="material-symbols-outlined text-[18px]">admin_panel_settings</span>
-</button>
-<button class="p-xs text-on-surface-variant hover:text-error transition-colors">
-<span class="material-symbols-outlined text-[18px]">lock_reset</span>
-</button>
-</div>
-</td>
-</tr>
-<tr class="hover:bg-surface-container-lowest transition-colors cursor-pointer" onclick="openDetails('EJA Mod I')">
-<td class="px-md py-md font-bold text-primary">EJA Mod I</td>
-<td class="px-md py-md">
-<span class="px-sm py-xs rounded-full text-label-sm font-bold shift-night">Noite</span>
-</td>
-<td class="px-md py-md text-body-sm">EJA</td>
-<td class="px-md py-md text-body-sm">40</td>
-<td class="px-md py-md text-body-sm">35/40</td>
-<td class="px-md py-md text-right">
-<div class="flex justify-end gap-sm" onclick="event.stopPropagation()">
-<button class="p-xs text-on-surface-variant hover:text-primary transition-colors">
-<span class="material-symbols-outlined text-[18px]">admin_panel_settings</span>
-</button>
-<button class="p-xs text-on-surface-variant hover:text-error transition-colors">
-<span class="material-symbols-outlined text-[18px]">lock_reset</span>
-</button>
-</div>
-</td>
-</tr>
+<tr><td colspan="6" class="px-md py-lg text-center text-on-surface-variant">Nenhuma turma cadastrada.</td></tr>
 </tbody>
 </table>
 </div>
@@ -400,7 +352,7 @@
 <div class="flex justify-between items-center mb-md">
 <h3 class="text-headline-md text-primary flex items-center gap-sm">
 <span class="material-symbols-outlined">group</span>
-                                Lista de Alunos: <span class="font-black" id="active-turma-name">1º Ano A</span>
+                                Lista de Alunos: <span class="font-black" id="active-turma-name"></span>
 </h3>
 <button class="text-on-surface-variant hover:text-primary" onclick="hideDetails()">
 <span class="material-symbols-outlined">close</span>
@@ -411,7 +363,7 @@
 <div class="flex items-center gap-md">
 <img alt="Student" class="w-10 h-10 rounded-full" data-alt="A portrait of a young student in a school uniform, looking forward with a friendly expression. The lighting is soft and natural, emphasizing the professional and educational atmosphere. The background is a simple, light-colored studio wall that maintains focus on the subject." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAP80C3LDejN3T6NvYz6gSXVM6eNh_w661ejMGWGqh46GbnP5Y4nGI0NVcbYlrUCqcHq6m_kFkHMUlE6HPBnrZT2sbB-2GuVIg2O_s5vyGJ_QXMo7FuG9N1_cC11GGr5FgSBpkrV4nUHzhyRHPChCEhlU8GlQD1lWhYX-QZXXGSAnj9lMLWw-GQK93ZLVWe6l4zFskCnQtti35Audv4fhD-2Jk7GlOy0yYA15CCciBYzbAFzginJ6C7SsnRhZYCOn6gi434Xs5StE0"/>
 <div>
-<p class="font-bold text-primary">Ana Beatriz Silva</p>
+<p class="font-bold text-primary">Aluno não cadastrado</p>
 <p class="text-label-sm text-on-surface-variant">RA: 202600123</p>
 </div>
 </div>
@@ -424,7 +376,7 @@
 <div class="flex items-center gap-md">
 <img alt="Student" class="w-10 h-10 rounded-full" data-alt="A young male student smiling at the camera, wearing a high-quality navy blue school polo. The shot is well-lit with high-fidelity corporate aesthetics, using a shallow depth of field. The overall vibe is clean, academic, and positive, consistent with a high-end school management system." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzxb8h-o_07736HbmV6IZp3RwfLan-loB4beGk_d0rkKf5xQ0p4xPD_1-XaYzol6UIjoxxokk_adPSVhqKkABNGpKG6Hy95HH8ujPIGgEySVFIB0ZWrQTTvk_dqqg92n-XHryRVpRzh_jR5JJnkHvrGOAi5ZMhkw5BK2-9oH7AMT3GeFnqdXpunjIs7jowhIc2L34jw1vvSxmb9SqclR4YeFJ1o_ewrb5YuV1eCz-9cisW_VAq0tsGxw5FNbJSLMlI9w5sZI8avOg"/>
 <div>
-<p class="font-bold text-primary">Carlos Eduardo Lima</p>
+<p class="font-bold text-primary">Aluno não cadastrado</p>
 <p class="text-label-sm text-on-surface-variant">RA: 202600456</p>
 </div>
 </div>
@@ -545,6 +497,7 @@
         'dashboard.html': 'menu-dashboard',
         'turmas.html': 'menu-turmas',
         'fichadoaluno.html': 'menu-alunos',
+        'sala_aee.html': 'menu-sala-aee',
         'calendario.html': 'menu-calendario',
         'agenda.html': 'menu-agenda',
         'frequencia.html': 'menu-frequencia',
@@ -622,7 +575,7 @@
               </div>`;
           }
         })();
-      }, 1000);
+}, 1000);
 
       // 4. Limpeza persistente do console
       if (typeof console !== 'undefined') {
@@ -636,81 +589,19 @@
   <script>
     // Lógica Customizada para Gestão de Turmas (SigaEdu)
     (function() {
-      // Inicializa e gerencia Estado das turmas persistido no localStorage
-      let defaultTurmas = [
-        { id: 1, nome: "1º Ano A", turno: "Manhã", tipo: "Regular", vagas: 30, alunosAtivos: 28, frequencia: 92, classeTurno: "shift-morning" },
-        { id: 2, nome: "9º Ano C", turno: "Tarde", tipo: "Fluxo", vagas: 25, alunosAtivos: 22, frequencia: 91, classeTurno: "shift-afternoon" },
-        { id: 3, nome: "EJA Mod I", turno: "Noite", tipo: "EJA", vagas: 40, alunosAtivos: 35, frequencia: 81, classeTurno: "shift-night" }
-      ];
+      // Estado das turmas e alunos em memória (carregados do Supabase)
+      let turmas = [];
+      let todosAlunos = [];
 
-      // Inicializa e gerencia Estado dos Alunos unificado no localStorage
-      let defaultAlunos = [];
+      const supabase = window.supabaseClient;
+      const selectedEscola = window.selectedEscola;
 
-      // Garante a existência do estado no localStorage
-      if (!localStorage.getItem('sigaedu_turmas')) {
-        localStorage.setItem('sigaedu_turmas', JSON.stringify(defaultTurmas));
+      if (!supabase || !selectedEscola) {
+        console.error("Supabase ou escola ativa não inicializados.");
+        return;
       }
-      // Detecção de dados mockados antigos (Enzo Gabriel Santos) para limpeza automática definitiva
-      let storedAlunos = localStorage.getItem('sigaedu_alunos');
-      if (storedAlunos) {
-        try {
-          let currentAlunos = JSON.parse(storedAlunos);
-          if (Array.isArray(currentAlunos) && currentAlunos.some(a => a.nome === "Enzo Gabriel Santos")) {
-            localStorage.setItem('sigaedu_alunos', JSON.stringify([]));
-          }
-        } catch(e) {
-          localStorage.setItem('sigaedu_alunos', JSON.stringify([]));
-        }
-      } else {
-        localStorage.setItem('sigaedu_alunos', JSON.stringify(defaultAlunos));
-      }
-
-      let turmas = JSON.parse(localStorage.getItem('sigaedu_turmas'));
-
-      // Gerador de alunos fictícios para novas turmas criadas
-      const nomesFicticios = ["Lucas Almeida", "Beatriz Rocha", "Guilherme Santos", "Juliana Costa", "Rafael Lima", "Camila Pereira", "Thiago Silva", "Manuela Alves"];
-      const avataresFicticios = [
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuAP80C3LDejN3T6NvYz6gSXVM6eNh_w661ejMGWGqh46GbnP5Y4nGI0NVcbYlrUCqcHq6m_kFkHMUlE6HPBnrZT2sbB-2GuVIg2O_s5vyGJ_QXMo7FuG9N1_cC11GGr5FgSBpkrV4nUHzhyRHPChCEhlU8GlQD1lWhYX-QZXXGSAnj9lMLWw-GQK93ZLVWe6l4zFskCnQtti35Audv4fhD-2Jk7GlOy0yYA15CCciBYzbAFzginJ6C7SsnRhZYCOn6gi434Xs5StE0",
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuBzxb8h-o_07736HbmV6IZp3RwfLan-loB4beGk_d0rkKf5xQ0p4xPD_1-XaYzol6UIjoxxokk_adPSVhqKkABNGpKG6Hy95HH8ujPIGgEySVFIB0ZWrQTTvk_dqqg92n-XHryRVpRzh_jR5JJnkHvrGOAi5ZMhkw5BK2-9oH7AMT3GeFnqdXpunjIs7jowhIc2L34jw1vvSxmb9SqclR4YeFJ1o_ewrb5YuV1eCz-9cisW_VAq0tsGxw5FNbJSLMlI9w5sZI8avOg",
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuBrSs0bTIeMbPpXPTtHua_P6xSNZhUKRnNal5YYDaQYpGFQRG-3hxPdhnN2gCo_t-kn4WCNwSi_MWtKaNeTDOMGCp0EJ6Z2I_FOd20XJMeDTQpSBt9i9kEeQC8BCM4KUT7ohOYY5m9zx-tBLEdfKQKChJ32q7XZdIZNcve2wDnKr7Z07f9eojzrntruPeOCOf-0-0KytQAfRVFqr8BaCeeLbi7SNlbGFDOwwgo6KQJ0KSEkJf0wavEZerQj8V2-TUC-czyBUo1pLHo",
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuDA7EYgNhseWB_tiPsTgnyGVBYFit932u6Luo70-4-ZEvhkU0nsNCR2PqNrR-7Q5ALFSt7M_p9Zqv9TT-fVgLbBTaHROPVuMb7ubTSYe4eRLJEd4O61n82Do8t_VwiHDC1IeJPXoUJPZwphXyjda46RhU6wWvDouW8KOJvv-Pp9__4axG_5DCrFtTuEyTLGwJfdGS2uawrDV8P5zg_4-18CxIsb2RvP0V6D9hbF2g8g4MgZC47LwjumPSBdSyo4WXhkyWf1sFRMszk",
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuC0H15MXEk5wwXHHtjR0_tQ3VbqenrRqKj5iHaSotRvy7A3xxq1ZVomH4vNA2DuR0ConsstGJ3p1FkAQjtQxtlJYH0TcxqJk8mUxDeTYMdpQ4M8UIFcnKmTk4esmSmijQi7BnhSDkjhfc9YZkynhb6F66u9gMAZB9AFVmtE9ACMvZqcZMGbM3nb2Z3ILM2iDdSyTipgwc8xy1ltgVnbPdn_rvHGurL5zMLM2bn-8Q7fZ5h7kRHjDX08Tlh_rUacSbwT9h7oeR4HfD0",
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuDAtaPrOMl8DU1umwjp_b4Kw5FRDqvF_pAjXKYz2jCR4bjvC4MFgJVKQi614Bng-uQQnWwAHnMAvc7_j8ll4inIMJALpnq2gdo-2GmBjWX-0G4vwHcRgx3byvlSnaBU578yo2IYFuz89DxnEp37hKrwPseyco1aoL3g1gPCKwnvIKwx7ybESCcHOdQn_Eg9Mx4brvflPmmWJVgOZEFwD3WNn9euWXQHKSaJVnsPDa5-t2XOpJr0kuxeqiwKKbZT0SIcyzyivcJvy_8",
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuDRGSGbqGOo2dzNp40hZk4pp_0rVieA-Su6u1WdWdVVqvGIA6n7dJMIDQVg3vkTYKgYN5HRKv7SOzuV4CGLSmB4xKZHKFpq-2ab9UNYf9ye3MByCMdx_JIehrQjusuLvStYhxK5Qj2eZHDffXBfYxzFUFDsX7kk7oInOP0foJp972O4lAIpD8pOJMQ4ehoA3BKsZHDj0gIh6Fx7Dr-Uvdu89v6j1O2f_mCuy7lSXEnJdzNLXbaD9C36QemEJIA6ok8BwdRRm8oVmvA"
-      ];
-
-      function gerarAlunosFicticios(turmaNome, quantidade) {
-        const resultado = [];
-        const turno = selectTurno.value;
-        for (let i = 0; i < quantidade; i++) {
-          const nome = nomesFicticios[Math.floor(Math.random() * nomesFicticios.length)] + " " + String.fromCharCode(65 + Math.floor(Math.random() * 26));
-          const cpf = `${Math.floor(100 + Math.random()*900)}.${Math.floor(100 + Math.random()*900)}.${Math.floor(100 + Math.random()*900)}-${Math.floor(10 + Math.random()*90)}`;
-          const email = `${nome.toLowerCase().replace(/\s/g, ".")}@aluno.seduc.pa.gov.br`;
-          const avatar = avataresFicticios[Math.floor(Math.random() * avataresFicticios.length)];
-          resultado.push({
-            id: Math.floor(Math.random() * 1000000) + 10,
-            nome,
-            cpf,
-            dataNascimento: "2012-05-10",
-            turno,
-            turma: turmaNome,
-            email,
-            contato: "(91) 98" + Math.floor(1000 + Math.random()*9000) + "-" + Math.floor(1000 + Math.random()*9000),
-            tipoResponsavel: "Mãe",
-            nomeResponsavel: "Responsável de " + nome,
-            utilizaTransporte: "Não",
-            rota: "",
-            senha: "aluno@sigaedu",
-            avatar,
-            frequencia: Math.floor(80 + Math.random()*20) + "%",
-            faltas: "0" + Math.floor(Math.random()*9),
-            projetos: ["Atividades Gerais"],
-            historico: [{ desc: "Matrícula Efetuada", obs: "Processado em Lote (Jun 2026)" }],
-            ocorrencias: [{ titulo: "Matrícula Ativa", data: "01 Jun 2026", desc: "Aluno importado.", tipo: "Concluído" }]
-          });
-        }
-        return resultado;
-      }
+      
+      const escolaId = selectedEscola.id;
 
       // Elementos do DOM
       const modalTurma = document.getElementById("modal-turma");
@@ -734,13 +625,40 @@
       if (freqBarEl) freqBarEl.id = "active-turma-attendance-bar";
       if (studentsList) studentsList.id = "students-list-container";
 
+      // Busca turmas e alunos do Supabase
+      async function carregarDados() {
+        try {
+          // 1. Busca as turmas da escola ativa
+          const { data: dbTurmas, error: errorTurmas } = await supabase
+            .from('turmas')
+            .select('*')
+            .eq('escola_id', escolaId)
+            .order('nome', { ascending: true });
+
+          if (errorTurmas) throw errorTurmas;
+          turmas = dbTurmas;
+
+          // 2. Busca todos os alunos da escola ativa para calcular os totais por turma
+          const { data: dbAlunos, error: errorAlunos } = await supabase
+            .from('alunos')
+            .select('id, turma_id, nome, avatar, cpf')
+            .eq('escola_id', escolaId);
+
+          if (errorAlunos) throw errorAlunos;
+          todosAlunos = dbAlunos;
+
+          renderTurmasTable();
+        } catch(err) {
+          console.error("Erro ao carregar dados do Supabase:", err);
+        }
+      }
+
       // 1. Expor funções globais chamadas pelo HTML
       window.toggleModal = function(modalId) {
         const targetModal = document.getElementById(modalId);
         if (targetModal) {
           if (targetModal.classList.contains("hidden")) {
             targetModal.classList.remove("hidden");
-            // Se estiver abrindo o modal de criação de turma, limpa as informações anteriores
             if (modalId === "modal-turma") {
               form.reset();
             }
@@ -750,15 +668,13 @@
         }
       };
 
-      window.openDetails = function(turmaNome) {
-        const turma = turmas.find(t => t.nome === turmaNome);
+      window.openDetails = function(turmaId) {
+        const turma = turmas.find(t => t.id === turmaId);
         if (!turma) return;
 
         activeTurmaName.textContent = turma.nome;
         
-        // Renderiza alunos vinculados a partir do localStorage sigaedu_alunos
-        const todosAlunos = JSON.parse(localStorage.getItem('sigaedu_alunos')) || [];
-        const listaAlunos = todosAlunos.filter(aluno => aluno.turma === turmaNome);
+        const listaAlunos = todosAlunos.filter(aluno => aluno.turma_id === turmaId);
         const container = document.getElementById("students-list-container") || studentsList;
         
         if (listaAlunos.length === 0) {
@@ -770,7 +686,7 @@
           container.innerHTML = listaAlunos.map(aluno => `
             <div class="flex items-center justify-between p-sm border border-surface-variant rounded-lg hover:bg-surface-container-low transition-colors">
               <div class="flex items-center gap-md">
-                <img alt="Estudante" class="w-10 h-10 rounded-full object-cover border bg-white" src="${aluno.avatar}"/>
+                <img alt="Estudante" class="w-10 h-10 rounded-full object-cover border bg-white" src="${aluno.avatar || 'https://lh3.googleusercontent.com/aida-public/AB6AXuDRGSGbqGOo2dzNp40hZk4pp_0rVieA-Su6u1WdWdVVqvGIA6n7dJMIDQVg3vkTYKgYN5HRKv7SOzuV4CGLSmB4xKZHKFpq-2ab9UNYf9ye3MByCMdx_JIehrQjusuLvStYhxK5Qj2eZHDffXBfYxzFUFDsX7kk7oInOP0foJp972O4lAIpD8pOJMQ4ehoA3BKsZHDj0gIh6Fx7Dr-Uvdu89v6j1O2f_mCuy7lSXEnJdzNLXbaD9C36QemEJIA6ok8BwdRRm8oVmvA'}"/>
                 <div class="text-left">
                   <p class="font-bold text-primary">${aluno.nome}</p>
                   <p class="text-label-sm text-on-surface-variant">CPF: ${aluno.cpf}</p>
@@ -784,11 +700,11 @@
           `).join('');
         }
 
-        // --- Frequência Geral da Turma ---
+        // Frequência padrão simulada para exibição visual
         const freqVal = document.getElementById("active-turma-attendance-val") || freqValueEl;
         const freqBar = document.getElementById("active-turma-attendance-bar") || freqBarEl;
-        if (freqVal) freqVal.textContent = turma.frequencia + "%";
-        if (freqBar) freqBar.style.width = turma.frequencia + "%";
+        if (freqVal) freqVal.textContent = "95%";
+        if (freqBar) freqBar.style.width = "95%";
 
         detailsSection.classList.remove("hidden");
         detailsSection.scrollIntoView({ behavior: 'smooth' });
@@ -798,28 +714,31 @@
         detailsSection.classList.add("hidden");
       };
 
-      // 2. Renderizar Tabela de Turmas e Atualizar Bento Grid de Estatísticas
+      // 2. Renderizar Tabela de Turmas e Atualizar Grid de Estatísticas
       function renderTurmasTable() {
-        const todosAlunos = JSON.parse(localStorage.getItem('sigaedu_alunos')) || [];
-        
-        // Renderiza linhas
         tableBody.innerHTML = turmas.map(turma => {
-          const totalAtivos = todosAlunos.filter(aluno => aluno.turma === turma.nome).length;
+          const totalAtivos = todosAlunos.filter(aluno => aluno.turma_id === turma.id).length;
+          
+          let classeTurno = "shift-morning";
+          const turnoLower = String(turma.turno || '').toLowerCase();
+          if (turnoLower.startsWith("tard") || turnoLower.startsWith("afte")) classeTurno = "shift-afternoon";
+          if (turnoLower.startsWith("noit") || turnoLower.startsWith("nigh")) classeTurno = "shift-night";
+
           return `
-          <tr class="hover:bg-surface-container-lowest transition-colors cursor-pointer group" onclick="openDetails('${turma.nome}')">
+          <tr class="hover:bg-surface-container-lowest transition-colors cursor-pointer group" onclick="openDetails('${turma.id}')">
             <td class="px-md py-md font-bold text-primary">${turma.nome}</td>
             <td class="px-md py-md">
-              <span class="px-sm py-xs rounded-full text-label-sm font-bold ${turma.classeTurno}">${turma.turno}</span>
+              <span class="px-sm py-xs rounded-full text-label-sm font-bold ${classeTurno}">${turma.turno}</span>
             </td>
             <td class="px-md py-md text-body-sm">${turma.tipo}</td>
-            <td class="px-md py-md text-body-sm">${turma.vagas}</td>
-            <td class="px-md py-md text-body-sm">${totalAtivos}/${turma.vagas}</td>
+            <td class="px-md py-md text-body-sm">${turma.vagas || 35}</td>
+            <td class="px-md py-md text-body-sm">${totalAtivos}/${turma.vagas || 35}</td>
             <td class="px-md py-md text-right">
               <div class="flex justify-end gap-sm" onclick="event.stopPropagation()">
                 <button class="p-xs text-on-surface-variant hover:text-primary transition-colors" title="Editar Turma">
                   <span class="material-symbols-outlined text-[18px]">admin_panel_settings</span>
                 </button>
-                <button class="p-xs text-on-surface-variant hover:text-error transition-colors" title="Excluir Turma" onclick="deletarTurma('${turma.nome}')">
+                <button class="p-xs text-on-surface-variant hover:text-error transition-colors" title="Excluir Turma" onclick="deletarTurma('${turma.id}', '${turma.nome}')">
                   <span class="material-symbols-outlined text-[18px]">delete</span>
                 </button>
               </div>
@@ -827,21 +746,18 @@
           </tr>
         `}).join('');
 
-        // Atualiza contadores do Bento Grid
+        // Atualiza contadores do Grid de Estatísticas
         const total = turmas.length;
         const manha = turmas.filter(t => {
-          if (!t.turno) return false;
-          const lower = t.turno.trim().toLowerCase();
+          const lower = String(t.turno || '').toLowerCase();
           return lower.startsWith("manh") || lower.startsWith("morn");
         }).length;
         const tarde = turmas.filter(t => {
-          if (!t.turno) return false;
-          const lower = t.turno.trim().toLowerCase();
+          const lower = String(t.turno || '').toLowerCase();
           return lower.startsWith("tard") || lower.startsWith("afte");
         }).length;
         const noite = turmas.filter(t => {
-          if (!t.turno) return false;
-          const lower = t.turno.trim().toLowerCase();
+          const lower = String(t.turno || '').toLowerCase();
           return lower.startsWith("noit") || lower.startsWith("nigh");
         }).length;
 
@@ -853,30 +769,38 @@
         }
       }
 
-      window.deletarTurma = function(nome) {
-        const senha = prompt(`A exclusão da turma "${nome}" é irreversível. Digite a senha do administrador para confirmar:`);
-        if (senha === null) return; // O usuário cancelou
+      window.deletarTurma = async function(turmaId, nome) {
+        const senha = prompt(`A exclusão da turma "${nome}" é irreversível. Digite a senha de exclusão para confirmar:`);
+        if (senha === null) return;
         
         if (senha === "siga@EDU2026excluir") {
-          // Remove a turma
-          turmas = turmas.filter(t => t.nome !== nome);
-          localStorage.setItem('sigaedu_turmas', JSON.stringify(turmas));
-          
-          // Cascata: remove os alunos daquela turma
-          const todosAlunos = JSON.parse(localStorage.getItem('sigaedu_alunos')) || [];
-          const alunosRestantes = todosAlunos.filter(aluno => aluno.turma !== nome);
-          localStorage.setItem('sigaedu_alunos', JSON.stringify(alunosRestantes));
-          
-          hideDetails();
-          renderTurmasTable();
-          alert(`Turma "${nome}" e seus alunos vinculados foram excluídos com sucesso.`);
+          try {
+            const { error } = await supabase
+              .from('turmas')
+              .delete()
+              .eq('id', turmaId);
+
+            if (error) throw error;
+            
+            // Remove localmente da lista e atualiza
+            turmas = turmas.filter(t => t.id !== turmaId);
+            todosAlunos.forEach(aluno => {
+              if (aluno.turma_id === turmaId) aluno.turma_id = null;
+            });
+            
+            hideDetails();
+            renderTurmasTable();
+            alert(`Turma "${nome}" e seus vínculos foram excluídos com sucesso do banco de dados.`);
+          } catch(err) {
+            alert("Erro ao excluir turma do Supabase: " + err.message);
+          }
         } else {
           alert("Senha incorreta! A exclusão foi cancelada.");
         }
       };
 
-      // 3. Cadastrar Nova Turma e Limpar Informações de Criação
-      form.onsubmit = function(e) {
+      // 3. Cadastrar Nova Turma
+      form.onsubmit = async function(e) {
         e.preventDefault();
         
         const nome = inputNome.value.trim();
@@ -885,70 +809,60 @@
 
         if (!nome) return;
 
-        // Valida duplicatas
         if (turmas.some(t => t.nome.toLowerCase() === nome.toLowerCase())) {
           alert("Uma turma com este nome já existe!");
           return;
         }
 
-        // Define estilo visual do turno
-        let classeTurno = "shift-morning";
-        if (turno === "Tarde") classeTurno = "shift-afternoon";
-        if (turno === "Noite") classeTurno = "shift-night";
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalBtnText = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = "Criando...";
 
-        const novasVagas = 35;
-        const novosAlunosAtivos = Math.floor(10 + Math.random() * 15);
-        const frequenciaMedia = Math.floor(75 + Math.random() * 22);
+        try {
+          const { data: novaTurma, error } = await supabase
+            .from('turmas')
+            .insert({
+              escola_id: escolaId,
+              nome: nome,
+              turno: turno,
+              tipo: tipo,
+              vagas: 35
+            })
+            .select()
+            .single();
 
-        const novaTurma = {
-          id: turmas.length > 0 ? Math.max(...turmas.map(t => t.id)) + 1 : 1,
-          nome: nome,
-          turno: turno,
-          tipo: tipo,
-          vagas: novasVagas,
-          alunosAtivos: novosAlunosAtivos,
-          frequencia: frequenciaMedia,
-          classeTurno: classeTurno
-        };
+          if (error) throw error;
 
-        // Adiciona à lista e persiste no localStorage sigaedu_turmas
-        turmas.push(novaTurma);
-        localStorage.setItem('sigaedu_turmas', JSON.stringify(turmas));
+          turmas.push(novaTurma);
+          form.reset();
+          toggleModal("modal-turma");
+          renderTurmasTable();
+          openDetails(novaTurma.id);
 
-        // Gera e matricula alunos fictícios no banco unificado sigaedu_alunos
-        const novosAlunos = gerarAlunosFicticios(nome, novosAlunosAtivos);
-        const todosAlunos = JSON.parse(localStorage.getItem('sigaedu_alunos')) || [];
-        localStorage.setItem('sigaedu_alunos', JSON.stringify(todosAlunos.concat(novosAlunos)));
-
-        // Limpa o formulário de criação (como solicitado!)
-        form.reset();
-
-        // Fecha o modal
-        toggleModal("modal-turma");
-
-        // Re-renderiza a tabela
-        renderTurmasTable();
-
-        // Abre os detalhes da turma criada
-        openDetails(nome);
+        } catch (err) {
+          alert("Erro ao criar turma no Supabase: " + err.message);
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalBtnText;
+        }
       };
 
-      window.importarTurmasExcel = function(input) {
+      // 4. Importar Turmas via Excel
+      window.importarTurmasExcel = async function(input) {
         if (!input.files || input.files.length === 0) return;
         
         const file = input.files[0];
         const reader = new FileReader();
         
-        reader.onload = function(e) {
+        reader.onload = async function(e) {
           try {
             const data = new Uint8Array(e.target.result);
             const workbook = XLSX.read(data, { type: 'array' });
             
-            // Lê a primeira planilha
             const firstSheetName = workbook.SheetNames[0];
             const worksheet = workbook.Sheets[firstSheetName];
             
-            // Converte para JSON
             const json = XLSX.utils.sheet_to_json(worksheet);
             
             if (json.length === 0) {
@@ -956,72 +870,53 @@
               return;
             }
             
-            // Valida cabeçalhos obrigatórios
             const firstRow = json[0];
             if (!("nome" in firstRow) || !("turno" in firstRow) || !("tipo" in firstRow)) {
-              alert("Formato de planilha inválido! A planilha de turmas deve conter as colunas: nome, turno, tipo, vagas, frequencia.");
+              alert("Formato inválido! Certifique-se de que a planilha contém as colunas: nome, turno, tipo.");
               return;
             }
             
-            let novasImportadas = 0;
-            const todosAlunos = JSON.parse(localStorage.getItem('sigaedu_alunos')) || [];
-            let novosAlunosGerais = [];
+            const turmasParaInserir = [];
             
             json.forEach(row => {
               const nome = String(row.nome || '').trim();
               const turno = String(row.turno || 'Manhã').trim();
               const tipo = String(row.tipo || 'Regular').trim();
               const vagas = parseInt(row.vagas) || 35;
-              const frequencia = parseInt(row.frequencia) || 90;
               
               if (!nome) return;
               
-              // Valida duplicidade
               if (turmas.some(t => t.nome.toLowerCase() === nome.toLowerCase())) {
                 return; // Pula duplicadas
               }
               
-              let classeTurno = "shift-morning";
-              if (turno === "Tarde") classeTurno = "shift-afternoon";
-              if (turno === "Noite") classeTurno = "shift-night";
-              
-              const novaTurma = {
-                id: turmas.length > 0 ? Math.max(...turmas.map(t => t.id)) + 1 : 1,
-                nome,
-                turno,
-                tipo,
-                vagas,
-                alunosAtivos: 0,
-                frequencia,
-                classeTurno
-              };
-              
-              // Gera alunos fictícios
-              const alunosAtivosCount = Math.floor(10 + Math.random() * 15);
-              novaTurma.alunosAtivos = alunosAtivosCount;
-              
-              const alunosMockados = gerarAlunosFicticiosImportacao(nome, turno, alunosAtivosCount);
-              novosAlunosGerais = novosAlunosGerais.concat(alunosMockados);
-              
-              turmas.push(novaTurma);
-              novasImportadas++;
+              turmasParaInserir.push({
+                escola_id: escolaId,
+                nome: nome,
+                turno: turno,
+                tipo: tipo,
+                vagas: vagas
+              });
             });
             
-            if (novasImportadas > 0) {
-              localStorage.setItem('sigaedu_turmas', JSON.stringify(turmas));
-              localStorage.setItem('sigaedu_alunos', JSON.stringify(todosAlunos.concat(novosAlunosGerais)));
+            if (turmasParaInserir.length > 0) {
+              const { data: novasTurmas, error } = await supabase
+                .from('turmas')
+                .insert(turmasParaInserir)
+                .select();
+                
+              if (error) throw error;
               
+              turmas.push(...novasTurmas);
               renderTurmasTable();
-              alert(`${novasImportadas} turmas foram importadas com sucesso a partir da planilha Excel!`);
+              alert(`${novasTurmas.length} turmas foram importadas com sucesso para o banco do Supabase!`);
             } else {
-              alert("Nenhuma turma nova foi importada (todas as turmas já existiam no sistema).");
+              alert("Nenhuma turma nova foi importada (todas já existem no banco).");
             }
             
           } catch(err) {
-            console.error(err);
-            alert("Erro ao decodificar a planilha Excel! Certifique-se de carregar um arquivo .xlsx válido.");
+            alert("Erro ao importar planilha: " + err.message);
           } finally {
-            // Limpa o input file para que possa selecionar o mesmo arquivo novamente
             input.value = "";
           }
         };
@@ -1029,41 +924,8 @@
         reader.readAsArrayBuffer(file);
       };
 
-      // Gerador adaptado para importação em massa que respeita o turno da linha importada
-      function gerarAlunosFicticiosImportacao(turmaNome, turno, quantidade) {
-        const resultado = [];
-        for (let i = 0; i < quantidade; i++) {
-          const nome = nomesFicticios[Math.floor(Math.random() * nomesFicticios.length)] + " " + String.fromCharCode(65 + Math.floor(Math.random() * 26));
-          const cpf = `${Math.floor(100 + Math.random()*900)}.${Math.floor(100 + Math.random()*900)}.${Math.floor(100 + Math.random()*900)}-${Math.floor(10 + Math.random()*90)}`;
-          const email = `${nome.toLowerCase().replace(/\s/g, ".")}@aluno.seduc.pa.gov.br`;
-          const avatar = avataresFicticios[Math.floor(Math.random() * avataresFicticios.length)];
-          resultado.push({
-            id: Math.floor(Math.random() * 1000000) + 10,
-            nome,
-            cpf,
-            dataNascimento: "2012-05-10",
-            turno,
-            turma: turmaNome,
-            email,
-            contato: "(91) 98" + Math.floor(1000 + Math.random()*9000) + "-" + Math.floor(1000 + Math.random()*9000),
-            tipoResponsavel: "Mãe",
-            nomeResponsavel: "Responsável de " + nome,
-            utilizaTransporte: "Não",
-            rota: "",
-            senha: "aluno@sigaedu",
-            avatar,
-            frequencia: Math.floor(80 + Math.random()*20) + "%",
-            faltas: "0" + Math.floor(Math.random()*9),
-            projetos: ["Atividades Gerais"],
-            historico: [{ desc: "Matrícula Efetuada", obs: "Processado em lote via Excel (Jun 2026)" }],
-            ocorrencias: [{ titulo: "Matrícula Ativa", data: "01 Jun 2026", desc: "Registro inicial importado por planilha Excel.", tipo: "Concluído" }]
-          });
-        }
-        return resultado;
-      }
-
-      // 4. Execução de Inicialização
-      renderTurmasTable();
+      // Inicialização
+      carregarDados();
     })();
   </script>
 </body></html>

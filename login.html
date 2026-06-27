@@ -171,7 +171,7 @@
 <label class="block font-label-md text-label-md text-on-surface mb-2" for="email">E-mail Institucional</label>
 <div class="relative">
 <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline-variant text-[20px]">alternate_email</span>
-<input class="w-full pl-12 pr-4 py-3 bg-[#F8F9FA] border border-[#F0F2F5] rounded-lg focus:border-primary focus:ring-0 transition-all text-body-md" id="email" placeholder="usuario@escola.seduc.pa.gov.br ou @aluno.seduc.pa.gov.br" required="" type="email"/>
+<input class="w-full pl-12 pr-4 py-3 bg-[#F8F9FA] border border-[#F0F2F5] rounded-lg focus:border-primary focus:ring-0 transition-all text-body-md" id="email" placeholder="professor@escola.seduc.pa.gov.br" required="" type="email"/>
 </div>
 <p id="email-error" class="text-[11px] text-error font-semibold mt-1.5 hidden"></p>
 </div>
@@ -213,53 +213,17 @@
 </button>
 </div>
 <div class="p-8">
-<!-- Step 1: Selection -->
-<div class="space-y-6" id="step-selection">
-<p class="text-body-md text-on-surface-variant text-center mb-8">Para redefinir sua senha, precisamos primeiro identificar seu perfil institucional.</p>
-<div class="grid grid-cols-2 gap-4">
-<button class="group p-6 border-2 border-[#F0F2F5] rounded-xl hover:border-secondary-container hover:bg-secondary-container/5 transition-all text-center" onclick="goToForm('professor')">
-<div class="w-12 h-12 bg-[#F8F9FA] group-hover:bg-secondary-container rounded-full flex items-center justify-center mx-auto mb-4 transition-colors">
-<span class="material-symbols-outlined text-primary">school</span>
-</div>
-<span class="block font-bold text-primary">Professor</span>
-</button>
-<button class="group p-6 border-2 border-[#F0F2F5] rounded-xl hover:border-secondary-container hover:bg-secondary-container/5 transition-all text-center" onclick="goToForm('aluno')">
-<div class="w-12 h-12 bg-[#F8F9FA] group-hover:bg-secondary-container rounded-full flex items-center justify-center mx-auto mb-4 transition-colors">
-<span class="material-symbols-outlined text-primary">person</span>
-</div>
-<span class="block font-bold text-primary">Aluno</span>
-</button>
-</div>
-</div>
-<!-- Step 2: Form Professor -->
-<div class="hidden space-y-5" id="form-professor">
-<div class="flex items-center gap-2 mb-6 text-on-surface-variant">
-<button class="hover:text-primary" onclick="backToSelection()"><span class="material-symbols-outlined text-[18px]">arrow_back</span></button>
-<span class="text-label-md font-bold uppercase tracking-widest">Perfil Professor</span>
+<!-- Formulário exclusivo para professor -->
+<div class="space-y-5" id="form-professor">
+<div class="mb-6">
+<span class="text-label-md font-bold uppercase tracking-widest text-on-surface-variant">Perfil Professor</span>
+<p class="text-body-sm text-on-surface-variant mt-xs">Informe os dados cadastrados pela escola.</p>
 </div>
 <div class="space-y-4">
 <div>
 <label class="block font-label-md text-label-md text-on-surface mb-1">Matrícula</label>
 <input class="w-full p-3 bg-[#F8F9FA] border border-[#F0F2F5] rounded-lg focus:border-primary focus:ring-0" placeholder="0000000" type="text"/>
 </div>
-<div>
-<label class="block font-label-md text-label-md text-on-surface mb-1">CPF</label>
-<input class="w-full p-3 bg-[#F8F9FA] border border-[#F0F2F5] rounded-lg focus:border-primary focus:ring-0" placeholder="000.000.000-00" type="text"/>
-</div>
-<div>
-<label class="block font-label-md text-label-md text-on-surface mb-1">Data de Nascimento</label>
-<input class="w-full p-3 bg-[#F8F9FA] border border-[#F0F2F5] rounded-lg focus:border-primary focus:ring-0" type="date"/>
-</div>
-</div>
-<button class="w-full py-4 bg-primary text-white font-bold rounded-lg mt-6 hover:brightness-125 transition-all" onclick="simulateSearch()">Localizar Cadastro</button>
-</div>
-<!-- Step 2: Form Aluno -->
-<div class="hidden space-y-5" id="form-aluno">
-<div class="flex items-center gap-2 mb-6 text-on-surface-variant">
-<button class="hover:text-primary" onclick="backToSelection()"><span class="material-symbols-outlined text-[18px]">arrow_back</span></button>
-<span class="text-label-md font-bold uppercase tracking-widest">Perfil Aluno</span>
-</div>
-<div class="space-y-4">
 <div>
 <label class="block font-label-md text-label-md text-on-surface mb-1">CPF</label>
 <input class="w-full p-3 bg-[#F8F9FA] border border-[#F0F2F5] rounded-lg focus:border-primary focus:ring-0" placeholder="000.000.000-00" type="text"/>
@@ -280,17 +244,14 @@
 <div class="hidden w-full space-y-6" id="result-content">
 <div class="bg-surface-container-low p-6 rounded-xl border border-secondary-container/20">
 <div class="flex items-center gap-4">
-<div class="w-14 h-14 rounded-full overflow-hidden border-2 border-white shadow-sm">
-<img alt="Profile Avatar" class="w-full h-full object-cover" data-alt="A clean, high-resolution portrait of a professional academic administrator in his 40s. He has a warm, confident expression and is wearing a crisp white dress shirt with a dark blazer. The lighting is soft and studio-quality, emphasizing a professional and trustworthy academic environment. The background is a soft, out-of-focus modern office space with subtle hints of corporate yellow and gray." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0H15MXEk5wwXHHtjR0_tQ3VbqenrRqKj5iHaSotRvy7A3xxq1ZVomH4vNA2DuR0ConsstGJ3p1FkAQjtQxtlJYH0TcxqJk8mUxDeTYMdpQ4M8UIFcnKmTk4esmSmijQi7BnhSDkjhfc9YZkynhb6F66u9gMAZB9AFVmtE9ACMvZqcZMGbM3nb2Z3ILM2iDdSyTipgwc8xy1ltgVnbPdn_rvHGurL5zMLM2bn-8Q7fZ5h7kRHjDX08Tlh_rUacSbwT9h7oeR4HfD0"/>
-</div>
+<div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center"><span class="material-symbols-outlined text-primary">mark_email_read</span></div>
 <div>
-<h4 class="font-bold text-primary">Dhenison Guimarães</h4>
-<p class="text-body-sm text-on-surface-variant">Matrícula: 2026.4178-9</p>
+<h4 class="font-bold text-primary">Solicitação recebida</h4>
+<p class="text-body-sm text-on-surface-variant">Se os dados forem válidos, as instruções serão enviadas ao e-mail institucional.</p>
 </div>
 </div>
 </div>
-<p class="text-body-sm text-center px-4">Cadastro verificado com sucesso. Clique abaixo para preencher os dados de acesso automaticamente e prosseguir.</p>
-<button class="w-full py-4 bg-secondary-container text-primary font-extrabold rounded-lg shadow-sm hover:brightness-95 transition-all" onclick="autoFillAndClose()">PREENCHER E ACESSAR</button>
+<button class="w-full py-4 bg-secondary-container text-primary font-extrabold rounded-lg shadow-sm hover:brightness-95 transition-all" onclick="closeModal()">VOLTAR AO LOGIN</button>
 </div>
 </div>
 </div>
@@ -301,34 +262,28 @@
 <span class="material-symbols-outlined text-secondary">check_circle</span>
 <span class="text-label-md font-bold">Acesso autorizado com sucesso!</span>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
 <script>
+        const config = window.SIGAEDU_CONFIG;
+        const supabase = window.supabase.createClient(config.supabaseUrl, config.supabaseAnonKey);
+
         const modal = document.getElementById('forgotPasswordModal');
         const steps = {
-            selection: document.getElementById('step-selection'),
             professor: document.getElementById('form-professor'),
-            aluno: document.getElementById('form-aluno'),
             search: document.getElementById('search-result')
         };
 
         function openModal() {
             modal.classList.remove('hidden');
             modal.classList.add('flex');
-            backToSelection();
+            Object.values(steps).forEach(s => s.classList.add('hidden'));
+            steps.professor.classList.remove('hidden');
         }
 
         function closeModal() {
             modal.classList.add('hidden');
             modal.classList.remove('flex');
-        }
-
-        function backToSelection() {
-            Object.values(steps).forEach(s => s.classList.add('hidden'));
-            steps.selection.classList.remove('hidden');
-        }
-
-        function goToForm(type) {
-            steps.selection.classList.add('hidden');
-            steps[type].classList.remove('hidden');
         }
 
         function simulateSearch() {
@@ -343,55 +298,20 @@
             }, 1800);
         }
 
-        function autoFillAndClose() {
-            const emailInput = document.getElementById('email');
-            const passInput = document.getElementById('password');
-            const emailError = document.getElementById('email-error');
-
-            closeModal();
-            
-            // Limpa estados de erro prévios
-            emailInput.classList.remove('border-error');
-            emailError.classList.add('hidden');
-            
-            // Simulação visual de preenchimento automático com as credenciais do usuário
-            emailInput.value = "dhenison.guimaraes4178@escola.seduc.pa.gov.br";
-            passInput.value = "siga@EDU2026";
-            
-            emailInput.classList.add('ring-2', 'ring-secondary-container');
-            passInput.classList.add('ring-2', 'ring-secondary-container');
-
-            setTimeout(() => {
-                emailInput.classList.remove('ring-2', 'ring-secondary-container');
-                passInput.classList.remove('ring-2', 'ring-secondary-container');
-                
-                // Exibe toast de preenchimento concluído
-                const toast = document.getElementById('toast');
-                const toastText = toast.querySelector('.text-label-md');
-                toastText.textContent = "Credenciais carregadas com sucesso! Clique em Acessar.";
-                toast.classList.remove('hidden');
-                toast.classList.add('flex');
-                
-                setTimeout(() => {
-                    toast.classList.add('hidden');
-                    toast.classList.remove('flex');
-                    toastText.textContent = "Acesso autorizado com sucesso!"; // Restaura texto original
-                }, 3000);
-            }, 800);
-        }
-
-        document.getElementById('loginForm').onsubmit = (e) => {
+        document.getElementById('loginForm').onsubmit = async (e) => {
             e.preventDefault();
             const emailInput = document.getElementById('email');
             const email = emailInput.value.trim().toLowerCase();
+            const passwordInput = document.getElementById('password');
+            const password = passwordInput.value;
             const emailError = document.getElementById('email-error');
             
-            const allowedDomains = ['@escola.seduc.pa.gov.br', '@aluno.seduc.pa.gov.br'];
+            const allowedDomains = ['@escola.seduc.pa.gov.br'];
             const isValidDomain = allowedDomains.some(domain => email.endsWith(domain));
             
             if (!isValidDomain) {
                 emailInput.classList.add('border-error');
-                emailError.textContent = "Acesso permitido apenas para e-mails institucionais da SEDUC Pará (@escola.seduc.pa.gov.br ou @aluno.seduc.pa.gov.br).";
+                emailError.textContent = "Acesso permitido apenas para e-mails institucionais da escola (@escola.seduc.pa.gov.br).";
                 emailError.classList.remove('hidden');
                 
                 // Efeito visual de tremor no campo (Premium UX)
@@ -402,20 +322,63 @@
                 return;
             }
             
-            // Limpa erros caso passe na validação
+            // Limpa erros caso passe na validação de domínio
             emailInput.classList.remove('border-error');
             emailError.classList.add('hidden');
             
-            const toast = document.getElementById('toast');
-            toast.classList.remove('hidden');
-            toast.classList.add('flex');
-            
-            setTimeout(() => {
-                toast.classList.add('hidden');
-                toast.classList.remove('flex');
-                // Redireciona para o painel principal após validação bem-sucedida
-                window.location.href = "dashboard.html";
-            }, 2000);
+            // Feedback visual de carregamento
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalBtnText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="animate-spin inline-block w-5 h-5 border-2 border-current border-t-transparent rounded-full mr-2"></span> Entrando...';
+
+            try {
+                // 1. Faz a autenticação no Supabase Auth
+                const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+                if (error) throw error;
+
+                // 2. Busca o perfil na tabela usuarios
+                const { data: profile, error: profileError } = await supabase
+                    .from('usuarios')
+                    .select('*')
+                    .eq('id', data.user.id)
+                    .single();
+
+                if (profileError || !profile) {
+                    await supabase.auth.signOut();
+                    throw new Error("Usuário autenticado, mas nenhum perfil cadastrado no SigaEDU.");
+                }
+
+                // 3. Salva sessão e perfil localmente para acesso rápido nas páginas
+                localStorage.setItem('sigaedu_user_session', JSON.stringify({
+                    user: data.user,
+                    profile: profile
+                }));
+
+                const toast = document.getElementById('toast');
+                toast.classList.remove('hidden');
+                toast.classList.add('flex');
+                
+                setTimeout(() => {
+                    toast.classList.add('hidden');
+                    toast.classList.remove('flex');
+                    // Redireciona para o painel principal após validação bem-sucedida
+                    window.location.href = "dashboard.html";
+                }, 1500);
+
+            } catch (err) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnText;
+
+                emailInput.classList.add('border-error');
+                emailError.textContent = err.message || "Erro desconhecido ao autenticar.";
+                emailError.classList.remove('hidden');
+                
+                emailInput.classList.add('animate-shake');
+                setTimeout(() => {
+                    emailInput.classList.remove('animate-shake');
+                }, 400);
+            }
         };
     </script>
 </body></html>

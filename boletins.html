@@ -132,6 +132,7 @@
         }
     </style>
 </head>
+<script src="clean-demo-data.js"></script>
 <body class="bg-background text-on-background min-h-screen overflow-x-hidden">
 <!-- SideNavBar Componente Unificado -->
 <aside id="sidebar" class="fixed left-0 top-0 bottom-0 z-50 flex flex-col p-sm pt-xl overflow-y-auto w-64 bg-white/70 backdrop-blur-xl border-r border-surface-variant dark:border-outline-variant shadow-md transition-transform duration-300 -translate-x-full md:translate-x-0">
@@ -162,6 +163,10 @@
       <a id="menu-alunos" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="fichadoaluno.html">
         <span class="material-symbols-outlined" data-icon="person">person</span>
         <span class="text-label-md font-label-md">Alunos</span>
+      </a>
+      <a id="menu-sala-aee" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="sala_aee.html">
+        <span class="material-symbols-outlined" data-icon="psychology_alt">psychology_alt</span>
+        <span class="text-label-md font-label-md">Sala AEE</span>
       </a>
       <a id="menu-calendario" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="calendario.html">
         <span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
@@ -334,8 +339,8 @@
 <div class="p-4 border-b border-surface-container-highest hover:bg-surface-container-lowest transition-colors group cursor-pointer">
 <div class="flex justify-between items-start mb-2">
 <div>
-<span class="font-label-md text-label-md text-primary">3º ANO A - Ensino Médio</span>
-<p class="font-body-sm text-body-sm text-on-surface-variant">Prof. Marcos Silveira</p>
+<span class="font-label-md text-label-md text-primary">Nenhuma turma cadastrada</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Professor não cadastrado</p>
 </div>
 <span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full font-label-sm text-label-sm">Lançado</span>
 </div>
@@ -350,8 +355,8 @@
 <div class="p-4 border-b border-surface-container-highest hover:bg-surface-container-lowest transition-colors group cursor-pointer">
 <div class="flex justify-between items-start mb-2">
 <div>
-<span class="font-label-md text-label-md text-primary">2º ANO C - Ensino Médio</span>
-<p class="font-body-sm text-body-sm text-on-surface-variant">Profª. Ana Paula</p>
+<span class="font-label-md text-label-md text-primary">Nenhuma turma cadastrada</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Professor não cadastrado</p>
 </div>
 <span class="bg-error-container text-on-error-container px-3 py-1 rounded-full font-label-sm text-label-sm">Pendente</span>
 </div>
@@ -366,8 +371,8 @@
 <div class="p-4 border-b border-surface-container-highest hover:bg-surface-container-lowest transition-colors group cursor-pointer">
 <div class="flex justify-between items-start mb-2">
 <div>
-<span class="font-label-md text-label-md text-primary">1º ANO B - Fundamental</span>
-<p class="font-body-sm text-body-sm text-on-surface-variant">Prof. Ricardo Costa</p>
+<span class="font-label-md text-label-md text-primary">Nenhuma turma cadastrada</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Professor não cadastrado</p>
 </div>
 <span class="bg-error-container text-on-error-container px-3 py-1 rounded-full font-label-sm text-label-sm">Pendente</span>
 </div>
@@ -382,8 +387,8 @@
 <div class="p-4 border-b border-surface-container-highest hover:bg-surface-container-lowest transition-colors group cursor-pointer">
 <div class="flex justify-between items-start mb-2">
 <div>
-<span class="font-label-md text-label-md text-primary">9º ANO A - Fundamental</span>
-<p class="font-body-sm text-body-sm text-on-surface-variant">Profª. Heloísa Lima</p>
+<span class="font-label-md text-label-md text-primary">Nenhuma turma cadastrada</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Professor não cadastrado</p>
 </div>
 <span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full font-label-sm text-label-sm">Lançado</span>
 </div>
@@ -498,6 +503,7 @@
         'dashboard.html': 'menu-dashboard',
         'turmas.html': 'menu-turmas',
         'fichadoaluno.html': 'menu-alunos',
+        'sala_aee.html': 'menu-sala-aee',
         'calendario.html': 'menu-calendario',
         'agenda.html': 'menu-agenda',
         'frequencia.html': 'menu-frequencia',
