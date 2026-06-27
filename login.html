@@ -306,23 +306,7 @@
             const password = passwordInput.value;
             const emailError = document.getElementById('email-error');
             
-            const allowedDomains = ['@escola.seduc.pa.gov.br'];
-            const isValidDomain = allowedDomains.some(domain => email.endsWith(domain));
-            
-            if (!isValidDomain) {
-                emailInput.classList.add('border-error');
-                emailError.textContent = "Acesso permitido apenas para e-mails institucionais da escola (@escola.seduc.pa.gov.br).";
-                emailError.classList.remove('hidden');
-                
-                // Efeito visual de tremor no campo (Premium UX)
-                emailInput.classList.add('animate-shake');
-                setTimeout(() => {
-                    emailInput.classList.remove('animate-shake');
-                }, 400);
-                return;
-            }
-            
-            // Limpa erros caso passe na validação de domínio
+            // Limpa erros
             emailInput.classList.remove('border-error');
             emailError.classList.add('hidden');
             
