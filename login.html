@@ -266,7 +266,7 @@
 <script src="supabase-config.js"></script>
 <script>
         const config = window.SIGAEDU_CONFIG;
-        const supabase = window.supabase.createClient(config.supabaseUrl, config.supabaseAnonKey);
+        const supabaseClient = window.supabase.createClient(config.supabaseUrl, config.supabaseAnonKey);
 
         const modal = document.getElementById('forgotPasswordModal');
         const steps = {
@@ -318,18 +318,18 @@
 
             try {
                 // 1. Faz a autenticação no Supabase Auth
-                const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+                const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
                 if (error) throw error;
 
                 // 2. Busca o perfil na tabela usuarios
-                const { data: profile, error: profileError } = await supabase
+                const { data: profile, error: profileError } = await supabaseClient
                     .from('usuarios')
                     .select('*')
                     .eq('id', data.user.id)
                     .single();
 
                 if (profileError || !profile) {
-                    await supabase.auth.signOut();
+                    await supabaseClient.auth.signOut();
                     throw new Error("Usuário autenticado, mas nenhum perfil cadastrado no SigaEDU.");
                 }
 
