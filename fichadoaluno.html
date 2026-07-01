@@ -461,7 +461,7 @@
         <span class="material-symbols-outlined">close</span>
       </button>
     </div>
-    <form class="p-md space-y-md overflow-y-auto flex-1 text-left" onsubmit="cadastrarOuEditarAluno(e || event)">
+    <form class="p-md space-y-md overflow-y-auto flex-1 text-left" onsubmit="cadastrarOuEditarAluno(event)">
       <!-- Avatar Section -->
       <div class="flex flex-col sm:flex-row items-center gap-md bg-surface-container-low p-md rounded-xl border border-surface-variant">
         <div class="relative group">
@@ -1060,13 +1060,14 @@ ON CONFLICT (id) DO NOTHING;`;
         const filterTurmaEl = document.getElementById("filter-turma");
         const alunoTurmaEl = document.getElementById("aluno-turma");
         
-        const optionsHtml = turmas.map(t => `<option value="${t.nome}">${t.nome}</option>`).join('');
+        const filterOptionsHtml = turmas.map(t => `<option value="${t.id}">${t.nome}</option>`).join('');
+        const formOptionsHtml = turmas.map(t => `<option value="${t.id}">${t.nome}</option>`).join('');
 
         if (filterTurmaEl) {
-          filterTurmaEl.innerHTML = `<option value="">Todas as Turmas</option>` + optionsHtml;
+          filterTurmaEl.innerHTML = `<option value="">Todas as Turmas</option>` + filterOptionsHtml;
         }
         if (alunoTurmaEl) {
-          alunoTurmaEl.innerHTML = `<option value="" disabled selected>Selecione a turma...</option>` + optionsHtml;
+          alunoTurmaEl.innerHTML = `<option value="" disabled selected>Selecione a turma...</option>` + formOptionsHtml;
         }
       }
 
@@ -1326,8 +1327,7 @@ ON CONFLICT (id) DO NOTHING;`;
           const alunoTurno = turmaObj ? turmaObj.turno : "Manhã";
           const matchesTurno = turnoSel === "" || alunoTurno === turnoSel;
           
-          const turmaNome = turmaObj ? turmaObj.nome : "";
-          const matchesTurma = turmaSel === "" || turmaNome === turmaSel;
+          const matchesTurma = turmaSel === "" || aluno.turma_id === turmaSel;
           
           return matchesSearch && matchesTurno && matchesTurma;
         });
@@ -1518,14 +1518,12 @@ ON CONFLICT (id) DO NOTHING;`;
           populateTurmas();
           
           const turmaObj = turmas.find(t => t.id === aluno.turma_id);
-          const turmaNome = turmaObj ? turmaObj.nome : "";
-
           document.getElementById("aluno-nome").value = aluno.nome;
           document.getElementById("aluno-cpf").value = aluno.cpf;
           document.getElementById("aluno-nascimento").value = aluno.data_nascimento;
           const alunoTurno = turmaObj ? turmaObj.turno : "Manhã";
           document.getElementById("aluno-turno").value = alunoTurno;
-          document.getElementById("aluno-turma").value = turmaNome;
+          document.getElementById("aluno-turma").value = aluno.turma_id || "";
           document.getElementById("aluno-email").value = aluno.email;
           document.getElementById("aluno-contato").value = aluno.contato || "";
           
@@ -1594,30 +1592,30 @@ ON CONFLICT (id) DO NOTHING;`;
           resetAeeFormulario();
           populateTurmas();
 
-          // Preenche com informações mockadas padrão para teste ágil
+          // Mantem apenas os valores padrao dos campos de selecao.
           const nInput = document.getElementById("aluno-nome");
-          if (nInput) nInput.value = "Ana Maria de Souza";
+          if (nInput) nInput.value = "";
           
           const cpfInput = document.getElementById("aluno-cpf");
-          if (cpfInput) cpfInput.value = "123.456.789-00";
+          if (cpfInput) cpfInput.value = "";
           
           const nascInput = document.getElementById("aluno-nascimento");
-          if (nascInput) nascInput.value = "2012-05-15";
+          if (nascInput) nascInput.value = "";
           
           const turnoInput = document.getElementById("aluno-turno");
           if (turnoInput) turnoInput.value = "Manhã";
           
           const emailInput = document.getElementById("aluno-email");
-          if (emailInput) emailInput.value = "anamaria@aluno.seduc.pa.gov.br";
+          if (emailInput) emailInput.value = "";
           
           const contInput = document.getElementById("aluno-contato");
-          if (contInput) contInput.value = "(91) 98765-4321";
+          if (contInput) contInput.value = "";
           
           const respTipoInput = document.getElementById("aluno-responsavel-tipo");
           if (respTipoInput) respTipoInput.value = "Mãe";
           
           const respNomeInput = document.getElementById("aluno-responsavel-nome");
-          if (respNomeInput) respNomeInput.value = "Antônia de Souza";
+          if (respNomeInput) respNomeInput.value = "";
           
           const transpInput = document.getElementById("aluno-transporte");
           if (transpInput) transpInput.value = "Não";
@@ -1626,7 +1624,7 @@ ON CONFLICT (id) DO NOTHING;`;
           if (aeeInput) aeeInput.value = "Não";
           
           const senhaInput = document.getElementById("aluno-senha");
-          if (senhaInput) senhaInput.value = "aluno@sigaedu";
+          if (senhaInput) senhaInput.value = "";
 
           toggleModal("modal-aluno");
         } catch (err) {
@@ -1643,7 +1641,7 @@ ON CONFLICT (id) DO NOTHING;`;
         const cpf = document.getElementById("aluno-cpf").value;
         const nascimento = document.getElementById("aluno-nascimento").value;
         const turno = document.getElementById("aluno-turno").value;
-        const turmaNome = document.getElementById("aluno-turma").value;
+        const turmaId = document.getElementById("aluno-turma").value;
         const email = document.getElementById("aluno-email").value.trim();
         const contato = document.getElementById("aluno-contato").value;
         
@@ -1666,8 +1664,11 @@ ON CONFLICT (id) DO NOTHING;`;
           return;
         }
 
-        const selectedTurmaObj = turmas.find(t => t.nome === turmaNome);
-        const turmaId = selectedTurmaObj ? selectedTurmaObj.id : null;
+        const selectedTurmaObj = turmas.find(t => t.id === turmaId && t.escola_id === escolaId);
+        if (!selectedTurmaObj) {
+          alert("Selecione uma turma válida da escola ativa antes de cadastrar alunos.");
+          return;
+        }
 
         const submitBtn = form.querySelector('button[type="submit"]');
         const originalBtnText = submitBtn.innerHTML;
