@@ -1696,7 +1696,12 @@ ON CONFLICT (id) DO NOTHING;`;
           renderAlunosTable();
 
         } catch (err) {
-          alert("Erro ao salvar aluno no Supabase: " + err.message);
+          console.error("Erro completo ao salvar aluno:", err);
+          let errorMsg = err.message || "Erro desconhecido";
+          if (err.code) errorMsg += ` (Código: ${err.code})`;
+          if (err.details) errorMsg += `\nDetalhes: ${err.details}`;
+          if (err.hint) errorMsg += `\nSugestão: ${err.hint}`;
+          alert("Erro ao salvar aluno no Supabase:\n\n" + errorMsg);
         } finally {
           submitBtn.disabled = false;
           submitBtn.innerHTML = originalBtnText;
