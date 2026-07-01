@@ -42,26 +42,37 @@ ALTER TABLE public.turmas ENABLE ROW LEVEL SECURITY;
 
 -- 4. ALUNOS
 CREATE TABLE IF NOT EXISTS public.alunos (
-    id                      UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    escola_id               UUID REFERENCES public.escolas(id) ON DELETE CASCADE NOT NULL,
-    turma_id                UUID REFERENCES public.turmas(id) ON DELETE SET NULL,
-    nome                    TEXT NOT NULL,
-    cpf                     TEXT NOT NULL,
-    data_nascimento         DATE NOT NULL,
-    email                   TEXT UNIQUE NOT NULL,
-    contato                 TEXT,
-    tipo_responsavel        TEXT,
-    nome_responsavel        TEXT,
-    parentesco_responsavel  TEXT,
-    utiliza_transporte      BOOLEAN DEFAULT false,
-    rota                    TEXT,
-    senha                   TEXT, -- Senha do Portal do Aluno
-    avatar                  TEXT,
-    aee_atendido            BOOLEAN DEFAULT false,
-    aee_especificidades     TEXT[],
-    aee_outra_especificidade TEXT,
-    created_at              TIMESTAMPTZ DEFAULT now()
+  id uuid not null default gen_random_uuid (),
+  escola_id uuid not null,
+  turma_id uuid null,
+  nome text not null,
+  cpf text not null,
+  data_nascimento date not null,
+  email text not null,
+  contato text null,
+  tipo_responsavel text null,
+  nome_responsavel text null,
+  parentesco_responsavel text null,
+  utiliza_transporte boolean null default false,
+  rota text null,
+  senha text null,
+  avatar text null,
+  aee_atendido boolean null default false,
+  aee_especificidades text[] null,
+  aee_outra_especificidade text null,
+  created_at timestamp with time zone null default now(),
+  auth_user_id uuid null,
+  email_institucional text null,
+  constraint alunos_pkey primary key (id),
+  constraint alunos_auth_user_id_key unique (auth_user_id),
+  constraint alunos_email_key unique (email),
+  constraint alunos_auth_user_id_fkey foreign KEY (auth_user_id) references auth.users (id) on delete set null,
+  constraint alunos_escola_id_fkey foreign KEY (escola_id) references public.escolas (id) on delete CASCADE,
+  constraint alunos_turma_id_fkey foreign KEY (turma_id) references public.turmas (id) on delete set null
 );
+
+CREATE UNIQUE INDEX IF NOT EXISTS alunos_email_institucional_unique ON public.alunos USING btree (lower(email_institucional))
+WHERE (email_institucional IS NOT NULL);
 
 ALTER TABLE public.alunos ENABLE ROW LEVEL SECURITY;
 
