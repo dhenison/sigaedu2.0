@@ -1141,9 +1141,11 @@
         const filtrados = alunos.filter(aluno => {
           const rawCpf = aluno.cpf.replace(/\D/g, "");
           const matchesSearch = aluno.nome.toLowerCase().includes(rawQuery) || rawCpf.includes(query) || aluno.cpf.includes(rawQuery);
-          const matchesTurno = turnoSel === "" || aluno.turno === turnoSel;
           
           const turmaObj = turmas.find(t => t.id === aluno.turma_id);
+          const alunoTurno = turmaObj ? turmaObj.turno : "Manhã";
+          const matchesTurno = turnoSel === "" || alunoTurno === turnoSel;
+          
           const turmaNome = turmaObj ? turmaObj.nome : "";
           const matchesTurma = turmaSel === "" || turmaNome === turmaSel;
           
@@ -1163,6 +1165,7 @@
         tableBody.innerHTML = filtrados.map(aluno => {
           const turmaObj = turmas.find(t => t.id === aluno.turma_id);
           const turmaNome = turmaObj ? turmaObj.nome : "Sem Turma";
+          const alunoTurno = turmaObj ? turmaObj.turno : "Manhã";
           
           return `
           <tr class="hover:bg-surface-container-lowest transition-colors group">
@@ -1173,7 +1176,7 @@
                 <p class="text-label-sm text-on-surface-variant">CPF: ${aluno.cpf}</p>
               </div>
             </td>
-            <td class="px-md py-md font-medium text-body-sm text-left">${turmaNome} (${aluno.turno || 'Manhã'})</td>
+            <td class="px-md py-md font-medium text-body-sm text-left">${turmaNome} (${alunoTurno})</td>
             <td class="px-md py-md text-right">
               <div class="flex justify-end gap-sm" onclick="event.stopPropagation()">
                 <button class="flex items-center gap-xs px-sm py-xs bg-surface-container-high text-primary text-label-sm font-bold rounded-lg hover:bg-primary hover:text-white transition-all" onclick="abrirFichaIndividual('${aluno.id}')" title="Ficha Individual">
@@ -1206,7 +1209,8 @@
         document.getElementById("ficha-avatar").src = aluno.avatar || 'https://lh3.googleusercontent.com/aida-public/AB6AXuDRGSGbqGOo2dzNp40hZk4pp_0rVieA-Su6u1WdWdVVqvGIA6n7dJMIDQVg3vkTYKgYN5HRKv7SOzuV4CGLSmB4xKZHKFpq-2ab9UNYf9ye3MByCMdx_JIehrQjusuLvStYhxK5Qj2eZHDffXBfYxzFUFDsX7kk7oInOP0foJp972O4lAIpD8pOJMQ4ehoA3BKsZHDj0gIh6Fx7Dr-Uvdu89v6j1O2f_mCuy7lSXEnJdzNLXbaD9C36QemEJIA6ok8BwdRRm8oVmvA';
         document.getElementById("ficha-nome").textContent = aluno.nome;
         document.getElementById("ficha-matricula").textContent = `Matrícula: 2026.ALUNO.${aluno.id.slice(0,4)}`;
-        document.getElementById("ficha-turno").textContent = aluno.turno || 'Manhã';
+        const alunoTurno = turmaObj ? turmaObj.turno : "Manhã";
+        document.getElementById("ficha-turno").textContent = alunoTurno;
         document.getElementById("ficha-turma").textContent = turmaNome;
         
         document.getElementById("ficha-responsavel").textContent = `${aluno.nome_responsavel || 'Não Cadastrado'} (${aluno.tipo_responsavel || 'Mãe'})`;
@@ -1339,7 +1343,8 @@
           document.getElementById("aluno-nome").value = aluno.nome;
           document.getElementById("aluno-cpf").value = aluno.cpf;
           document.getElementById("aluno-nascimento").value = aluno.data_nascimento;
-          document.getElementById("aluno-turno").value = aluno.turno || "Manhã";
+          const alunoTurno = turmaObj ? turmaObj.turno : "Manhã";
+          document.getElementById("aluno-turno").value = alunoTurno;
           document.getElementById("aluno-turma").value = turmaNome;
           document.getElementById("aluno-email").value = aluno.email;
           document.getElementById("aluno-contato").value = aluno.contato || "";
@@ -1517,7 +1522,6 @@
             nome,
             cpf,
             data_nascimento: nascimento,
-            turno,
             email,
             contato,
             tipo_responsavel: responsavelTipo,
@@ -1681,7 +1685,6 @@
                 nome,
                 cpf,
                 data_nascimento: dataNascimento,
-                turno,
                 email,
                 contato,
                 tipo_responsavel: tipoResponsavel,
