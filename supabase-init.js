@@ -21,6 +21,7 @@
 
   const supabase = window.supabase.createClient(config.supabaseUrl, config.supabaseAnonKey);
   window.supabaseClient = supabase; // Exporta globalmente
+  window.sigaeduAuthReady = Promise.resolve(null);
 
   if (isPublicPage) {
     return; // Não executa o fluxo de autenticação em páginas públicas
@@ -44,20 +45,62 @@
 
   window.userSession = session; // Exporta sessão globalmente
 
-  // Define a escola ativa imediatamente para evitar problemas de concorrência com scripts da página
-  if (session.profile.perfil === 'super_admin') {
-    const storedEscola = localStorage.getItem('sigaedu_selected_escola');
-    if (storedEscola) {
-      window.selectedEscola = JSON.parse(storedEscola);
+  function aplicarEscolaDaSessao(activeSession) {
+    if (activeSession.profile.perfil === 'super_admin') {
+      const storedEscola = localStorage.getItem('sigaedu_selected_escola');
+      window.selectedEscola = storedEscola ? JSON.parse(storedEscola) : null;
+    } else {
+      const escolaFixa = {
+        id: activeSession.profile.escola_id,
+        nome: "Minha Escola"
+      };
+      localStorage.setItem('sigaedu_selected_escola', JSON.stringify(escolaFixa));
+      window.selectedEscola = escolaFixa;
     }
-  } else {
-    const escolaFixa = {
-      id: session.profile.escola_id,
-      nome: "Minha Escola"
-    };
-    localStorage.setItem('sigaedu_selected_escola', JSON.stringify(escolaFixa));
-    window.selectedEscola = escolaFixa;
   }
+
+  window.sigaeduAuthReady = (async function validarSessaoSupabase() {
+    try {
+      const { data, error } = await supabase.auth.getSession();
+      if (error) throw error;
+
+      const authSession = data && data.session;
+      if (!authSession || !authSession.user) {
+        throw new Error("Sessao do Supabase ausente ou expirada.");
+      }
+
+      const { data: profile, error: profileError } = await supabase
+        .from('usuarios')
+        .select('*')
+        .eq('id', authSession.user.id)
+        .single();
+
+      if (profileError || !profile) {
+        throw profileError || new Error("Perfil do usuario nao encontrado.");
+      }
+
+      const refreshedSession = {
+        user: authSession.user,
+        profile
+      };
+
+      localStorage.setItem('sigaedu_user_session', JSON.stringify(refreshedSession));
+      window.userSession = refreshedSession;
+      aplicarEscolaDaSessao(refreshedSession);
+      return refreshedSession;
+    } catch (err) {
+      console.warn("Sessao local invalida para o Supabase:", err);
+      localStorage.removeItem('sigaedu_user_session');
+      localStorage.removeItem('sigaedu_selected_escola');
+      window.userSession = null;
+      window.selectedEscola = null;
+      window.location.href = "login.html";
+      return null;
+    }
+  })();
+
+  // Define a escola ativa imediatamente para evitar problemas de concorrência com scripts da página
+  aplicarEscolaDaSessao(session);
 
   // Função Global de Logout
   window.logoutUsuario = async function() {

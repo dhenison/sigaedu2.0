@@ -878,10 +878,16 @@
       }
 
       const supabase = window.supabaseClient;
-      const selectedEscola = window.selectedEscola;
-      const escolaId = selectedEscola ? selectedEscola.id : null;
+      let selectedEscola = window.selectedEscola;
+      let escolaId = selectedEscola ? selectedEscola.id : null;
       let alunos = JSON.parse(localStorage.getItem('sigaedu_alunos')) || [];
       let turmas = [];
+
+      function atualizarEscolaAtiva() {
+        selectedEscola = window.selectedEscola;
+        escolaId = selectedEscola ? selectedEscola.id : null;
+        return escolaId;
+      }
 
       function saveAlunos() {
         localStorage.setItem('sigaedu_alunos', JSON.stringify(alunos));
@@ -989,6 +995,14 @@ ON CONFLICT (id) DO NOTHING;`;
       // Busca dados do Supabase
       async function carregarDados() {
         try {
+          atualizarEscolaAtiva();
+          if (!supabase) {
+            throw new Error("Cliente Supabase nao inicializado.");
+          }
+          if (!escolaId) {
+            throw new Error("Nenhuma escola ativa selecionada para carregar os alunos.");
+          }
+
           // Verifica se a base está vazia (falta de registros em escolas)
           const { data: dbEscolas, error: errorEscolas } = await supabase
             .from('escolas')
@@ -1623,6 +1637,7 @@ ON CONFLICT (id) DO NOTHING;`;
 
       window.cadastrarOuEditarAluno = async function(e) {
         e.preventDefault();
+        atualizarEscolaAtiva();
         
         const nome = document.getElementById("aluno-nome").value.trim();
         const cpf = document.getElementById("aluno-cpf").value;
@@ -1646,6 +1661,11 @@ ON CONFLICT (id) DO NOTHING;`;
           return;
         }
 
+        if (!escolaId) {
+          alert("Selecione uma escola ativa antes de cadastrar alunos.");
+          return;
+        }
+
         const selectedTurmaObj = turmas.find(t => t.nome === turmaNome);
         const turmaId = selectedTurmaObj ? selectedTurmaObj.id : null;
 
@@ -1653,6 +1673,8 @@ ON CONFLICT (id) DO NOTHING;`;
         const originalBtnText = submitBtn.innerHTML;
         submitBtn.disabled = true;
         submitBtn.innerHTML = "Enviando...";
+
+        let alunoPayload = null;
 
         try {
           let avatarUrl = activeAvatar;
@@ -1712,7 +1734,7 @@ ON CONFLICT (id) DO NOTHING;`;
 
           submitBtn.innerHTML = "Salvando dados...";
 
-          const alunoPayload = {
+          alunoPayload = {
             escola_id: escolaId,
             turma_id: turmaId,
             nome,
@@ -1766,7 +1788,7 @@ ON CONFLICT (id) DO NOTHING;`;
               adminId = JSON.parse(sessionData).user.id;
             } catch(e) {}
           }
-          window.mostrarDiagnosticoErro(err, alunoPayload, adminId, escolaId, turmaId);
+          window.mostrarDiagnosticoErro(err, alunoPayload || {}, adminId, escolaId, turmaId);
         } finally {
           submitBtn.disabled = false;
           submitBtn.innerHTML = originalBtnText;
@@ -1898,7 +1920,23 @@ ON CONFLICT (id) DO NOTHING;`;
       };
 
       // Inicialização
-      carregarDados();
+      async function inicializarModuloAlunos() {
+        try {
+          if (window.sigaeduAuthReady) {
+            await window.sigaeduAuthReady;
+          }
+          atualizarEscolaAtiva();
+          if (!escolaId) {
+            alert("Selecione uma escola ativa para carregar os alunos.");
+            return;
+          }
+          await carregarDados();
+        } catch (err) {
+          console.error("Nao foi possivel inicializar o modulo de alunos:", err);
+        }
+      }
+
+      inicializarModuloAlunos();
     })();
   </script>
 </body></html>
