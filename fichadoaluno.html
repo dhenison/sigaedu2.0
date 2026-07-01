@@ -628,6 +628,46 @@
       </button>
     </div>
   </div>
+<!-- Modal de Inicialização do DB -->
+<div class="fixed inset-0 z-[110] hidden flex items-center justify-center p-md bg-black/50 backdrop-blur-sm" id="modal-inicializacao-db">
+  <div class="bg-white w-full max-w-2xl rounded-2xl border border-outline-variant shadow-lg flex flex-col max-h-[90vh]">
+    <div class="p-lg border-b border-outline-variant flex justify-between items-center bg-error-container/20">
+      <div class="flex items-center gap-sm text-error">
+        <span class="material-symbols-outlined text-[32px]">warning</span>
+        <h2 class="text-title-lg font-bold">Banco de Dados Vazio Detectado</h2>
+      </div>
+      <button class="p-xs text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors" onclick="toggleModal('modal-inicializacao-db')">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <div class="p-lg overflow-y-auto space-y-md text-left">
+      <p class="text-body-md text-on-surface-variant">
+        Detectamos que a sua base de dados do Supabase está vazia. Para cadastrar alunos, as políticas de segurança (RLS) exigem que a <strong>Escola</strong> e o <strong>Usuário Administrador</strong> estejam registrados no banco de dados.
+      </p>
+      <p class="text-body-md font-bold text-primary">
+        Por favor, copie o código SQL abaixo e execute-o no Editor SQL do painel do seu projeto Supabase:
+      </p>
+      <div class="relative bg-surface-container-high p-md rounded-xl font-mono text-[13px] text-primary overflow-x-auto border border-outline-variant">
+        <pre id="sql-code-block" class="whitespace-pre-wrap break-all"></pre>
+        <button onclick="copiarSqlCode()" class="absolute top-2 right-2 px-sm py-xs bg-primary text-white text-label-sm font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center gap-xs">
+          <span class="material-symbols-outlined text-[16px]">content_copy</span>
+          Copiar SQL
+        </button>
+      </div>
+      <div class="bg-surface-container-low p-md rounded-xl border border-outline-variant text-body-sm text-on-surface-variant flex gap-sm items-start">
+        <span class="material-symbols-outlined text-primary">info</span>
+        <p>Após executar o script no Supabase, atualize esta página para que os dados sejam sincronizados e o cadastro de alunos funcione normalmente.</p>
+      </div>
+    </div>
+    <div class="p-lg border-t border-outline-variant flex justify-end gap-sm">
+      <button class="px-lg py-sm bg-white border border-outline-variant text-primary font-bold rounded-xl hover:bg-surface-container-low transition-colors" onclick="toggleModal('modal-inicializacao-db')">
+        Fechar
+      </button>
+      <button class="px-lg py-sm bg-primary text-white font-bold rounded-xl hover:opacity-90 transition-opacity" onclick="window.location.reload()">
+        Já executei, Atualizar Página
+      </button>
+    </div>
+  </div>
 </div>
 
 <!-- Footer -->
@@ -847,9 +887,56 @@
         fichaView.classList.remove("hidden");
       };
 
+      window.mostrarInstrucoesInicializacao = function(adminId, adminEmail, adminNome, activeEscolaId, activeEscolaNome) {
+        const sql = `-- 1. Inserir a escola ativa
+INSERT INTO public.escolas (id, nome)
+VALUES ('${activeEscolaId}', '${activeEscolaNome}')
+ON CONFLICT (id) DO NOTHING;
+
+-- 2. Inserir o seu perfil de usuário administrador associado à escola
+INSERT INTO public.usuarios (id, escola_id, nome, email, perfil)
+VALUES ('${adminId}', '${activeEscolaId}', '${adminNome}', '${adminEmail}', 'admin')
+ON CONFLICT (id) DO NOTHING;`;
+
+        const codeBlock = document.getElementById("sql-code-block");
+        if (codeBlock) {
+          codeBlock.textContent = sql;
+        }
+        
+        toggleModal("modal-inicializacao-db");
+      };
+
+      window.copiarSqlCode = function() {
+        const codeBlock = document.getElementById("sql-code-block");
+        if (codeBlock) {
+          navigator.clipboard.writeText(codeBlock.textContent);
+          alert("Código SQL copiado para a área de transferência!");
+        }
+      };
+
       // Busca dados do Supabase
       async function carregarDados() {
         try {
+          // Verifica se a base está vazia (falta de registros em escolas)
+          const { data: dbEscolas, error: errorEscolas } = await supabase
+            .from('escolas')
+            .select('id');
+            
+          if (errorEscolas || !dbEscolas || dbEscolas.length === 0) {
+            const sessionData = localStorage.getItem('sigaedu_user_session');
+            if (sessionData) {
+              const session = JSON.parse(sessionData);
+              const adminId = session.user.id;
+              const adminEmail = session.user.email;
+              const adminNome = session.profile.nome;
+              const activeEscolaId = session.profile.escola_id || escolaId || '00000000-0000-0000-0000-000000000000';
+              const activeEscolaNome = selectedEscola ? selectedEscola.nome : 'Minha Escola';
+              
+              window.mostrarInstrucoesInicializacao(adminId, adminEmail, adminNome, activeEscolaId, activeEscolaNome);
+              return;
+            }
+          }
+
           const { data: dbTurmas, error: errorTurmas } = await supabase
             .from('turmas')
             .select('*')
@@ -873,6 +960,13 @@
           checarUrlParams();
         } catch(err) {
           console.error("Erro ao carregar alunos/turmas do Supabase:", err);
+          if (err.message && (err.message.includes("RLS") || err.message.includes("policy"))) {
+            const sessionData = localStorage.getItem('sigaedu_user_session');
+            if (sessionData) {
+              const session = JSON.parse(sessionData);
+              window.mostrarInstrucoesInicializacao(session.user.id, session.user.email, session.profile.nome, session.profile.escola_id || escolaId, 'Minha Escola');
+            }
+          }
         }
       }
 
