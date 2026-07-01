@@ -780,7 +780,10 @@
         localStorage.setItem('sigaedu_alunos', JSON.stringify(defaultAlunos));
       }
 
-      let alunos = JSON.parse(localStorage.getItem('sigaedu_alunos'));
+      const supabase = window.supabaseClient;
+      const selectedEscola = window.selectedEscola;
+      const escolaId = selectedEscola ? selectedEscola.id : null;
+      let alunos = JSON.parse(localStorage.getItem('sigaedu_alunos')) || [];
 
       function saveAlunos() {
         localStorage.setItem('sigaedu_alunos', JSON.stringify(alunos));
@@ -1395,30 +1398,56 @@
 
       // 6. Cadastrar ou Salvar Edição do Aluno
       window.abrirCadastroAluno = function() {
-        editingAlunoId = null;
-        modalAlunoTitle.textContent = "Cadastrar Novo Aluno";
-        form.reset();
-        activeAvatar = "https://lh3.googleusercontent.com/aida-public/AB6AXuChwy7OeE79vSwiRfMcYvFI7j5KL0rYxzxlH0ftQIV2K52io4HEe4cd0YiBXu3EHDT46oWl-xO06U2HlDHIACep2nrtFTeAoj1sFYLyNMNH4pj_mqsFslfcFEpJIlzlffAAIXVRfMSfQG42g7KZ7tTmG4Cb1PDODyiP8dcCDnR352c3SQ812oFSRM77-CpYg3b5whPXEoMSsWFGlGcj_r2tkGoXE82Zf7iG-hZTTuX8vkZ6QeEfinXwnGrIpaAs--gB0SJrOLboUwE";
-        avatarPreview.src = activeAvatar;
-        parentescoContainer.classList.add("hidden");
-        rotaContainer.classList.add("hidden");
-        resetAeeFormulario();
-        populateTurmas();
+        try {
+          editingAlunoId = null;
+          modalAlunoTitle.textContent = "Cadastrar Novo Aluno";
+          if (form) form.reset();
+          activeAvatar = "https://lh3.googleusercontent.com/aida-public/AB6AXuChwy7OeE79vSwiRfMcYvFI7j5KL0rYxzxlH0ftQIV2K52io4HEe4cd0YiBXu3EHDT46oWl-xO06U2HlDHIACep2nrtFTeAoj1sFYLyNMNH4pj_mqsFslfcFEpJIlzlffAAIXVRfMSfQG42g7KZ7tTmG4Cb1PDODyiP8dcCDnR352c3SQ812oFSRM77-CpYg3b5whPXEoMSsWFGlGcj_r2tkGoXE82Zf7iG-hZTTuX8vkZ6QeEfinXwnGrIpaAs--gB0SJrOLboUwE";
+          if (avatarPreview) avatarPreview.src = activeAvatar;
+          if (parentescoContainer) parentescoContainer.classList.add("hidden");
+          if (rotaContainer) rotaContainer.classList.add("hidden");
+          resetAeeFormulario();
+          populateTurmas();
 
-        // Preenche com informações mockadas padrão para teste ágil
-        document.getElementById("aluno-nome").value = "Ana Maria de Souza";
-        document.getElementById("aluno-cpf").value = "123.456.789-00";
-        document.getElementById("aluno-nascimento").value = "2012-05-15";
-        document.getElementById("aluno-turno").value = "Manhã";
-        document.getElementById("aluno-email").value = "anamaria@aluno.seduc.pa.gov.br";
-        document.getElementById("aluno-contato").value = "(91) 98765-4321";
-        document.getElementById("aluno-responsavel-tipo").value = "Mãe";
-        document.getElementById("aluno-responsavel-nome").value = "Antônia de Souza";
-        document.getElementById("aluno-transporte").value = "Não";
-        document.getElementById("aluno-aee-atendido").value = "Não";
-        document.getElementById("aluno-senha").value = "aluno@sigaedu";
+          // Preenche com informações mockadas padrão para teste ágil
+          const nInput = document.getElementById("aluno-nome");
+          if (nInput) nInput.value = "Ana Maria de Souza";
+          
+          const cpfInput = document.getElementById("aluno-cpf");
+          if (cpfInput) cpfInput.value = "123.456.789-00";
+          
+          const nascInput = document.getElementById("aluno-nascimento");
+          if (nascInput) nascInput.value = "2012-05-15";
+          
+          const turnoInput = document.getElementById("aluno-turno");
+          if (turnoInput) turnoInput.value = "Manhã";
+          
+          const emailInput = document.getElementById("aluno-email");
+          if (emailInput) emailInput.value = "anamaria@aluno.seduc.pa.gov.br";
+          
+          const contInput = document.getElementById("aluno-contato");
+          if (contInput) contInput.value = "(91) 98765-4321";
+          
+          const respTipoInput = document.getElementById("aluno-responsavel-tipo");
+          if (respTipoInput) respTipoInput.value = "Mãe";
+          
+          const respNomeInput = document.getElementById("aluno-responsavel-nome");
+          if (respNomeInput) respNomeInput.value = "Antônia de Souza";
+          
+          const transpInput = document.getElementById("aluno-transporte");
+          if (transpInput) transpInput.value = "Não";
+          
+          const aeeInput = document.getElementById("aluno-aee-atendido");
+          if (aeeInput) aeeInput.value = "Não";
+          
+          const senhaInput = document.getElementById("aluno-senha");
+          if (senhaInput) senhaInput.value = "aluno@sigaedu";
 
-        toggleModal("modal-aluno");
+          toggleModal("modal-aluno");
+        } catch (err) {
+          console.error("Erro no cadastro de aluno:", err);
+          alert("Não foi possível abrir o formulário de cadastro: " + err.message);
+        }
       };
 
       window.cadastrarOuEditarAluno = async function(e) {
