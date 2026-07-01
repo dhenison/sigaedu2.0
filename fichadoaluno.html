@@ -835,24 +835,14 @@
 
       // 1. Expor funções de alternância de visualização globais
       window.showListView = function() {
-      const rotaContainer = document.getElementById("transporte-rota-container");
-      const aeeAtendidoSelect = document.getElementById("aluno-aee-atendido") || document.getElementById("aluno-aee");
+        listView.classList.remove("hidden");
+        fichaView.classList.add("hidden");
+      };
 
-      const tableBody = document.querySelector("table tbody");
-      const searchInput = document.getElementById("search-alunos");
-      const filterTurno = document.getElementById("filter-turno");
-      const filterTurma = document.getElementById("filter-turma");
-
-      const avatarPreview = document.getElementById("avatar-preview");
-      let activeAvatar = "https://lh3.googleusercontent.com/aida-public/AB6AXuChwy7OeE79vSwiRfMcYvFI7j5KL0rYxzxlH0ftQIV2K52io4HEe4cd0YiBXu3EHDT46oWl-xO06U2HlDHIACep2nrtFTeAoj1sFYLyNMNH4pj_mqsFslfcFEpJIlzlffAAIXVRfMSfQG42g7KZ7tTmG4Cb1PDODyiP8dcCDnR352c3SQ812oFSRM77-CpYg3b5whPXEoMSsWFGlGcj_r2tkGoXE82Zf7iG-hZTTuX8vkZ6QeEfinXwnGrIpaAs--gB0SJrOLboUwE";
-      let editingAlunoId = null;
-
-      const avataresCameraSimulada = [
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuAP80C3LDejN3T6NvYz6gSXVM6eNh_w661ejMGWGqh46GbnP5Y4nGI0NVcbYlrUCqcHq6m_kFkHMUlE6HPBnrZT2sbB-2GuVIg2O_s5vyGJ_QXMo7FuG9N1_cC11GGr5FgSBpkrV4nUHzhyRHPChCEhlU8GlQD1lWhYX-QZXXGSAnj9lMLWw-GQK93ZLVWe6l4zFskCnQtti35Audv4fhD-2Jk7GlOy0yYA15CCciBYzbAFzginJ6C7SsnRhZYCOn6gi434Xs5StE0",
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuBzxb8h-o_07736HbmV6IZp3RwfLan-loB4beGk_d0rkKf5xQ0p4xPD_1-XaYzol6UIjoxxokk_adPSVhqKkABNGpKG6Hy95HH8ujPIGgEySVFIB0ZWrQTTvk_dqqg92n-XHryRVpRzh_jR5JJnkHvrGOAi5ZMhkw5BK2-9oH7AMT3GeFnqdXpunjIs7jowhIc2L34jw1vvSxmb9SqclR4YeFJ1o_ewrb5YuV1eCz-9cisW_VAq0tsGxw5FNbJSLMlI9w5sZI8avOg",
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuBrSs0bTIeMbPpXPTtHua_P6xSNZhUKRnNal5YYDaQYpGFQRG-3hxPdhnN2gCo_t-kn4WCNwSi_MWtKaNeTDOMGCp0EJ6Z2I_FOd20XJMeDTQpSBt9i9kEeQC8BCM4KUT7ohOYY5m9zx-tBLEdfKQKChJ32q7XZdIZNcve2wDnKr7Z07f9eojzrntruPeOCOf-0-0KytQAfRVFqr8BaCeeLbi7SNlbGFDOwwgo6KQJ0KSEkJf0wavEZerQj8V2-TUC-czyBUo1pLHo",
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuDA7EYgNhseWB_tiPsTgnyGVBYFit932u6Luo70-4-ZEvhkU0nsNCR2PqNrR-7Q5ALFSt7M_p9Zqv9TT-fVgLbBTaHROPVuMb7ubTSYe4eRLJEd4O61n82Do8t_VwiHDC1IeJPXoUJPZwphXyjda46RhU6wWvDouW8KOJvv-Pp9__4axG_5DCrFtTuEyTLGwJfdGS2uawrDV8P5zg_4-18CxIsb2RvP0V6D9hbF2g8g4MgZC47LwjumPSBdSyo4WXhkyWf1sFRMszk"
-      ];
+      window.showFichaView = function() {
+        listView.classList.add("hidden");
+        fichaView.classList.remove("hidden");
+      };
 
       // Busca dados do Supabase
       async function carregarDados() {
@@ -1414,6 +1404,20 @@
         rotaContainer.classList.add("hidden");
         resetAeeFormulario();
         populateTurmas();
+
+        // Preenche com informações mockadas padrão para teste ágil
+        document.getElementById("aluno-nome").value = "Ana Maria de Souza";
+        document.getElementById("aluno-cpf").value = "123.456.789-00";
+        document.getElementById("aluno-nascimento").value = "2012-05-15";
+        document.getElementById("aluno-turno").value = "Manhã";
+        document.getElementById("aluno-email").value = "anamaria@aluno.seduc.pa.gov.br";
+        document.getElementById("aluno-contato").value = "(91) 98765-4321";
+        document.getElementById("aluno-responsavel-tipo").value = "Mãe";
+        document.getElementById("aluno-responsavel-nome").value = "Antônia de Souza";
+        document.getElementById("aluno-transporte").value = "Não";
+        document.getElementById("aluno-aee-atendido").value = "Não";
+        document.getElementById("aluno-senha").value = "aluno@sigaedu";
+
         toggleModal("modal-aluno");
       };
 
@@ -1514,6 +1518,31 @@
             alert("Cadastro do aluno atualizado com sucesso!");
           } else {
             // Cadastrando Novo no Supabase
+            // 1. Criar credenciais de autenticação no Supabase Auth de forma isolada
+            submitBtn.innerHTML = "Criando credenciais...";
+            const config = window.SIGAEDU_CONFIG || {};
+            try {
+              const tempClient = window.supabase.createClient(config.supabaseUrl, config.supabaseAnonKey, {
+                auth: { persistSession: false }
+              });
+              const { data: authData, error: signUpError } = await tempClient.auth.signUp({
+                email: email,
+                password: senha,
+                options: {
+                  data: {
+                    nome: nome,
+                    perfil: 'aluno'
+                  }
+                }
+              });
+              if (signUpError) {
+                console.warn("Conta de autenticação já existente ou erro de criação:", signUpError.message);
+              }
+            } catch (authErr) {
+              console.warn("Erro ao tentar registrar aluno na Auth:", authErr);
+            }
+
+            submitBtn.innerHTML = "Salvando no banco...";
             const { data: novoAlunoInserted, error } = await supabase
               .from('alunos')
               .insert(alunoPayload)
@@ -1523,7 +1552,7 @@
             if (error) throw error;
 
             alunos.push(novoAlunoInserted);
-            alert("Novo aluno cadastrado e matriculado com sucesso!");
+            alert("Novo aluno cadastrado e credenciais de acesso geradas com sucesso!");
           }
 
           toggleModal("modal-aluno");
