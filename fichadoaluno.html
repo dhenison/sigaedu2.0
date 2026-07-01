@@ -668,6 +668,63 @@
       </button>
     </div>
   </div>
+<!-- Modal de Diagnóstico de Erro -->
+<div class="fixed inset-0 z-[120] hidden flex items-center justify-center p-md bg-black/60 backdrop-blur-sm" id="modal-diagnostico">
+  <div class="bg-white w-full max-w-3xl rounded-2xl border border-outline-variant shadow-lg flex flex-col max-h-[90vh]">
+    <div class="p-lg border-b border-outline-variant flex justify-between items-center bg-red-50">
+      <div class="flex items-center gap-sm text-error">
+        <span class="material-symbols-outlined text-[32px]">report</span>
+        <h2 class="text-title-lg font-bold">Relatório de Diagnóstico de Erro</h2>
+      </div>
+      <button class="p-xs text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors" onclick="toggleModal('modal-diagnostico')">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <div class="p-lg overflow-y-auto space-y-md text-left">
+      <div class="bg-red-50 border-l-4 border-error p-md rounded-r-xl">
+        <p class="text-body-md font-bold text-error" id="diag-error-title">Erro ao salvar no banco</p>
+        <p class="text-body-sm text-on-surface-variant mt-xs font-mono whitespace-pre-wrap" id="diag-error-details"></p>
+      </div>
+
+      <div class="space-y-sm">
+        <h3 class="text-label-md font-bold text-primary">Contexto do Sistema</h3>
+        <table class="w-full text-body-sm border-collapse border border-outline-variant">
+          <tbody>
+            <tr class="border-b border-outline-variant bg-surface-container-lowest">
+              <td class="p-xs font-bold w-1/3">Admin ID (auth.uid)</td>
+              <td class="p-xs font-mono" id="diag-admin-id">-</td>
+            </tr>
+            <tr class="border-b border-outline-variant">
+              <td class="p-xs font-bold">Escola ID (escola_id)</td>
+              <td class="p-xs font-mono" id="diag-escola-id">-</td>
+            </tr>
+            <tr class="border-b border-outline-variant bg-surface-container-lowest">
+              <td class="p-xs font-bold">Turma Selecionada ID</td>
+              <td class="p-xs font-mono" id="diag-turma-id">-</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="space-y-sm">
+        <h3 class="text-label-md font-bold text-primary">Payload Enviado (JSON)</h3>
+        <pre class="bg-surface-container-high p-md rounded-xl font-mono text-[11px] overflow-x-auto border border-outline-variant max-h-48" id="diag-payload-json"></pre>
+      </div>
+
+      <div class="bg-surface-container-low p-md rounded-xl border border-outline-variant space-y-xs">
+        <p class="text-body-sm font-bold text-primary flex items-center gap-xs">
+          <span class="material-symbols-outlined text-[18px]">build</span>
+          Diagnóstico e Recomendação:
+        </p>
+        <p class="text-body-sm text-on-surface-variant" id="diag-recommendation">-</p>
+      </div>
+    </div>
+    <div class="p-lg border-t border-outline-variant flex justify-end gap-sm">
+      <button class="px-lg py-sm bg-primary text-white font-bold rounded-xl hover:opacity-90 transition-opacity" onclick="toggleModal('modal-diagnostico')">
+        Entendido
+      </button>
+    </div>
+  </div>
 </div>
 
 <!-- Footer -->
@@ -897,6 +954,36 @@ ON CONFLICT (id) DO NOTHING;`;
           navigator.clipboard.writeText(codeBlock.textContent);
           alert("Código SQL copiado para a área de transferência!");
         }
+      };
+
+      window.mostrarDiagnosticoErro = function(err, payload, adminId, activeEscolaId, targetTurmaId) {
+        document.getElementById("diag-error-title").textContent = err.message || "Erro de Banco de Dados";
+        
+        let detailsHtml = `Mensagem: ${err.message || 'Sem mensagem'}`;
+        if (err.code) detailsHtml += `\nCódigo do Postgres: ${err.code}`;
+        if (err.details) detailsHtml += `\nDetalhes do Erro: ${err.details}`;
+        if (err.hint) detailsHtml += `\nSugestão do Banco: ${err.hint}`;
+        document.getElementById("diag-error-details").textContent = detailsHtml;
+
+        document.getElementById("diag-admin-id").textContent = adminId || "Não autenticado";
+        document.getElementById("diag-escola-id").textContent = activeEscolaId || "Nulo / Não selecionado";
+        document.getElementById("diag-turma-id").textContent = targetTurmaId || "Nulo / Sem turma";
+        
+        document.getElementById("diag-payload-json").textContent = JSON.stringify(payload, null, 2);
+
+        let rec = "Erro desconhecido. Verifique as credenciais e tente novamente.";
+        if (err.code === "42501") {
+          rec = "BLOQUEIO DE RLS (Políticas de Segurança): O banco de dados recusou a gravação. Isso significa que o ID do seu usuário ou da sua Escola não existe nas tabelas 'usuarios' e 'escolas' do banco de dados remoto, ou você não possui permissão para gravar na escola de ID " + activeEscolaId + ". Verifique se o cadastro do seu admin na tabela 'public.usuarios' está ativo.";
+        } else if (err.code === "23505") {
+          rec = "VIOLAÇÃO DE UNICIDADE (Registro Duplicado): O banco de dados já possui um aluno cadastrado com o mesmo CPF, E-mail ou E-mail Institucional. Estudantes não podem compartilhar o mesmo e-mail ou CPF.";
+        } else if (err.code === "23503") {
+          rec = "VIOLAÇÃO DE CHAVE ESTRANGEIRA (Vínculo Inválido): O ID da Escola ou da Turma informado não existe no banco de dados. Certifique-se de que a escola selecionada e a turma estão devidamente criadas no painel.";
+        } else if (err.message && err.message.includes("undefined")) {
+          rec = "ERRO DE REFERÊNCIA JAVASCRIPT: Um objeto ou variável necessária não pôde ser lido. Certifique-se de que o Supabase SDK está devidamente carregado.";
+        }
+        document.getElementById("diag-recommendation").textContent = rec;
+
+        toggleModal("modal-diagnostico");
       };
 
       // Busca dados do Supabase
@@ -1656,37 +1743,30 @@ ON CONFLICT (id) DO NOTHING;`;
               .eq('id', editingAlunoId);
 
             if (error) throw error;
-
-            // Atualiza na memória
-            const aIndex = alunos.findIndex(a => a.id === editingAlunoId);
-            if (aIndex !== -1) {
-              alunos[aIndex] = { ...alunos[aIndex], ...alunoPayload };
-            }
             alert("Cadastro do aluno atualizado com sucesso!");
           } else {
             submitBtn.innerHTML = "Salvando no banco...";
-            const { data: novoAlunoInserted, error } = await supabase
+            const { error } = await supabase
               .from('alunos')
-              .insert(alunoPayload)
-              .select()
-              .single();
+              .insert(alunoPayload);
 
             if (error) throw error;
-
-            alunos.push(novoAlunoInserted);
             alert("Novo aluno cadastrado e credenciais de acesso geradas com sucesso!");
           }
 
+          await carregarDados();
           toggleModal("modal-aluno");
-          renderAlunosTable();
 
         } catch (err) {
           console.error("Erro completo ao salvar aluno:", err);
-          let errorMsg = err.message || "Erro desconhecido";
-          if (err.code) errorMsg += ` (Código: ${err.code})`;
-          if (err.details) errorMsg += `\nDetalhes: ${err.details}`;
-          if (err.hint) errorMsg += `\nSugestão: ${err.hint}`;
-          alert("Erro ao salvar aluno no Supabase:\n\n" + errorMsg);
+          const sessionData = localStorage.getItem('sigaedu_user_session');
+          let adminId = "Nulo";
+          if (sessionData) {
+            try {
+              adminId = JSON.parse(sessionData).user.id;
+            } catch(e) {}
+          }
+          window.mostrarDiagnosticoErro(err, alunoPayload, adminId, escolaId, turmaId);
         } finally {
           submitBtn.disabled = false;
           submitBtn.innerHTML = originalBtnText;
