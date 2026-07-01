@@ -572,7 +572,8 @@
 
     // ==========================================================================
     // LÓGICA DE NEGÓCIO DE AGENDA ESCOLAR TOTALMENTE DINÂMICA E INTEGRADA
-    // =======================    (async function() {
+    // ==========================================================================
+    (async function() {
         const supabase = window.supabaseClient;
         const selectedEscola = window.selectedEscola;
 
@@ -642,12 +643,13 @@
                 const { data: dbAgenda, error: errorAgenda } = await supabase
                     .from('agenda')
                     .select('*')
-                    .eq('escola_id', escolaId)
-                    .neq('tipo', 'ConfiguracaoCalendario');
+                    .eq('escola_id', escolaId);
 
                 if (errorAgenda) throw errorAgenda;
 
-                agenda = dbAgenda.map(item => {
+                const agendaRows = (dbAgenda || []).filter(item => item.tipo !== 'ConfiguracaoCalendario');
+
+                agenda = agendaRows.map(item => {
                     let details = {};
                     try {
                         details = JSON.parse(item.descricao);
@@ -731,7 +733,7 @@
             const searchVal = globalSearch.value.trim().toLowerCase();
 
             let filtered = agenda.filter(event => {
-                if (selTurno !== 'Todos' && event.turno !== selTurno) return false;
+                if (selTurno !== 'Todos' && event.turno !== selTurno && event.turno !== 'Geral') return false;
                 if (selTurma !== 'Todas' && !event.turmas.includes(selTurma)) return false;
 
                 if (currentScope === 'Turma') {
@@ -1031,6 +1033,7 @@
             const payload = {
                 escola_id: escolaId,
                 titulo: titulo,
+                tipo: 'Agendamento',
                 descricao: JSON.stringify(details),
                 data_evento: data,
                 imagem_url: uploadedEventImage || null,

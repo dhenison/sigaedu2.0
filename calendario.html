@@ -556,6 +556,144 @@ Limpar Mês
       let mesAtivo = 0; // Janeiro de 2026
 
       let calendarioDb = {};
+      const CALENDARIO_ANO = 2026;
+      const CALENDARIO_EVENTO_TIPO = 'CalendarioEscolar';
+
+      function normalizarEstado(valor) {
+        const estado = Number(valor);
+        return Number.isInteger(estado) && estado >= 0 && estado <= 4 ? estado : 0;
+      }
+
+      function obterLabelCalendario(dateKey, state) {
+        const dateObj = new Date(dateKey + "T00:00:00");
+        const dayOfWeek = dateObj.getDay();
+        if (state === 1) return dayOfWeek === 6 ? "Sábado Letivo" : "Dia Letivo";
+        if (state === 2) return "Feriado / Recesso";
+        if (state === 3) return "Evento / Prova";
+        if (state === 4) return "Férias Escolares";
+        return (dayOfWeek === 0 || dayOfWeek === 6) ? "Fim de Semana" : "Sem Aula";
+      }
+
+      function deveAparecerNaAgenda(dateKey, state) {
+        const dayOfWeek = new Date(dateKey + "T00:00:00").getDay();
+        return state === 2 || state === 3 || state === 4 || (state === 1 && dayOfWeek === 6);
+      }
+
+      async function carregarCalendarioLegado() {
+        const { data, error } = await supabase
+          .from('agenda')
+          .select('*')
+          .eq('escola_id', escolaId)
+          .eq('tipo', 'ConfiguracaoCalendario')
+          .maybeSingle();
+
+        if (error) throw error;
+        return data ? JSON.parse(data.descricao) : {};
+      }
+
+      async function salvarSnapshotLegado() {
+        const payload = {
+          escola_id: escolaId,
+          titulo: 'Calendário Letivo 2026',
+          tipo: 'ConfiguracaoCalendario',
+          descricao: JSON.stringify(calendarioDb),
+          data_evento: '2026-01-01'
+        };
+
+        const { data: existing, error: fetchErr } = await supabase
+          .from('agenda')
+          .select('id')
+          .eq('escola_id', escolaId)
+          .eq('tipo', 'ConfiguracaoCalendario')
+          .maybeSingle();
+
+        if (fetchErr) throw fetchErr;
+
+        if (existing) {
+          const { error } = await supabase
+            .from('agenda')
+            .update(payload)
+            .eq('id', existing.id);
+          if (error) throw error;
+        } else {
+          const { error } = await supabase
+            .from('agenda')
+            .insert(payload);
+          if (error) throw error;
+        }
+      }
+
+      async function sincronizarAgendaComCalendario() {
+        const { data: dbTurmas, error: turmasErr } = await supabase
+          .from('turmas')
+          .select('nome')
+          .eq('escola_id', escolaId);
+        if (turmasErr) throw turmasErr;
+
+        const nomesTurmas = (dbTurmas || []).map(t => t.nome);
+        const { data: eventosExistentes, error: agendaErr } = await supabase
+          .from('agenda')
+          .select('*')
+          .eq('escola_id', escolaId)
+          .eq('tipo', CALENDARIO_EVENTO_TIPO);
+        if (agendaErr) throw agendaErr;
+
+        const eventosPorData = new Map((eventosExistentes || []).map(evt => [evt.data_evento, evt]));
+        const datasRelevantes = new Set();
+
+        for (const [dateKey, value] of Object.entries(calendarioDb)) {
+          const state = normalizarEstado(value && value.state);
+          if (!deveAparecerNaAgenda(dateKey, state)) continue;
+
+          datasRelevantes.add(dateKey);
+          const titulo = obterLabelCalendario(dateKey, state);
+          const details = {
+            origem: 'calendario_escolar',
+            calendario_state: state,
+            descricao: value.observacao || `${titulo} definido no Calendário Escolar.`,
+            tipo: 'Calendário',
+            turno: 'Geral',
+            horario: 'Todo o dia',
+            professor: 'Sistema SIGAEDU',
+            status: 'Confirmado',
+            destaque: false,
+            turmas: nomesTurmas
+          };
+
+          const payload = {
+            escola_id: escolaId,
+            titulo,
+            tipo: CALENDARIO_EVENTO_TIPO,
+            descricao: JSON.stringify(details),
+            data_evento: dateKey,
+            imagem_url: null,
+            turma_id: null
+          };
+
+          const existente = eventosPorData.get(dateKey);
+          if (existente) {
+            const { error } = await supabase
+              .from('agenda')
+              .update(payload)
+              .eq('id', existente.id);
+            if (error) throw error;
+          } else {
+            const { error } = await supabase
+              .from('agenda')
+              .insert(payload);
+            if (error) throw error;
+          }
+        }
+
+        const eventosRemovidos = (eventosExistentes || []).filter(evt => !datasRelevantes.has(evt.data_evento));
+        for (const evt of eventosRemovidos) {
+          const { error } = await supabase
+            .from('agenda')
+            .delete()
+            .eq('id', evt.id);
+          if (error) throw error;
+        }
+      }
 
       // DOM Elements
       const monthsNavContainer = document.getElementById("months-nav-container");
@@ -593,22 +731,34 @@ Limpar Mês
       async function carregarCalendario() {
         try {
           const { data, error } = await supabase
-            .from('agenda')
-            .select('*')
+            .from('calendario_escolar')
+            .select('data, estado, observacao')
             .eq('escola_id', escolaId)
-            .eq('tipo', 'ConfiguracaoCalendario')
-            .maybeSingle();
+            .eq('ano', CALENDARIO_ANO)
+            .order('data', { ascending: true });
 
           if (error) throw error;
 
-          if (data) {
-            calendarioDb = JSON.parse(data.descricao);
-          } else {
-            calendarioDb = {};
+          calendarioDb = {};
+          (data || []).forEach(item => {
+            calendarioDb[item.data] = {
+              state: normalizarEstado(item.estado),
+              observacao: item.observacao || ''
+            };
+          });
+
+          if (Object.keys(calendarioDb).length === 0) {
+            calendarioDb = await carregarCalendarioLegado();
           }
         } catch(err) {
           console.error("Erro ao obter calendário letivo do Supabase:", err);
           calendarioDb = {};
+        }
+
+        if (Object.keys(calendarioDb).length === 0) {
+          try {
+            calendarioDb = await carregarCalendarioLegado();
+          } catch(e) {}
         }
 
         renderMonthsNav();
@@ -820,37 +970,27 @@ Limpar Mês
         }
 
         try {
-          const payload = {
+          const registros = Object.entries(calendarioDb).map(([dateKey, value]) => ({
             escola_id: escolaId,
-            titulo: 'Calendário Letivo 2026',
-            tipo: 'ConfiguracaoCalendario',
-            descricao: JSON.stringify(calendarioDb),
-            data_evento: '2026-01-01'
-          };
+            data: dateKey,
+            ano: CALENDARIO_ANO,
+            estado: normalizarEstado(value && value.state),
+            observacao: value && value.observacao ? value.observacao : null,
+            updated_by: window.userSession && window.userSession.user ? window.userSession.user.id : null,
+            updated_at: new Date().toISOString()
+          }));
 
-          const { data: existing, error: fetchErr } = await supabase
-            .from('agenda')
-            .select('id')
-            .eq('escola_id', escolaId)
-            .eq('tipo', 'ConfiguracaoCalendario')
-            .maybeSingle();
-
-          if (fetchErr) throw fetchErr;
-
-          if (existing) {
+          if (registros.length > 0) {
             const { error } = await supabase
-              .from('agenda')
-              .update(payload)
-              .eq('id', existing.id);
-            if (error) throw error;
-          } else {
-            const { error } = await supabase
-              .from('agenda')
-              .insert(payload);
+              .from('calendario_escolar')
+              .upsert(registros, { onConflict: 'escola_id,data' });
             if (error) throw error;
           }
 
-          showToast("Calendário Escolar 2026 Salvo com Sucesso!", "check_circle", "#4ADE80");
+          await salvarSnapshotLegado();
+          await sincronizarAgendaComCalendario();
+
+          showToast("Calendário salvo e encaminhado para Agenda/Frequência!", "check_circle", "#4ADE80");
         } catch(err) {
           alert("Erro ao salvar calendário no Supabase: " + err.message);
         } finally {

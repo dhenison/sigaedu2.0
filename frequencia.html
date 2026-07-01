@@ -652,6 +652,8 @@
       let turmas = [];
       let alunos = [];
       let calendarioDb = {};
+      let calendarioCarregado = false;
+      const CALENDARIO_ANO = 2026;
 
       const supabase = window.supabaseClient;
       const selectedEscola = window.selectedEscola;
@@ -716,6 +718,60 @@
         }, 2500);
       }
 
+      function normalizarEstadoCalendario(valor) {
+        const estado = Number(valor);
+        return Number.isInteger(estado) && estado >= 0 && estado <= 4 ? estado : 0;
+      }
+
+      async function carregarCalendarioLegado() {
+        const { data, error } = await supabase
+          .from('agenda')
+          .select('*')
+          .eq('escola_id', escolaId)
+          .eq('tipo', 'ConfiguracaoCalendario')
+          .maybeSingle();
+
+        if (error) throw error;
+        return data ? JSON.parse(data.descricao) : {};
+      }
+
+      async function carregarCalendarioEscolar(force = false) {
+        if (calendarioCarregado && !force) return;
+
+        try {
+          const { data, error } = await supabase
+            .from('calendario_escolar')
+            .select('data, estado, observacao')
+            .eq('escola_id', escolaId)
+            .eq('ano', CALENDARIO_ANO)
+            .order('data', { ascending: true });
+
+          if (error) throw error;
+
+          calendarioDb = {};
+          (data || []).forEach(item => {
+            calendarioDb[item.data] = {
+              state: normalizarEstadoCalendario(item.estado),
+              observacao: item.observacao || ''
+            };
+          });
+
+          if (Object.keys(calendarioDb).length === 0) {
+            calendarioDb = await carregarCalendarioLegado();
+          }
+        } catch(err) {
+          console.error("Erro ao carregar calendário escolar:", err);
+          try {
+            calendarioDb = await carregarCalendarioLegado();
+          } catch(legacyErr) {
+            console.error("Erro ao carregar calendário legado:", legacyErr);
+            calendarioDb = {};
+          }
+        }
+
+        calendarioCarregado = true;
+      }
+
       // Busca dados do Supabase ao inicializar
       async function carregarDados() {
         try {
@@ -738,6 +794,7 @@
           alunos = dbAlunos;
 
           populateTurmaSelector();
+          await carregarCalendarioEscolar(true);
           await checkDateLetivoState();
         } catch(err) {
           console.error("Erro ao carregar dados do Supabase:", err);
@@ -767,7 +824,7 @@
 
       // Carregar e Validar Calendário Letivo
       async function checkDateLetivoState() {
-        calendarioDb = JSON.parse(localStorage.getItem('sigaedu_calendario_2026')) || {};
+        await carregarCalendarioEscolar();
         
         const selectedDate = dataChamadaInput.value;
         if (!selectedDate) return;
@@ -1491,7 +1548,10 @@
       });
       turmaSelect.addEventListener("change", checkDateLetivoState);
       dataChamadaInput.addEventListener("change", checkDateLetivoState);
-      btnFiltrar.addEventListener("click", checkDateLetivoState);
+      btnFiltrar.addEventListener("click", async () => {
+        await carregarCalendarioEscolar(true);
+        await checkDateLetivoState();
+      });
 
     })();
   </script>
