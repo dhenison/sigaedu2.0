@@ -1584,6 +1584,7 @@ ON CONFLICT (id) DO NOTHING;`;
 
         try {
           let avatarUrl = activeAvatar;
+          let authUserId = null;
           
           if (activeAvatar && activeAvatar.startsWith("data:image/")) {
             try {
@@ -1608,42 +1609,7 @@ ON CONFLICT (id) DO NOTHING;`;
             }
           }
 
-          submitBtn.innerHTML = "Salvando dados...";
-
-          const alunoPayload = {
-            escola_id: escolaId,
-            turma_id: turmaId,
-            nome,
-            cpf,
-            data_nascimento: nascimento,
-            email,
-            contato,
-            tipo_responsavel: responsavelTipo,
-            nome_responsavel: responsavelNome,
-            parentesco_responsavel: parentesco,
-            utiliza_transporte: utilizaTransporte === "Sim",
-            rota,
-            senha,
-            avatar: avatarUrl,
-            aee_atendido: aee.atendido === "Sim"
-          };
-
-          if (editingAlunoId !== null) {
-            // Editando no Supabase
-            const { error } = await supabase
-              .from('alunos')
-              .update(alunoPayload)
-              .eq('id', editingAlunoId);
-
-            if (error) throw error;
-
-            // Atualiza na memória
-            const aIndex = alunos.findIndex(a => a.id === editingAlunoId);
-            if (aIndex !== -1) {
-              alunos[aIndex] = { ...alunos[aIndex], ...alunoPayload };
-            }
-            alert("Cadastro do aluno atualizado com sucesso!");
-          } else {
+          if (editingAlunoId === null) {
             // Cadastrando Novo no Supabase
             // 1. Criar credenciais de autenticação no Supabase Auth de forma isolada
             submitBtn.innerHTML = "Criando credenciais...";
@@ -1664,11 +1630,55 @@ ON CONFLICT (id) DO NOTHING;`;
               });
               if (signUpError) {
                 console.warn("Conta de autenticação já existente ou erro de criação:", signUpError.message);
+              } else if (authData && authData.user) {
+                authUserId = authData.user.id;
               }
             } catch (authErr) {
               console.warn("Erro ao tentar registrar aluno na Auth:", authErr);
             }
+          }
 
+          submitBtn.innerHTML = "Salvando dados...";
+
+          const alunoPayload = {
+            escola_id: escolaId,
+            turma_id: turmaId,
+            nome,
+            cpf,
+            data_nascimento: nascimento,
+            email,
+            email_institucional: email,
+            contato,
+            tipo_responsavel: responsavelTipo,
+            nome_responsavel: responsavelNome,
+            parentesco_responsavel: parentesco,
+            utiliza_transporte: utilizaTransporte === "Sim",
+            rota,
+            senha,
+            avatar: avatarUrl,
+            aee_atendido: aee.atendido === "Sim"
+          };
+
+          if (authUserId) {
+            alunoPayload.auth_user_id = authUserId;
+          }
+
+          if (editingAlunoId !== null) {
+            // Editando no Supabase
+            const { error } = await supabase
+              .from('alunos')
+              .update(alunoPayload)
+              .eq('id', editingAlunoId);
+
+            if (error) throw error;
+
+            // Atualiza na memória
+            const aIndex = alunos.findIndex(a => a.id === editingAlunoId);
+            if (aIndex !== -1) {
+              alunos[aIndex] = { ...alunos[aIndex], ...alunoPayload };
+            }
+            alert("Cadastro do aluno atualizado com sucesso!");
+          } else {
             submitBtn.innerHTML = "Salvando no banco...";
             const { data: novoAlunoInserted, error } = await supabase
               .from('alunos')
@@ -1780,6 +1790,7 @@ ON CONFLICT (id) DO NOTHING;`;
                 cpf,
                 data_nascimento: dataNascimento,
                 email,
+                email_institucional: email,
                 contato,
                 tipo_responsavel: tipoResponsavel,
                 nome_responsavel: nomeResponsavel,
