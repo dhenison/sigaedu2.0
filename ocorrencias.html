@@ -6,7 +6,7 @@
 <title>SIGAEDU - Ocorrências Escolares</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
-                            <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet"/>
+                              <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet"/>
 <style>
         .material-symbols-outlined {
       font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
@@ -245,10 +245,10 @@
         <div class="h-8 w-[1px] bg-surface-variant hidden sm:block"></div>
         <div class="flex items-center gap-sm pl-sm cursor-pointer hover:bg-surface-container-low p-xs rounded-xl transition-all duration-200">
           <div class="text-right hidden sm:block">
-            <p class="text-label-md font-bold text-primary leading-none">Dhenison Carlos</p>
+            <p class="text-label-md font-bold text-primary leading-none">Usuário</p>
             <p class="text-label-sm text-on-surface-variant">Administrador</p>
           </div>
-          <img alt="Dhenison Carlos - Administrador" class="w-10 h-10 rounded-full object-cover border-2 border-secondary-container hover:scale-105 transition-transform duration-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRGSGbqGOo2dzNp40hZk4pp_0rVieA-Su6u1WdWdVVqvGIA6n7dJMIDQVg3vkTYKgYN5HRKv7SOzuV4CGLSmB4xKZHKFpq-2ab9UNYf9ye3MByCMdx_JIehrQjusuLvStYhxK5Qj2eZHDffXBfYxzFUFDsX7kk7oInOP0foJp972O4lAIpD8pOJMQ4ehoA3BKsZHDj0gIh6Fx7Dr-Uvdu89v6j1O2f_mCuy7lSXEnJdzNLXbaD9C36QemEJIA6ok8BwdRRm8oVmvA"/>
+          <img alt="Foto de perfil" class="w-10 h-10 rounded-full object-cover border-2 border-secondary-container hover:scale-105 transition-transform duration-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRGSGbqGOo2dzNp40hZk4pp_0rVieA-Su6u1WdWdVVqvGIA6n7dJMIDQVg3vkTYKgYN5HRKv7SOzuV4CGLSmB4xKZHKFpq-2ab9UNYf9ye3MByCMdx_JIehrQjusuLvStYhxK5Qj2eZHDffXBfYxzFUFDsX7kk7oInOP0foJp972O4lAIpD8pOJMQ4ehoA3BKsZHDj0gIh6Fx7Dr-Uvdu89v6j1O2f_mCuy7lSXEnJdzNLXbaD9C36QemEJIA6ok8BwdRRm8oVmvA"/>
         </div>
       </div>
     </header>
@@ -336,7 +336,7 @@
 <!-- Footer (Footer Shared Component) -->
 <footer class="w-full py-md px-gutter flex justify-between items-center mt-auto bg-transparent border-t border-surface-variant/30">
   <div class="text-label-sm font-label-sm text-on-surface-variant">
-    Desenvolvido por Dhenison Carlos - 2026
+    SIGAEDU - 2026
   </div>
   <div class="flex gap-md">
     <a class="text-label-sm font-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Termos de Uso</a>
@@ -558,29 +558,6 @@
         }
       }
     })();
-
-    // Toggle Modal Helper
-    window.toggleModal = function(modalId) {
-      const modal = document.getElementById(modalId);
-      if (modal) {
-        if (modal.classList.contains("hidden")) {
-          modal.classList.remove("hidden");
-          modal.classList.add("flex");
-          
-          if (modalId === "modal-new-occurrence") {
-            // Prefill today's dates
-            const todayStr = new Date().toISOString().split('T')[0];
-            document.getElementById("new-oco-data").value = todayStr;
-            document.getElementById("new-oco-data-registro").value = todayStr;
-            
-            populateTurmaDropdown();
-          }
-        } else {
-          modal.classList.add("hidden");
-          modal.classList.remove("flex");
-        }
-      }
-    };
 
     // ==========================================================================
     // SEGURANÇA E PROTEÇÃO DO CLIENTE (Anti-F12 / Anti-Inspect / Anti-Botão Direito)
@@ -938,7 +915,7 @@
             data: dataOcorrencia,
             tipo: tipo,
             descricao: relato,
-            responsavel: 'Dhenison Carlos', // Usuário Master
+            responsavel: 'Usuário', // Usuário Master
             status: 'Pendente'
           };
         });
@@ -1218,8 +1195,8 @@
         const oco = occurrences.find(o => o.id === ocoId);
         if (!oco) return;
         
-        // Regra de Negócio: Excluir somente quem criou (Dhenison Carlos) ou o admin geral sob confirmação de senha
-        if (oco.responsavel === "Dhenison Carlos" || oco.responsavel === "Sistema (SIGAEDU)") {
+        // Regra de Negócio: Excluir somente quem criou (Usuário) ou o admin geral sob confirmação de senha
+        if (oco.responsavel === "Usuário" || oco.responsavel === "Sistema (SIGAEDU)") {
           if (confirm(`Tem certeza que deseja excluir permanentemente o registro de ocorrência de ${oco.studentName}?`)) {
             excluirOcorrencia(ocoId);
           }

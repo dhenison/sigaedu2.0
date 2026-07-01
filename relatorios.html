@@ -7,8 +7,8 @@
     <!-- SheetJS (xlsx) for spreadsheet export -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <!-- Material Symbols -->
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+      <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script id="tailwind-config">
@@ -105,14 +105,14 @@
     </script>
     <style>
         .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-            display: inline-block;
-            width: 24px;
-            height: 24px;
-            overflow: hidden;
-            text-rendering: optimizeLegibility;
-            -webkit-font-smoothing: antialiased;
-        }
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      overflow: hidden;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
         .cristal-blur {
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
@@ -141,85 +141,85 @@
 <!-- SideNavBar Componente Unificado -->
 <aside id="sidebar" class="fixed left-0 top-0 bottom-0 z-50 flex flex-col p-sm pt-xl overflow-y-auto w-64 bg-white/70 backdrop-blur-xl border-r border-surface-variant dark:border-outline-variant shadow-md transition-transform duration-300 -translate-x-full md:translate-x-0">
     <div class="px-sm mb-lg flex justify-between items-center">
-        <div class="flex items-center gap-sm">
-            <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-md">
-                <span class="material-symbols-outlined text-secondary-container" data-icon="school">school</span>
-            </div>
-            <div>
-                <h1 class="text-label-md font-bold text-primary tracking-tight leading-none">SIGAEDU</h1>
-                <p class="text-body-sm font-medium text-on-surface-variant">Gestão Acadêmica</p>
-            </div>
+      <div class="flex items-center gap-sm">
+        <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-md">
+          <span class="material-symbols-outlined text-secondary-container" data-icon="school">school</span>
         </div>
-        <button class="md:hidden p-1 text-on-surface hover:bg-surface-container-high rounded-full transition-colors" onclick="toggleSidebar()">
-            <span class="material-symbols-outlined">close</span>
-        </button>
+        <div>
+          <h1 class="text-label-md font-bold text-primary tracking-tight leading-none">SIGAEDU</h1>
+          <p class="text-body-sm font-medium text-on-surface-variant">Gestão Acadêmica</p>
+        </div>
+      </div>
+      <button class="md:hidden p-1 text-on-surface hover:bg-surface-container-high rounded-full transition-colors" onclick="toggleSidebar()">
+        <span class="material-symbols-outlined">close</span>
+      </button>
     </div>
     <nav class="flex-1 space-y-1">
-        <!-- Links Uniformes com Transições Suaves -->
-        <a id="menu-dashboard" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="dashboard.html">
-            <span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
-            <span class="text-label-md font-label-md">Dashboard</span>
-        </a>
-        <a id="menu-turmas" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="turmas.html">
-            <span class="material-symbols-outlined" data-icon="groups">groups</span>
-            <span class="text-label-md font-label-md">Turmas</span>
-        </a>
-        <a id="menu-alunos" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="fichadoaluno.html">
-            <span class="material-symbols-outlined" data-icon="person">person</span>
-            <span class="text-label-md font-label-md">Alunos</span>
-        </a>
+      <!-- Links Uniformes com Transições Suaves -->
+      <a id="menu-dashboard" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="dashboard.html">
+        <span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+        <span class="text-label-md font-label-md">Dashboard</span>
+      </a>
+      <a id="menu-turmas" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="turmas.html">
+        <span class="material-symbols-outlined" data-icon="groups">groups</span>
+        <span class="text-label-md font-label-md">Turmas</span>
+      </a>
+      <a id="menu-alunos" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="fichadoaluno.html">
+        <span class="material-symbols-outlined" data-icon="person">person</span>
+        <span class="text-label-md font-label-md">Alunos</span>
+      </a>
       <a id="menu-sala-aee" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="sala_aee.html">
         <span class="material-symbols-outlined" data-icon="psychology_alt">psychology_alt</span>
         <span class="text-label-md font-label-md">Sala AEE</span>
       </a>
       <a id="menu-calendario" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="calendario.html">
-            <span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
-            <span class="text-label-md font-label-md">Calendário</span>
-        </a>
-        <a id="menu-agenda" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="agenda.html">
-            <span class="material-symbols-outlined" data-icon="event_note">event_note</span>
-            <span class="text-label-md font-label-md">Agenda</span>
-        </a>
-        <a id="menu-frequencia" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="frequencia.html">
-            <span class="material-symbols-outlined" data-icon="fact_check">fact_check</span>
-            <span class="text-label-md font-label-md">Frequência</span>
-        </a>
-        <a id="menu-ocorrencias" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="ocorrencias.html">
-            <span class="material-symbols-outlined" data-icon="report_problem">report_problem</span>
-            <span class="text-label-md font-label-md">Ocorrências</span>
-        </a>
-        <a id="menu-solicitacoes" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="solicitacoes.html">
-            <span class="material-symbols-outlined" data-icon="task">task</span>
-            <span class="text-label-md font-label-md">Solicitações</span>
-        </a>
-        <a id="menu-whatsapp" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="whatsapp.html">
-            <span class="material-symbols-outlined" data-icon="message">message</span>
-            <span class="text-label-md font-label-md">Whatsapp</span>
-        </a>
-        <a id="menu-relatorios" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="relatorios.html">
-            <span class="material-symbols-outlined" data-icon="description">description</span>
-            <span class="text-label-md font-label-md">Relatórios</span>
-        </a>
-        <a id="menu-boletins" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="boletins.html">
-            <span class="material-symbols-outlined" data-icon="assignment_ind">assignment_ind</span>
-            <span class="text-label-md font-label-md">Boletins</span>
-        </a>
-        <a id="menu-usuarios" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="usuarios.html">
-            <span class="material-symbols-outlined" data-icon="manage_accounts">manage_accounts</span>
-            <span class="text-label-md font-label-md">Usuários</span>
-        </a>
+        <span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+        <span class="text-label-md font-label-md">Calendário</span>
+      </a>
+      <a id="menu-agenda" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="agenda.html">
+        <span class="material-symbols-outlined" data-icon="event_note">event_note</span>
+        <span class="text-label-md font-label-md">Agenda</span>
+      </a>
+      <a id="menu-frequencia" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="frequencia.html">
+        <span class="material-symbols-outlined" data-icon="fact_check">fact_check</span>
+        <span class="text-label-md font-label-md">Frequência</span>
+      </a>
+      <a id="menu-ocorrencias" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="ocorrencias.html">
+        <span class="material-symbols-outlined" data-icon="report_problem">report_problem</span>
+        <span class="text-label-md font-label-md">Ocorrências</span>
+      </a>
+      <a id="menu-solicitacoes" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="solicitacoes.html">
+        <span class="material-symbols-outlined" data-icon="task">task</span>
+        <span class="text-label-md font-label-md">Solicitações</span>
+      </a>
+      <a id="menu-whatsapp" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="whatsapp.html">
+        <span class="material-symbols-outlined" data-icon="message">message</span>
+        <span class="text-label-md font-label-md">Whatsapp</span>
+      </a>
+      <a id="menu-relatorios" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="relatorios.html">
+        <span class="material-symbols-outlined" data-icon="description">description</span>
+        <span class="text-label-md font-label-md">Relatórios</span>
+      </a>
+      <a id="menu-boletins" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="boletins.html">
+        <span class="material-symbols-outlined" data-icon="assignment_ind">assignment_ind</span>
+        <span class="text-label-md font-label-md">Boletins</span>
+      </a>
+      <a id="menu-usuarios" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="usuarios.html">
+        <span class="material-symbols-outlined" data-icon="manage_accounts">manage_accounts</span>
+        <span class="text-label-md font-label-md">Usuários</span>
+      </a>
     </nav>
     <div class="mt-xl border-t border-surface-variant/30 pt-md space-y-1">
-        <a id="menu-suporte" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="#">
-            <span class="material-symbols-outlined" data-icon="contact_support">contact_support</span>
-            <span class="text-label-md font-label-md">Suporte</span>
-        </a>
-        <a id="menu-configuracoes" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="#">
-            <span class="material-symbols-outlined" data-icon="settings">settings</span>
-            <span class="text-label-md font-label-md">Configurações</span>
-        </a>
+      <a id="menu-suporte" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="#">
+        <span class="material-symbols-outlined" data-icon="contact_support">contact_support</span>
+        <span class="text-label-md font-label-md">Suporte</span>
+      </a>
+      <a id="menu-configuracoes" class="flex items-center gap-sm px-sm py-3 text-on-surface-variant hover:bg-surface-container-high hover:scale-[1.02] active:scale-[0.98] rounded-xl transition-all duration-200" href="#">
+        <span class="material-symbols-outlined" data-icon="settings">settings</span>
+        <span class="text-label-md font-label-md">Configurações</span>
+      </a>
     </div>
-</aside>
+  </aside>
 
 <!-- Overlay para Foco Mobile -->
 <div id="sidebar-overlay" class="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm hidden md:hidden" onclick="toggleSidebar()"></div>
@@ -228,34 +228,34 @@
 <main class="md:ml-64 min-h-screen flex flex-col transition-all duration-300">
     <!-- Top Header (TopNavBar Shared Component Unificado) -->
     <header class="fixed top-0 right-0 left-0 md:left-64 z-40 h-xl px-gutter flex justify-between items-center bg-white/70 backdrop-blur-xl dark:bg-surface-container/70 border-b border-surface-variant dark:border-outline-variant shadow-sm transition-all duration-300">
-        <div class="flex items-center gap-md">
-            <button class="md:hidden p-2 text-on-surface hover:bg-surface-container-high rounded-full transition-colors" onclick="toggleSidebar()">
-                <span class="material-symbols-outlined">menu</span>
-            </button>
-            <div class="hidden sm:flex items-center bg-surface-container-low rounded-full px-md py-2 w-96 border border-surface-variant/50 focus-within:border-primary transition-colors">
-                <span class="material-symbols-outlined text-on-surface-variant mr-sm">search</span>
-                <input class="bg-transparent border-none focus:ring-0 text-body-sm w-full p-0" placeholder="Pesquisar..." type="text"/>
-            </div>
+      <div class="flex items-center gap-md">
+        <button class="md:hidden p-2 text-on-surface hover:bg-surface-container-high rounded-full transition-colors" onclick="toggleSidebar()">
+          <span class="material-symbols-outlined">menu</span>
+        </button>
+        <div class="hidden sm:flex items-center bg-surface-container-low rounded-full px-md py-2 w-96 border border-surface-variant/50 focus-within:border-primary transition-colors">
+          <span class="material-symbols-outlined text-on-surface-variant mr-sm">search</span>
+          <input class="bg-transparent border-none focus:ring-0 text-body-sm w-full p-0" placeholder="Pesquisar..." type="text"/>
         </div>
-        <div class="flex items-center gap-md">
-            <div class="flex items-center gap-sm">
-                <button class="p-2 text-on-surface-variant hover:bg-surface-container-low transition-all duration-200 rounded-full relative hover:scale-105 active:scale-95">
-                    <span class="material-symbols-outlined">notifications</span>
-                    <span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full animate-pulse"></span>
-                </button>
-                <button class="p-2 text-on-surface-variant hover:bg-surface-container-low transition-all duration-200 rounded-full hover:scale-105 active:scale-95">
-                    <span class="material-symbols-outlined">help</span>
-                </button>
-            </div>
-            <div class="h-8 w-[1px] bg-surface-variant hidden sm:block"></div>
-            <div class="flex items-center gap-sm pl-sm cursor-pointer hover:bg-surface-container-low p-xs rounded-xl transition-all duration-200">
-                <div class="text-right hidden sm:block">
-                    <p class="text-label-md font-bold text-primary leading-none">Dhenison Carlos</p>
-                    <p class="text-label-sm text-on-surface-variant">Administrador</p>
-                </div>
-                <img alt="Dhenison Carlos - Administrador" class="w-10 h-10 rounded-full object-cover border-2 border-secondary-container hover:scale-105 transition-transform duration-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRGSGbqGOo2dzNp40hZk4pp_0rVieA-Su6u1WdWdVVqvGIA6n7dJMIDQVg3vkTYKgYN5HRKv7SOzuV4CGLSmB4xKZHKFpq-2ab9UNYf9ye3MByCMdx_JIehrQjusuLvStYhxK5Qj2eZHDffXBfYxzFUFDsX7kk7oInOP0foJp972O4lAIpD8pOJMQ4ehoA3BKsZHDj0gIh6Fx7Dr-Uvdu89v6j1O2f_mCuy7lSXEnJdzNLXbaD9C36QemEJIA6ok8BwdRRm8oVmvA"/>
-            </div>
+      </div>
+      <div class="flex items-center gap-md">
+        <div class="flex items-center gap-sm">
+          <button class="p-2 text-on-surface-variant hover:bg-surface-container-low transition-all duration-200 rounded-full relative hover:scale-105 active:scale-95">
+            <span class="material-symbols-outlined">notifications</span>
+            <span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full animate-pulse"></span>
+          </button>
+          <button class="p-2 text-on-surface-variant hover:bg-surface-container-low transition-all duration-200 rounded-full hover:scale-105 active:scale-95">
+            <span class="material-symbols-outlined">help</span>
+          </button>
         </div>
+        <div class="h-8 w-[1px] bg-surface-variant hidden sm:block"></div>
+        <div class="flex items-center gap-sm pl-sm cursor-pointer hover:bg-surface-container-low p-xs rounded-xl transition-all duration-200">
+          <div class="text-right hidden sm:block">
+            <p class="text-label-md font-bold text-primary leading-none">Usuário</p>
+            <p class="text-label-sm text-on-surface-variant">Administrador</p>
+          </div>
+          <img alt="Foto de perfil" class="w-10 h-10 rounded-full object-cover border-2 border-secondary-container hover:scale-105 transition-transform duration-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRGSGbqGOo2dzNp40hZk4pp_0rVieA-Su6u1WdWdVVqvGIA6n7dJMIDQVg3vkTYKgYN5HRKv7SOzuV4CGLSmB4xKZHKFpq-2ab9UNYf9ye3MByCMdx_JIehrQjusuLvStYhxK5Qj2eZHDffXBfYxzFUFDsX7kk7oInOP0foJp972O4lAIpD8pOJMQ4ehoA3BKsZHDj0gIh6Fx7Dr-Uvdu89v6j1O2f_mCuy7lSXEnJdzNLXbaD9C36QemEJIA6ok8BwdRRm8oVmvA"/>
+        </div>
+      </div>
     </header>
 
     <!-- Content Canvas -->
@@ -395,7 +395,7 @@
     <!-- Footer -->
     <footer class="w-full py-md px-gutter flex justify-between items-center mt-auto bg-transparent border-t border-surface-variant/30">
         <div class="text-label-sm font-label-sm text-on-surface-variant">
-            Desenvolvido por Dhenison Carlos - 2026
+            SIGAEDU - 2026
         </div>
         <div class="flex gap-md">
             <a class="text-label-sm font-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Termos de Uso</a>
@@ -415,795 +415,113 @@
 <script>
     // Função para abrir/fechar a Sidebar no Mobile
     function toggleSidebar() {
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('sidebar-overlay');
-        if (sidebar.classList.contains('-translate-x-full')) {
-            sidebar.classList.remove('-translate-x-full');
-            overlay.classList.remove('hidden');
-        } else {
-            sidebar.classList.add('-translate-x-full');
-            overlay.classList.add('hidden');
-        }
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebar-overlay');
+      if (sidebar.classList.contains('-translate-x-full')) {
+        sidebar.classList.remove('-translate-x-full');
+        overlay.classList.remove('hidden');
+      } else {
+        sidebar.classList.add('-translate-x-full');
+        overlay.classList.add('hidden');
+      }
     }
 
-    // Destacar automaticamente o link do menu ativo
+    // Destacar automaticamente e imediatamente o link do menu ativo (sem esperar DOMContentLoaded)
     (function() {
-        const path = window.location.pathname;
-        const page = path.split('/').pop() || 'unificado.html';
-        
-        const menuMap = {
-            'dashboard.html': 'menu-dashboard',
-            'turmas.html': 'menu-turmas',
-            'fichadoaluno.html': 'menu-alunos',
+      const path = window.location.pathname;
+      const page = path.split('/').pop() || 'unificado.html';
+      
+      const menuMap = {
+        'dashboard.html': 'menu-dashboard',
+        'turmas.html': 'menu-turmas',
+        'fichadoaluno.html': 'menu-alunos',
         'sala_aee.html': 'menu-sala-aee',
-            'calendario.html': 'menu-calendario',
-            'agenda.html': 'menu-agenda',
-            'frequencia.html': 'menu-frequencia',
-            'ocorrencias.html': 'menu-ocorrencias',
-            'solicitacoes.html': 'menu-solicitacoes',
-            'whatsapp.html': 'menu-whatsapp',
-            'relatorios.html': 'menu-relatorios',
-            'boletins.html': 'menu-boletins',
-            'usuarios.html': 'menu-usuarios'
-        };
-        
-        const activeMenuId = menuMap[page];
-        if (activeMenuId) {
-            const activeLink = document.getElementById(activeMenuId);
-            if (activeLink) {
-                activeLink.classList.remove('text-on-surface-variant', 'hover:bg-surface-container-high', 'hover:scale-[1.02]');
-                activeLink.classList.add('bg-secondary-container', 'text-on-secondary-container', 'font-bold', 'scale-95', 'border-l-4', 'border-primary');
-            }
+        'calendario.html': 'menu-calendario',
+        'agenda.html': 'menu-agenda',
+        'frequencia.html': 'menu-frequencia',
+        'ocorrencias.html': 'menu-ocorrencias',
+        'solicitacoes.html': 'menu-solicitacoes',
+        'whatsapp.html': 'menu-whatsapp',
+        'relatorios.html': 'menu-relatorios',
+        'boletins.html': 'menu-boletins',
+        'usuarios.html': 'menu-usuarios'
+      };
+      
+      const activeMenuId = menuMap[page];
+      if (activeMenuId) {
+        const activeLink = document.getElementById(activeMenuId);
+        if (activeLink) {
+          activeLink.classList.remove('text-on-surface-variant', 'hover:bg-surface-container-high', 'hover:scale-[1.02]');
+          activeLink.classList.add('bg-secondary-container', 'text-on-secondary-container', 'font-bold', 'scale-95', 'border-l-4', 'border-primary');
         }
+      }
     })();
 
     // ==========================================================================
     // SEGURANÇA E PROTEÇÃO DO CLIENTE (Anti-F12 / Anti-Inspect / Anti-Botão Direito)
     // ==========================================================================
     (function() {
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-        });
+      // 1. Bloqueia o menu de contexto (clique com o botão direito)
+      document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+      });
 
-        document.addEventListener('keydown', function(e) {
-            if (e.keyCode === 123) {
-                e.preventDefault();
-                return false;
-            }
-            if (e.ctrlKey && e.shiftKey && e.keyCode === 73) {
-                e.preventDefault();
-                return false;
-            }
-            if (e.ctrlKey && e.shiftKey && e.keyCode === 74) {
-                e.preventDefault();
-                return false;
-            }
-            if (e.ctrlKey && e.shiftKey && e.keyCode === 67) {
-                e.preventDefault();
-                return false;
-            }
-            if (e.ctrlKey && e.keyCode === 85) {
-                e.preventDefault();
-                return false;
-            }
-        });
+      // 2. Bloqueia teclas de atalho comuns de ferramentas do desenvolvedor
+      document.addEventListener('keydown', function(e) {
+        // F12 (123)
+        if (e.keyCode === 123) {
+          e.preventDefault();
+          return false;
+        }
+        // Ctrl+Shift+I (73)
+        if (e.ctrlKey && e.shiftKey && e.keyCode === 73) {
+          e.preventDefault();
+          return false;
+        }
+        // Ctrl+Shift+J (74)
+        if (e.ctrlKey && e.shiftKey && e.keyCode === 74) {
+          e.preventDefault();
+          return false;
+        }
+        // Ctrl+Shift+C (67)
+        if (e.ctrlKey && e.shiftKey && e.keyCode === 67) {
+          e.preventDefault();
+          return false;
+        }
+        // Ctrl+U (85)
+        if (e.ctrlKey && e.keyCode === 85) {
+          e.preventDefault();
+          return false;
+        }
+      });
 
+      // 3. Detecção activa de DevTools por debugger recursivo (trava se console estiver aberto)
+      setInterval(function() {
+        (function() {
+          const start = new Date();
+          debugger;
+          const end = new Date();
+          if (end - start > 100) {
+            // Se demorou muito por causa da pausa do debugger, limpa o console e avisa
+            console.clear();
+            document.body.innerHTML = `
+              <div class="fixed inset-0 bg-red-950 text-red-200 flex flex-col items-center justify-center p-md text-center z-[99999]">
+                <span class="material-symbols-outlined text-[64px] mb-md text-red-400">gavel</span>
+                <h1 class="text-headline-xl font-bold">Acesso Bloqueado</h1>
+                <p class="text-body-lg max-w-md mt-sm">O uso de Ferramentas de Desenvolvedor (F12) é estritamente proibido neste sistema para garantir a segurança dos dados escolares.</p>
+                <button onclick="window.location.reload()" class="mt-lg px-lg py-sm bg-red-600 text-white rounded-xl font-bold hover:bg-red-500 transition-colors">Recarregar Sistema</button>
+              </div>`;
+          }
+        })();
+      }, 1000);
+
+      // 4. Limpeza persistente do console
+      if (typeof console !== 'undefined') {
         setInterval(function() {
-            (function() {
-                const start = new Date();
-                debugger;
-                const end = new Date();
-                if (end - start > 100) {
-                    console.clear();
-                    document.body.innerHTML = `
-                        <div class="fixed inset-0 bg-red-950 text-red-200 flex flex-col items-center justify-center p-md text-center z-[99999]">
-                            <span class="material-symbols-outlined text-[64px] mb-md text-red-400">gavel</span>
-                            <h1 class="text-headline-xl font-bold">Acesso Bloqueado</h1>
-                            <p class="text-body-lg max-w-md mt-sm">O uso de Ferramentas de Desenvolvedor (F12) é estritamente proibido neste sistema para garantir a segurança dos dados escolares.</p>
-                            <button onclick="window.location.reload()" class="mt-lg px-lg py-sm bg-red-600 text-white rounded-xl font-bold hover:bg-red-500 transition-colors">Recarregar Sistema</button>
-                        </div>`;
-                }
-            })();
-        }, 1000);
-
-        if (typeof console !== 'undefined') {
-            setInterval(function() {
-                console.clear();
-            }, 3000);
-        }
+          console.clear();
+        }, 3000);
+      }
     })();
-
-    // ==========================================================================
-    // LÓGICA DE RELATÓRIOS ACADÊMICOS INTEGRADOS (FREQUÊNCIA E OCORRÊNCIAS)
-    // ==========================================================================
-    (function() {
-        // Obter dados reais das tabelas locais
-        function getDb(key, defaultValue = []) {
-            try {
-                const data = localStorage.getItem(key);
-                return data ? JSON.parse(data) : defaultValue;
-            } catch(e) {
-                console.error("Erro ao obter do localStorage: ", e);
-                return defaultValue;
-            }
-        }
-
-        let turmas = getDb('sigaedu_turmas', []);
-
-        if (!localStorage.getItem('sigaedu_turmas')) {
-            localStorage.setItem('sigaedu_turmas', JSON.stringify(turmas));
-        }
-
-        let alunos = getDb('sigaedu_alunos', []);
-        let frequenciaDb = getDb('sigaedu_frequencia', {});
-        let ocorrencias = getDb('sigaedu_ocorrencias', []);
-
-        // Estado do Módulo
-        let activeType = 'Frequência';
-        let filteredData = [];
-
-        // DOM Elements
-        const btnTipoFreq = document.getElementById('btn-tipo-freq');
-        const btnTipoOco = document.getElementById('btn-tipo-oco');
-        const filterTurma = document.getElementById('filter-turma');
-        const filterPeriodo = document.getElementById('filter-periodo');
-        const filterAluno = document.getElementById('filter-aluno');
-        const filterDynamicContainer = document.getElementById('filter-dynamic-container');
-
-        const insight1Title = document.getElementById('insight-1-title');
-        const insight1Value = document.getElementById('insight-1-value');
-        const insight2Title = document.getElementById('insight-2-title');
-        const insight2Value = document.getElementById('insight-2-value');
-        const insight3Title = document.getElementById('insight-3-title');
-        const insight3Value = document.getElementById('insight-3-value');
-
-        const previewTitle = document.getElementById('preview-title');
-        const tableHeaders = document.getElementById('table-headers');
-        const tableBody = document.getElementById('table-body');
-        const tablePaginationSummary = document.getElementById('table-pagination-summary');
-
-        const btnExportPdf = document.getElementById('btn-export-pdf');
-        const btnExportXlsx = document.getElementById('btn-export-xlsx');
-        const loadingOverlay = document.getElementById('loading-overlay');
-
-        // Popular classes no seletor
-        function populateFilters() {
-            filterTurma.innerHTML = '<option value="Todas">Todas as Turmas</option>';
-            turmas.forEach(t => {
-                const opt = document.createElement('option');
-                opt.value = t.nome;
-                opt.textContent = `${t.nome} (${t.turno})`;
-                filterTurma.appendChild(opt);
-            });
-
-            renderDynamicFilterColumn();
-        }
-
-        // Trocar filtros dinâmicos (Bimestre vs Status de Ocorrência)
-        function renderDynamicFilterColumn() {
-            filterDynamicContainer.innerHTML = '';
-            if (activeType === 'Frequência') {
-                filterDynamicContainer.innerHTML = `
-                    <label class="font-label-md text-label-md text-on-surface-variant font-medium">Bimestre</label>
-                    <select id="filter-bimestre" class="bg-surface-container-low border-none rounded-lg p-3 text-body-sm focus:ring-2 focus:ring-secondary-container w-full">
-                        <option value="Todos">Todos os Bimestres</option>
-                        <option value="1º Bimestre">1º Bimestre</option>
-                        <option value="2º Bimestre">2º Bimestre</option>
-                        <option value="3º Bimestre">3º Bimestre</option>
-                        <option value="4º Bimestre">4º Bimestre</option>
-                    </select>
-                `;
-                document.getElementById('filter-bimestre').addEventListener('change', renderReport);
-            } else {
-                filterDynamicContainer.innerHTML = `
-                    <label class="font-label-md text-label-md text-on-surface-variant font-medium">Status da Ocorrência</label>
-                    <select id="filter-status-ocorrencia" class="bg-surface-container-low border-none rounded-lg p-3 text-body-sm focus:ring-2 focus:ring-secondary-container w-full">
-                        <option value="Todas">Todas as Ocorrências</option>
-                        <option value="Pendente">Não Tratadas / Pendentes</option>
-                        <option value="Tratada">Tratadas / Resolvidas</option>
-                    </select>
-                `;
-                document.getElementById('filter-status-ocorrencia').addEventListener('change', renderReport);
-            }
-        }
-
-        // Validador de Bimestre escolar para 2026
-        function isDateInBimestre(dateStr, bimestre) {
-            if (bimestre === 'Todos') return true;
-            const year = dateStr.slice(0, 4);
-
-            const ranges = {
-                '1º Bimestre': { start: `${year}-02-01`, end: `${year}-04-30` },
-                '2º Bimestre': { start: `${year}-05-01`, end: `${year}-06-30` },
-                '3º Bimestre': { start: `${year}-07-01`, end: `${year}-09-30` },
-                '4º Bimestre': { start: `${year}-10-01`, end: `${year}-12-31` }
-            };
-
-            const range = ranges[bimestre];
-            if (!range) return true;
-            return dateStr >= range.start && dateStr <= range.end;
-        }
-
-        // Motor de Processamento Geral dos Relatórios
-        function renderReport() {
-            // Sincronizar informações com localStorage ativo
-            alunos = getDb('sigaedu_alunos', []);
-            frequenciaDb = getDb('sigaedu_frequencia', {});
-            ocorrencias = getDb('sigaedu_ocorrencias', []);
-
-            const selectedTurma = filterTurma.value;
-            const selectedPeriodo = filterPeriodo.value;
-            const searchAluno = filterAluno.value.trim().toLowerCase();
-
-            tableBody.innerHTML = '';
-            filteredData = [];
-
-            if (activeType === 'Frequência') {
-                previewTitle.textContent = "Prévia dos Dados: Frequências Consolidadas";
-
-                // Cabeçalhos de Frequência
-                tableHeaders.innerHTML = `
-                    <th class="p-4 font-label-md text-label-md text-primary">CPF/Matrícula</th>
-                    <th class="p-4 font-label-md text-label-md text-primary">Nome do Aluno</th>
-                    <th class="p-4 font-label-md text-label-md text-primary">Turma</th>
-                    <th class="p-4 font-label-md text-label-md text-primary text-center">Presenças</th>
-                    <th class="p-4 font-label-md text-label-md text-primary text-center">Faltas</th>
-                    <th class="p-4 font-label-md text-label-md text-primary text-center">Justificadas</th>
-                    <th class="p-4 font-label-md text-label-md text-primary">% Freq</th>
-                `;
-
-                const filterBimElement = document.getElementById('filter-bimestre');
-                const selectedBimestre = filterBimElement ? filterBimElement.value : 'Todos';
-
-                // Filtrar alunos base
-                let targetStudents = alunos;
-                if (selectedTurma !== 'Todas') {
-                    targetStudents = targetStudents.filter(s => s.turma === selectedTurma);
-                }
-                if (searchAluno) {
-                    targetStudents = targetStudents.filter(s => 
-                        s.nome.toLowerCase().includes(searchAluno) || 
-                        s.cpf.toLowerCase().includes(searchAluno)
-                    );
-                }
-
-                // Filtrar chaves de logs de frequências consolidadas
-                const freqKeys = Object.keys(frequenciaDb).filter(key => {
-                    const record = frequenciaDb[key];
-                    if (!record.consolidadoSaida) return false;
-
-                    const parts = key.split('_');
-                    const dateStr = parts[0];
-                    const recordTurma = parts[1];
-
-                    if (selectedTurma !== 'Todas' && recordTurma !== selectedTurma) return false;
-
-                    if (selectedPeriodo !== 'Todos') {
-                        const month = dateStr.split('-')[1];
-                        if (month !== selectedPeriodo) return false;
-                    }
-
-                    if (!isDateInBimestre(dateStr, selectedBimestre)) return false;
-
-                    return true;
-                });
-
-                const uniqueDates = new Set(freqKeys.map(k => k.split('_')[0]));
-                let totalPresencesAll = 0;
-                let totalAbsencesAll = 0;
-                let studentsInRisk = 0;
-
-                targetStudents.forEach(student => {
-                    let presences = 0;
-                    let absences = 0;
-                    let justified = 0;
-
-                    freqKeys.forEach(key => {
-                        const parts = key.split('_');
-                        const recordTurma = parts[1];
-
-                        if (student.turma !== recordTurma) return;
-
-                        const entStatusMap = frequenciaDb[key].entrada || {};
-                        const saiStatusMap = frequenciaDb[key].saida || {};
-                        
-                        const ent = entStatusMap[student.cpf];
-                        const sai = saiStatusMap[student.cpf];
-
-                        if (ent) {
-                            if (ent === 'P' && sai === 'F') {
-                                absences++; // Evasão
-                            } else if (ent === 'F') {
-                                absences++; // Falta regular
-                            } else if (ent === 'FJ') {
-                                presences++; // Justificado conta como pedagógico
-                                justified++;
-                            } else if (ent === 'P' && (sai === 'P' || sai === 'FJ')) {
-                                presences++;
-                                if (sai === 'FJ') justified++;
-                            } else {
-                                presences++;
-                            }
-                        }
-                    });
-
-                    const hasRecords = presences > 0 || absences > 0;
-                    const freqPct = (presences + absences) === 0 ? 100 : Math.round((presences / (presences + absences)) * 100);
-                    
-                    if (freqPct < 75 && hasRecords) {
-                        studentsInRisk++;
-                    }
-
-                    filteredData.push({
-                        matricula: student.cpf,
-                        nome: student.nome,
-                        turma: student.turma,
-                        presencas: presences,
-                        faltas: absences,
-                        justificadas: justified,
-                        freq: freqPct
-                    });
-                });
-
-                filteredData.sort((a, b) => a.nome.localeCompare(b.nome));
-
-                if (filteredData.length === 0) {
-                    tableBody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-on-surface-variant italic">Nenhum registro de frequência consolidado foi encontrado para os critérios selecionados.</td></tr>`;
-                } else {
-                    filteredData.forEach(row => {
-                        const badgeColor = row.freq >= 90 ? 'bg-secondary-container' : (row.freq >= 75 ? 'bg-amber-500' : 'bg-error');
-                        const textColor = row.freq >= 75 ? 'text-primary' : 'text-error';
-
-                        const tr = document.createElement('tr');
-                        tr.className = "hover:bg-surface-container-low transition-colors group";
-                        tr.innerHTML = `
-                            <td class="p-4 text-body-sm font-semibold text-on-surface-variant">${row.matricula}</td>
-                            <td class="p-4 font-bold text-primary">${row.nome}</td>
-                            <td class="p-4 text-body-sm">${row.turma}</td>
-                            <td class="p-4 text-body-sm font-bold text-emerald-600 text-center">${String(row.presencas).padStart(2, '0')}</td>
-                            <td class="p-4 text-body-sm font-bold text-error text-center">${String(row.faltas).padStart(2, '0')}</td>
-                            <td class="p-4 text-body-sm font-medium text-amber-600 text-center">${String(row.justificadas).padStart(2, '0')}</td>
-                            <td class="p-4">
-                                <div class="flex items-center gap-2">
-                                    <div class="w-16 h-2 bg-surface-container-highest rounded-full overflow-hidden">
-                                        <div class="h-full ${badgeColor}" style="width: ${row.freq}%"></div>
-                                    </div>
-                                    <span class="text-label-sm font-bold ${textColor}">${row.freq}%</span>
-                                </div>
-                            </td>
-                        `;
-                        tableBody.appendChild(tr);
-                    });
-                }
-
-                // Indicadores Rápidos
-                const avgPresence = filteredData.length === 0 ? 100 : Math.round(filteredData.reduce((acc, cur) => acc + cur.freq, 0) / filteredData.length);
-                insight1Title.textContent = "Presença Média Geral";
-                insight1Value.textContent = `${avgPresence}%`;
-
-                insight2Title.textContent = "Alunos em Risco (<75%)";
-                insight2Value.textContent = String(studentsInRisk).padStart(2, '0');
-                insight2Value.className = `font-headline-md text-headline-md font-bold ${studentsInRisk > 0 ? 'text-error animate-pulse' : 'text-primary'}`;
-
-                insight3Title.textContent = "Dias Letivos Consolidados";
-                insight3Value.textContent = String(uniqueDates.size).padStart(2, '0');
-
-                tablePaginationSummary.textContent = `Mostrando ${filteredData.length} de ${targetStudents.length} alunos cadastrados no banco de dados`;
-
-            } else {
-                // Modo Ocorrências
-                previewTitle.textContent = "Prévia dos Dados: Ocorrências Disciplinares";
-
-                // Cabeçalhos de Ocorrência
-                tableHeaders.innerHTML = `
-                    <th class="p-4 font-label-md text-label-md text-primary">Aluno(s) Envolvido(s)</th>
-                    <th class="p-4 font-label-md text-label-md text-primary">Turma</th>
-                    <th class="p-4 font-label-md text-label-md text-primary">Tipo de Infração</th>
-                    <th class="p-4 font-label-md text-label-md text-primary">Data</th>
-                    <th class="p-4 font-label-md text-label-md text-primary">Autor do Registro</th>
-                    <th class="p-4 font-label-md text-label-md text-primary">Status</th>
-                    <th class="p-4 font-label-md text-label-md text-primary">Medida Aplicada</th>
-                `;
-
-                const filterStatusElement = document.getElementById('filter-status-ocorrencia');
-                const selectedStatus = filterStatusElement ? filterStatusElement.value : 'Todas';
-
-                let targetOcorrencias = ocorrencias;
-
-                // Filtrar por Turma
-                if (selectedTurma !== 'Todas') {
-                    targetOcorrencias = targetOcorrencias.filter(o => o.turma === selectedTurma);
-                }
-
-                // Filtrar por Período
-                if (selectedPeriodo !== 'Todos') {
-                    targetOcorrencias = targetOcorrencias.filter(o => o.dataOcorrencia.split('-')[1] === selectedPeriodo);
-                }
-
-                // Filtrar por Status
-                if (selectedStatus !== 'Todas') {
-                    targetOcorrencias = targetOcorrencias.filter(o => o.status === selectedStatus);
-                }
-
-                // Filtrar por Aluno buscador
-                if (searchAluno) {
-                    targetOcorrencias = targetOcorrencias.filter(o => 
-                        o.alunosEnvolvidos.some(a => 
-                            a.nome.toLowerCase().includes(searchAluno) || 
-                            a.cpf.toLowerCase().includes(searchAluno)
-                        )
-                    );
-                }
-
-                filteredData = targetOcorrencias;
-
-                if (filteredData.length === 0) {
-                    tableBody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-on-surface-variant italic">Nenhum registro de ocorrência encontrado para a pesquisa.</td></tr>`;
-                } else {
-                    filteredData.forEach(row => {
-                        const statusClass = row.status === "Pendente" ? "text-error bg-red-50 border-red-200" : "text-emerald-700 bg-emerald-50 border-emerald-200";
-                        const dotClass = row.status === "Pendente" ? "bg-error animate-pulse" : "bg-emerald-600";
-                        const formattedDate = row.dataOcorrencia.split('-').reverse().join('/');
-
-                        const studentsLinks = row.alunosEnvolvidos.map(a => 
-                            `<a href="fichadoaluno.html?cpf=${a.cpf}" class="hover:underline hover:text-primary transition-all text-primary font-bold decoration-2" title="Acessar Ficha do Aluno">${a.nome}</a>`
-                        ).join(', ');
-
-                        const tr = document.createElement('tr');
-                        tr.className = "hover:bg-surface-container-low transition-colors group";
-                        tr.innerHTML = `
-                            <td class="p-4 text-body-sm min-w-[200px]">${studentsLinks}</td>
-                            <td class="p-4 text-body-sm font-semibold">${row.turma}</td>
-                            <td class="p-4 text-body-sm"><span class="px-2.5 py-1 bg-surface-container-high rounded-full font-bold text-primary text-[11px]">${row.tipo}</span></td>
-                            <td class="p-4 text-body-sm">${formattedDate}</td>
-                            <td class="p-4 text-body-sm text-on-surface-variant">${row.autor}</td>
-                            <td class="p-4">
-                                <span class="flex items-center gap-1.5 px-3 py-1 border rounded-full text-label-sm font-bold uppercase select-none w-fit ${statusClass}">
-                                    <span class="w-2 h-2 rounded-full ${dotClass}"></span> ${row.status}
-                                </span>
-                            </td>
-                            <td class="p-4 text-body-sm italic text-on-surface-variant max-w-[250px] truncate" title="${row.resposta || 'Aguardando Medida Disciplinar'}">${row.resposta || 'Pendente de tratamento'}</td>
-                        `;
-                        tableBody.appendChild(tr);
-                    });
-                }
-
-                // Indicadores Rápidos Ocorrências
-                const pendentesCount = filteredData.filter(o => o.status === 'Pendente').length;
-                const tratadasCount = filteredData.filter(o => o.status === 'Tratada').length;
-
-                insight1Title.textContent = "Ocorrências Registradas";
-                insight1Value.textContent = String(filteredData.length).padStart(2, '0');
-
-                insight2Title.textContent = "Casos Pendentes";
-                insight2Value.textContent = String(pendentesCount).padStart(2, '0');
-                insight2Value.className = `font-headline-md text-headline-md font-bold ${pendentesCount > 0 ? 'text-error animate-pulse' : 'text-primary'}`;
-
-                insight3Title.textContent = "Casos Resolvidos / Tratados";
-                insight3Value.textContent = String(tratadasCount).padStart(2, '0');
-
-                tablePaginationSummary.textContent = `Mostrando ${filteredData.length} ocorrência(s) registrada(s) no histórico total`;
-            }
-        }
-
-        // Eventos de Seleção de Tipo de Relatório
-        btnTipoFreq.addEventListener('click', () => {
-            activeType = 'Frequência';
-            btnTipoFreq.className = "flex items-center justify-center gap-2 p-4 rounded-lg bg-secondary-container text-on-secondary-container font-bold border-2 border-secondary-container transition-all scale-95";
-            btnTipoOco.className = "flex items-center justify-center gap-2 p-4 rounded-lg bg-surface-container-low text-on-surface-variant border-2 border-transparent hover:border-surface-container-highest transition-all";
-            renderDynamicFilterColumn();
-            renderReport();
-        });
-
-        btnTipoOco.addEventListener('click', () => {
-            activeType = 'Ocorrência';
-            btnTipoOco.className = "flex items-center justify-center gap-2 p-4 rounded-lg bg-secondary-container text-on-secondary-container font-bold border-2 border-secondary-container transition-all scale-95";
-            btnTipoFreq.className = "flex items-center justify-center gap-2 p-4 rounded-lg bg-surface-container-low text-on-surface-variant border-2 border-transparent hover:border-surface-container-highest transition-all";
-            renderDynamicFilterColumn();
-            renderReport();
-        });
-
-        // Eventos gerais dos Filtros
-        filterTurma.addEventListener('change', renderReport);
-        filterPeriodo.addEventListener('change', renderReport);
-        filterAluno.addEventListener('input', renderReport);
-
-        // Exportação Premium PDF via Window.print
-        btnExportPdf.addEventListener('click', () => {
-            if (filteredData.length === 0) {
-                alert("Não há dados na tabela para exportação no momento.");
-                return;
-            }
-
-            loadingOverlay.classList.remove('opacity-0', 'pointer-events-none');
-            loadingOverlay.classList.add('opacity-100');
-
-            setTimeout(() => {
-                const selectedTurma = filterTurma.value;
-                const selectedPeriodoStr = filterPeriodo.options[filterPeriodo.selectedIndex].text;
-                
-                const printWindow = window.open("", "_blank");
-                let tableRowsMarkup = "";
-
-                if (activeType === 'Frequência') {
-                    filteredData.forEach(row => {
-                        tableRowsMarkup += `
-                            <tr>
-                                <td>${row.matricula}</td>
-                                <td style="font-weight: bold;">${row.nome}</td>
-                                <td>${row.turma}</td>
-                                <td style="text-align: center; color: #10B981; font-weight: bold;">${row.presencas}</td>
-                                <td style="text-align: center; color: #EF4444; font-weight: bold;">${row.faltas}</td>
-                                <td style="text-align: center; color: #F59E0B;">${row.justificadas}</td>
-                                <td style="text-align: center; font-weight: bold; color: ${row.freq >= 75 ? '#1A1A1A' : '#EF4444'};">${row.freq}%</td>
-                            </tr>
-                        `;
-                    });
-                } else {
-                    filteredData.forEach(row => {
-                        const names = row.alunosEnvolvidos.map(a => a.nome).join(', ');
-                        const formattedDate = row.dataOcorrencia.split('-').reverse().join('/');
-                        tableRowsMarkup += `
-                            <tr>
-                                <td style="font-weight: bold; max-width: 250px;">${names}</td>
-                                <td>${row.turma}</td>
-                                <td><span style="background: #E5E7EB; padding: 2px 8px; border-radius: 9999px; font-size: 11px;">${row.tipo}</span></td>
-                                <td>${formattedDate}</td>
-                                <td>${row.autor}</td>
-                                <td style="font-weight: bold; color: ${row.status === 'Pendente' ? '#EF4444' : '#10B981'}; text-transform: uppercase;">${row.status}</td>
-                                <td style="font-style: italic; color: #4B5563;">${row.resposta || 'Pendente de tratamento'}</td>
-                            </tr>
-                        `;
-                    });
-                }
-
-                const headersHtml = activeType === 'Frequência' ? `
-                    <th>Matrícula/CPF</th>
-                    <th>Nome do Aluno</th>
-                    <th>Turma</th>
-                    <th style="text-align: center;">Presenças</th>
-                    <th style="text-align: center;">Faltas</th>
-                    <th style="text-align: center;">Justificadas</th>
-                    <th style="text-align: center;">% Freq</th>
-                ` : `
-                    <th>Aluno(s) Envolvido(s)</th>
-                    <th>Turma</th>
-                    <th>Tipo</th>
-                    <th>Data</th>
-                    <th>Autor</th>
-                    <th>Status</th>
-                    <th>Medida Aplicada</th>
-                `;
-
-                const html = `
-                    <!DOCTYPE html>
-                    <html>
-                    <head>
-                        <title>Relatório Acadêmico - SIGAEDU</title>
-                        <style>
-                            body {
-                                font-family: 'Helvetica Neue', Arial, sans-serif;
-                                color: #1A1A1A;
-                                margin: 40px;
-                                line-height: 1.5;
-                            }
-                            .header {
-                                display: flex;
-                                justify-content: space-between;
-                                align-items: center;
-                                border-bottom: 3px double #000;
-                                padding-bottom: 20px;
-                                margin-bottom: 30px;
-                            }
-                            .logo {
-                                font-size: 28px;
-                                font-weight: 900;
-                                letter-spacing: -1.5px;
-                                color: #000;
-                            }
-                            .subtitle {
-                                font-size: 11px;
-                                color: #4B5563;
-                                text-transform: uppercase;
-                                letter-spacing: 1px;
-                                text-align: right;
-                            }
-                            .report-title {
-                                font-size: 20px;
-                                font-weight: bold;
-                                text-align: center;
-                                text-transform: uppercase;
-                                background: #F3F4F6;
-                                padding: 12px;
-                                border: 1px solid #D1D5DB;
-                                margin-bottom: 30px;
-                            }
-                            .metadata-grid {
-                                display: grid;
-                                grid-template-columns: repeat(4, 1fr);
-                                gap: 15px;
-                                margin-bottom: 35px;
-                                background: #F9FAFB;
-                                padding: 15px;
-                                border: 1px solid #E5E7EB;
-                                border-radius: 8px;
-                                font-size: 13px;
-                            }
-                            .metadata-item strong {
-                                color: #000;
-                                display: block;
-                                text-transform: uppercase;
-                                font-size: 10px;
-                                color: #4B5563;
-                                margin-bottom: 2px;
-                            }
-                            table {
-                                width: 100%;
-                                border-collapse: collapse;
-                                margin-bottom: 40px;
-                                font-size: 12px;
-                            }
-                            th {
-                                background: #F3F4F6;
-                                border-bottom: 2px solid #9CA3AF;
-                                padding: 10px 8px;
-                                font-weight: bold;
-                                text-align: left;
-                                text-transform: uppercase;
-                                font-size: 11px;
-                            }
-                            td {
-                                padding: 10px 8px;
-                                border-bottom: 1px solid #E5E7EB;
-                            }
-                            .signatures {
-                                margin-top: 80px;
-                                display: grid;
-                                grid-template-columns: 1fr 1fr;
-                                gap: 50px;
-                                text-align: center;
-                                font-size: 12px;
-                            }
-                            .sig-line {
-                                border-top: 1px solid #000;
-                                margin-top: 50px;
-                                padding-top: 5px;
-                            }
-                            .footer {
-                                margin-top: 60px;
-                                text-align: center;
-                                font-size: 10px;
-                                color: #9CA3AF;
-                                border-top: 1px solid #E5E7EB;
-                                padding-top: 15px;
-                            }
-                            @media print {
-                                body { margin: 15px; }
-                            }
-                        </style>
-                    </head>
-                    <body>
-                        <div class="header">
-                            <div class="logo">SIGAEDU</div>
-                            <div class="subtitle">Módulo de Relatórios Acadêmicos e Disciplinares<br>Emitido digitalmente</div>
-                        </div>
-                        
-                        <div class="report-title">Relatório Consolidado de ${activeType}</div>
-                        
-                        <div class="metadata-grid">
-                            <div class="metadata-item"><strong>Turma:</strong> ${selectedTurma}</div>
-                            <div class="metadata-item"><strong>Período:</strong> ${selectedPeriodoStr}</div>
-                            <div class="metadata-item"><strong>Tipo:</strong> ${activeType}</div>
-                            <div class="metadata-item"><strong>Emissão:</strong> ${new Date().toLocaleDateString('pt-BR')}</div>
-                        </div>
-                        
-                        <table>
-                            <thead>
-                                <tr>
-                                    ${headersHtml}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${tableRowsMarkup}
-                            </tbody>
-                        </table>
-                        
-                        <div class="signatures">
-                            <div>
-                                <div class="sig-line">Assinatura da Coordenação Pedagógica</div>
-                            </div>
-                            <div>
-                                <div class="sig-line">Assinatura da Direção Escolar</div>
-                            </div>
-                        </div>
-                        
-                        <div class="footer">
-                            SIGAEDU Gestão Escolar - Emitido em ${new Date().toLocaleDateString('pt-BR')} às ${new Date().toLocaleTimeString('pt-BR')}.
-                        </div>
-                        
-                        <script>
-                            window.onload = function() {
-                                window.print();
-                            };
-                        <\/script>
-                    </body>
-                    </html>
-                `;
-
-                printWindow.document.open();
-                printWindow.document.write(html);
-                printWindow.document.close();
-
-                loadingOverlay.classList.remove('opacity-100');
-                loadingOverlay.classList.add('opacity-0', 'pointer-events-none');
-            }, 800);
-        });
-
-        // Exportação XLSX Real com SheetJS
-        btnExportXlsx.addEventListener('click', () => {
-            if (filteredData.length === 0) {
-                alert("Não há dados cadastrados para exportação no momento.");
-                return;
-            }
-
-            loadingOverlay.classList.remove('opacity-0', 'pointer-events-none');
-            loadingOverlay.classList.add('opacity-100');
-
-            setTimeout(() => {
-                let exportRows = [];
-
-                if (activeType === 'Frequência') {
-                    exportRows = filteredData.map(row => ({
-                        'Matrícula/CPF': row.matricula,
-                        'Nome do Aluno': row.nome,
-                        'Turma': row.turma,
-                        'Presenças': row.presencas,
-                        'Faltas': row.faltas,
-                        'Justificadas': row.justificadas,
-                        '% Frequência': row.freq
-                    }));
-                } else {
-                    exportRows = filteredData.map(row => ({
-                        'Alunos Envolvidos': row.alunosEnvolvidos.map(a => a.nome).join(', '),
-                        'Turma': row.turma,
-                        'Tipo de Ocorrência': row.tipo,
-                        'Data da Infração': row.dataOcorrencia.split('-').reverse().join('/'),
-                        'Autor do Registro': row.autor,
-                        'Status': row.status,
-                        'Medida Aplicada / Resposta': row.resposta || 'Pendente'
-                    }));
-                }
-
-                // Criar planilha do SheetJS
-                const ws = XLSX.utils.json_to_sheet(exportRows);
-
-                // Auto-ajustar larguras das colunas
-                const colWidths = Object.keys(exportRows[0]).map(key => {
-                    let maxLen = key.length;
-                    exportRows.forEach(row => {
-                        const val = String(row[key] || '');
-                        if (val.length > maxLen) maxLen = val.length;
-                    });
-                    return { wch: maxLen + 4 };
-                });
-                ws['!cols'] = colWidths;
-
-                const wb = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(wb, ws, activeType.substring(0, 30));
-
-                const filename = `Relatorio_${activeType}_${new Date().toISOString().slice(0, 10)}.xlsx`;
-                XLSX.writeFile(wb, filename);
-
-                loadingOverlay.classList.remove('opacity-100');
-                loadingOverlay.classList.add('opacity-0', 'pointer-events-none');
-            }, 800);
-        });
-
-        // Inicialização
-        populateFilters();
-        renderReport();
-
-    })();
-</script>
+  </script>
 </body>
 </html>

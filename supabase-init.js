@@ -44,6 +44,21 @@
 
   window.userSession = session; // Exporta sessão globalmente
 
+  // Define a escola ativa imediatamente para evitar problemas de concorrência com scripts da página
+  if (session.profile.perfil === 'super_admin') {
+    const storedEscola = localStorage.getItem('sigaedu_selected_escola');
+    if (storedEscola) {
+      window.selectedEscola = JSON.parse(storedEscola);
+    }
+  } else {
+    const escolaFixa = {
+      id: session.profile.escola_id,
+      nome: "Minha Escola"
+    };
+    localStorage.setItem('sigaedu_selected_escola', JSON.stringify(escolaFixa));
+    window.selectedEscola = escolaFixa;
+  }
+
   // Função Global de Logout
   window.logoutUsuario = async function() {
     try {
@@ -102,13 +117,6 @@
     // 4. Fluxo de Seleção de Escola para Super Admin
     if (session.profile.perfil === 'super_admin') {
       inicializarSeletorEscolasSuperAdmin();
-    } else {
-      const escolaFixa = {
-        id: session.profile.escola_id,
-        nome: "Minha Escola"
-      };
-      localStorage.setItem('sigaedu_selected_escola', JSON.stringify(escolaFixa));
-      window.selectedEscola = escolaFixa;
     }
   });
 

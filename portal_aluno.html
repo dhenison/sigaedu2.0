@@ -282,7 +282,7 @@
           </button>
           <div class="min-w-0">
             <p class="text-label-sm uppercase tracking-wider text-on-surface-variant font-bold">Colegio Estadual SigaEDU</p>
-            <h2 class="text-label-md sm:text-headline-md font-bold text-primary truncate">Bem-vinda, Aluno</h2>
+            <h2 id="student-greeting" class="text-label-md sm:text-headline-md font-bold text-primary truncate">Bem-vindo(a)</h2>
           </div>
         </div>
         <div class="flex items-center gap-sm">
@@ -290,7 +290,7 @@
             <span class="material-symbols-outlined">notifications</span>
             <span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
           </button>
-          <img alt="Foto da aluna Aluno" class="w-10 h-10 rounded-full object-cover border-2 border-secondary-container" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&amp;fit=crop&amp;w=160&amp;q=80"/>
+          <img id="student-header-avatar" alt="Foto de perfil" class="w-10 h-10 rounded-full object-cover border-2 border-secondary-container" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&amp;fit=crop&amp;w=160&amp;q=80"/>
         </div>
       </header>
 
@@ -300,29 +300,29 @@
             <div class="p-lg bg-primary text-white relative">
               <div class="absolute inset-0 opacity-10 soft-grid"></div>
               <div class="relative flex flex-col sm:flex-row sm:items-center gap-md">
-                <img alt="Foto da aluna Aluno" class="w-24 h-24 rounded-xl object-cover border-4 border-secondary-container shadow-lg" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&amp;fit=crop&amp;w=240&amp;q=80"/>
+                <img id="student-card-avatar" alt="Foto de perfil" class="w-24 h-24 rounded-xl object-cover border-4 border-secondary-container shadow-lg" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&amp;fit=crop&amp;w=240&amp;q=80"/>
                 <div class="min-w-0">
-                  <div class="inline-flex items-center gap-xs bg-secondary-container text-primary px-sm py-1 rounded-full text-label-sm font-black uppercase tracking-wider mb-sm">
+                  <div id="student-matricula-badge" class="inline-flex items-center gap-xs bg-secondary-container text-primary px-sm py-1 rounded-full text-label-sm font-black uppercase tracking-wider mb-sm">
                     <span class="material-symbols-outlined text-[18px]">badge</span>
-                    Matricula 2026.04178
+                    Matrícula --
                   </div>
-                  <h1 class="text-headline-lg font-black">Aluno não cadastrado</h1>
-                  <p class="text-body-md text-inverse-on-surface mt-xs">8&ordm; Ano B - Ensino Fundamental | Turno Matutino</p>
+                  <h1 id="student-name" class="text-headline-lg font-black">Nome do Estudante</h1>
+                  <p id="student-class" class="text-body-md text-inverse-on-surface mt-xs">Série/Ano - Turno</p>
                 </div>
               </div>
             </div>
             <div class="grid sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-surface-variant">
               <div class="p-md">
                 <p class="text-label-sm text-on-surface-variant uppercase tracking-wider font-bold">Frequencia</p>
-                <p class="text-headline-md font-black text-primary mt-xs">96%</p>
+                <p id="student-attendance" class="text-headline-md font-black text-primary mt-xs">--%</p>
               </div>
               <div class="p-md">
                 <p class="text-label-sm text-on-surface-variant uppercase tracking-wider font-bold">Media atual</p>
-                <p class="text-headline-md font-black text-primary mt-xs">8.7</p>
+                <p id="student-average" class="text-headline-md font-black text-primary mt-xs">--</p>
               </div>
               <div class="p-md">
                 <p class="text-label-sm text-on-surface-variant uppercase tracking-wider font-bold">Proximo evento</p>
-                <p class="text-body-md font-bold text-primary mt-xs">Feira de Ciencias</p>
+                <p id="student-next-event" class="text-body-md font-bold text-primary mt-xs">--</p>
               </div>
             </div>
           </div>
@@ -341,22 +341,22 @@
               <div class="flex items-center gap-sm p-sm rounded-xl bg-surface-container-low">
                 <span class="material-symbols-outlined text-primary">menu_book</span>
                 <div>
-                  <p class="text-label-md font-bold">5 aulas programadas</p>
-                  <p class="text-body-sm text-on-surface-variant">Matematica, Portugues, Ciencias e Historia</p>
+                  <p class="text-label-md font-bold">Aulas programadas</p>
+                  <p class="text-body-sm text-on-surface-variant">Consulte os horários diários na aba correspondente.</p>
                 </div>
               </div>
               <div class="flex items-center gap-sm p-sm rounded-xl bg-surface-container-low">
                 <span class="material-symbols-outlined text-primary">assignment</span>
                 <div>
-                  <p class="text-label-md font-bold">2 atividades pendentes</p>
-                  <p class="text-body-sm text-on-surface-variant">Entrega ate sexta-feira</p>
+                  <p class="text-label-md font-bold">Atividades acadêmicas</p>
+                  <p class="text-body-sm text-on-surface-variant">Verifique prazos de entregas e trabalhos agendados.</p>
                 </div>
               </div>
               <div class="flex items-center gap-sm p-sm rounded-xl bg-secondary-container/20">
                 <span class="material-symbols-outlined text-secondary">emoji_events</span>
                 <div>
-                  <p class="text-label-md font-bold">Inscricao aberta</p>
-                  <p class="text-body-sm text-on-surface-variant">Olimpiada Topo do Saber</p>
+                  <p class="text-label-md font-bold">Topo do Saber</p>
+                  <p class="text-body-sm text-on-surface-variant">Olimpíadas de conhecimento integradas.</p>
                 </div>
               </div>
             </div>
@@ -405,40 +405,11 @@
                 <p class="text-label-sm uppercase tracking-wider text-on-surface-variant font-bold">Horario de Aula</p>
                 <h2 class="text-headline-md font-bold text-primary">Aulas de hoje</h2>
               </div>
-              <span class="inline-flex items-center gap-xs px-sm py-2 rounded-full bg-secondary-container/30 text-secondary text-label-sm font-black">8&ordm; Ano B</span>
+              <span class="inline-flex items-center gap-xs px-sm py-2 rounded-full bg-secondary-container/30 text-secondary text-label-sm font-black">Turma</span>
             </div>
-            <div class="p-md space-y-sm">
-              <div class="grid grid-cols-[76px_1fr_auto] gap-sm items-center p-sm rounded-xl bg-surface-container-low">
-                <p class="text-label-md font-black">07:30</p>
-                <div>
-                  <p class="text-label-md font-bold">Matematica</p>
-                  <p class="text-body-sm text-on-surface-variant">Professor não cadastrado - Sala 08</p>
-                </div>
-                <span class="material-symbols-outlined text-primary">functions</span>
-              </div>
-              <div class="grid grid-cols-[76px_1fr_auto] gap-sm items-center p-sm rounded-xl bg-white border border-surface-variant">
-                <p class="text-label-md font-black">08:20</p>
-                <div>
-                  <p class="text-label-md font-bold">Lingua Portuguesa</p>
-                  <p class="text-body-sm text-on-surface-variant">Professor não cadastrado - Sala 08</p>
-                </div>
-                <span class="material-symbols-outlined text-primary">menu_book</span>
-              </div>
-              <div class="grid grid-cols-[76px_1fr_auto] gap-sm items-center p-sm rounded-xl bg-white border border-surface-variant">
-                <p class="text-label-md font-black">09:30</p>
-                <div>
-                  <p class="text-label-md font-bold">Ciencias</p>
-                  <p class="text-body-sm text-on-surface-variant">Lab. 02 - Experimento guiado</p>
-                </div>
-                <span class="material-symbols-outlined text-primary">biotech</span>
-              </div>
-              <div class="grid grid-cols-[76px_1fr_auto] gap-sm items-center p-sm rounded-xl bg-white border border-surface-variant">
-                <p class="text-label-md font-black">10:20</p>
-                <div>
-                  <p class="text-label-md font-bold">Historia</p>
-                  <p class="text-body-sm text-on-surface-variant">Professor não cadastrado - Sala 08</p>
-                </div>
-                <span class="material-symbols-outlined text-primary">history_edu</span>
+            <div class="p-md space-y-sm" id="class-schedule-list">
+              <div class="text-center p-md text-on-surface-variant/70 text-body-sm font-medium border border-dashed border-outline-variant rounded-lg">
+                Sua grade de horários será disponibilizada pela escola.
               </div>
             </div>
           </div>
@@ -449,35 +420,8 @@
               <h2 class="text-headline-md font-bold text-primary">Proximos compromissos</h2>
             </div>
             <div class="p-md space-y-sm">
-              <div class="flex gap-sm p-sm rounded-xl bg-secondary-container/20">
-                <div class="w-12 h-12 rounded-xl bg-secondary-container flex flex-col items-center justify-center text-primary font-black">
-                  <span class="text-[10px] leading-none">JUN</span>
-                  <span class="text-lg leading-none">20</span>
-                </div>
-                <div>
-                  <p class="text-label-md font-bold">Feira de Ciencias</p>
-                  <p class="text-body-sm text-on-surface-variant">Apresentacao dos projetos por equipe.</p>
-                </div>
-              </div>
-              <div class="flex gap-sm p-sm rounded-xl border border-surface-variant">
-                <div class="w-12 h-12 rounded-xl bg-surface-container-low flex flex-col items-center justify-center text-primary font-black">
-                  <span class="text-[10px] leading-none">JUN</span>
-                  <span class="text-lg leading-none">24</span>
-                </div>
-                <div>
-                  <p class="text-label-md font-bold">Avaliacao de Matematica</p>
-                  <p class="text-body-sm text-on-surface-variant">Conteudo: fracoes, razao e proporcao.</p>
-                </div>
-              </div>
-              <div class="flex gap-sm p-sm rounded-xl border border-surface-variant">
-                <div class="w-12 h-12 rounded-xl bg-surface-container-low flex flex-col items-center justify-center text-primary font-black">
-                  <span class="text-[10px] leading-none">JUL</span>
-                  <span class="text-lg leading-none">02</span>
-                </div>
-                <div>
-                  <p class="text-label-md font-bold">Reuniao de responsaveis</p>
-                  <p class="text-body-sm text-on-surface-variant">Entrega de acompanhamento bimestral.</p>
-                </div>
+              <div class="text-center p-md text-on-surface-variant/70 text-body-sm font-medium border border-dashed border-outline-variant rounded-lg">
+                Nenhum compromisso agendado no momento.
               </div>
             </div>
           </div>
@@ -494,29 +438,10 @@
                 <span class="material-symbols-outlined">filter_list</span>
               </button>
             </div>
-            <div class="p-md grid md:grid-cols-2 gap-sm">
-              <article class="p-md rounded-xl border border-surface-variant bg-white">
-                <div class="flex items-center justify-between mb-sm">
-                  <span class="material-symbols-outlined text-primary">eco</span>
-                  <span class="px-2 py-1 rounded-full bg-secondary-container/30 text-secondary text-[10px] font-black">78%</span>
-                </div>
-                <h3 class="text-label-md font-bold">Horta Inteligente</h3>
-                <p class="text-body-sm text-on-surface-variant mt-xs">Pesquisa sobre irrigacao automatizada e sustentabilidade.</p>
-                <div class="mt-md h-2 bg-surface-container-low rounded-full overflow-hidden">
-                  <div class="h-full w-[78%] bg-secondary-container rounded-full"></div>
-                </div>
-              </article>
-              <article class="p-md rounded-xl border border-surface-variant bg-white">
-                <div class="flex items-center justify-between mb-sm">
-                  <span class="material-symbols-outlined text-primary">draw</span>
-                  <span class="px-2 py-1 rounded-full bg-surface-container-high text-on-surface-variant text-[10px] font-black">42%</span>
-                </div>
-                <h3 class="text-label-md font-bold">Jornal da Escola</h3>
-                <p class="text-body-sm text-on-surface-variant mt-xs">Producao de noticias e entrevistas com a comunidade.</p>
-                <div class="mt-md h-2 bg-surface-container-low rounded-full overflow-hidden">
-                  <div class="h-full w-[42%] bg-primary rounded-full"></div>
-                </div>
-              </article>
+            <div class="p-md grid md:grid-cols-2 gap-sm" id="projects-list">
+              <div class="md:col-span-2 text-center p-md text-on-surface-variant/70 text-body-sm font-medium border border-dashed border-outline-variant rounded-lg">
+                Nenhum projeto em andamento no momento.
+              </div>
             </div>
           </div>
 
@@ -537,25 +462,25 @@
               <div class="flex items-center justify-between p-sm rounded-xl bg-secondary-container/20">
                 <div>
                   <p class="text-label-md font-bold">Nivel atual</p>
-                  <p class="text-body-sm text-on-surface-variant">Fase escolar - Matematica</p>
+                  <p class="text-body-sm text-on-surface-variant">Fase escolar</p>
                 </div>
-                <span class="text-headline-md font-black text-primary">2&ordm;</span>
+                <span class="text-headline-md font-black text-primary">--</span>
               </div>
               <div class="flex items-center justify-between p-sm rounded-xl border border-surface-variant">
                 <div>
                   <p class="text-label-md font-bold">Pontuacao</p>
                   <p class="text-body-sm text-on-surface-variant">Somatorio dos simulados</p>
                 </div>
-                <span class="text-headline-md font-black text-primary">840</span>
+                <span class="text-headline-md font-black text-primary">--</span>
               </div>
               <button class="w-full py-3 bg-secondary-container text-primary rounded-xl font-black hover:brightness-95" type="button">Ver desafios</button>
             </div>
-          </div>
+          </div>   </div>
         </section>
       </div>
 
       <footer class="w-full py-md px-gutter flex flex-col sm:flex-row gap-sm justify-between items-start sm:items-center mt-auto bg-transparent">
-        <p class="text-label-sm text-on-surface-variant">Desenvolvido por Dhenison Carlos - 2026</p>
+        <p class="text-label-sm text-on-surface-variant">SIGAEDU - 2026</p>
         <div class="flex gap-md">
           <a class="text-label-sm text-on-surface-variant hover:text-primary" href="#">Termos de Uso</a>
           <a class="text-label-sm text-on-surface-variant hover:text-primary" href="#">Privacidade</a>
@@ -628,6 +553,7 @@
     }
 
     function logoutStudent() {
+      localStorage.removeItem('sigaedu_student_session');
       portalView.classList.add("hidden-view");
       loginView.classList.remove("hidden-view");
       passwordInput.value = "";
@@ -743,6 +669,136 @@
     recoveryForm.addEventListener("submit", findStudentAccess);
     document.getElementById("recovery-use-login").addEventListener("click", useRecoveredAccess);
 
+    async function carregarDadosDoAluno(email, token) {
+      const config = window.SIGAEDU_CONFIG || {};
+      try {
+        // 1. Buscar perfil do estudante e dados da turma
+        const res = await fetch(`${config.supabaseUrl}/rest/v1/alunos?email=eq.${encodeURIComponent(email)}&select=*,turmas(*)`, {
+          headers: {
+            "apikey": config.supabaseAnonKey,
+            "Authorization": `Bearer ${token}`
+          }
+        });
+        if (!res.ok) throw new Error("Erro ao buscar dados do estudante");
+        
+        const students = await res.json();
+        if (students.length === 0) {
+          console.warn("Nenhum registro de estudante correspondente ao e-mail.");
+          return;
+        }
+
+        const student = students[0];
+        
+        // 2. Atualizar campos da UI
+        document.getElementById("student-name").textContent = student.nome;
+        document.getElementById("student-greeting").textContent = `Bem-vindo(a), ${student.nome.split(' ')[0]}`;
+        
+        const avatarUrl = student.avatar_url || "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=160&q=80";
+        document.getElementById("student-header-avatar").src = avatarUrl;
+        document.getElementById("student-card-avatar").src = avatarUrl;
+        
+        document.getElementById("student-matricula-badge").innerHTML = `
+          <span class="material-symbols-outlined text-[18px]">badge</span>
+          CPF: ${student.cpf}
+        `;
+
+        if (student.turmas) {
+          document.getElementById("student-class").textContent = `${student.turmas.nome} | Turno ${student.turmas.turno}`;
+          const labelTurma = document.querySelector("#horario span.inline-flex");
+          if (labelTurma) labelTurma.textContent = student.turmas.nome;
+        } else {
+          document.getElementById("student-class").textContent = "Sem Turma Vinculada";
+        }
+
+        // 3. Carregar taxa de frequência
+        if (student.turma_id) {
+          const freqRes = await fetch(`${config.supabaseUrl}/rest/v1/frequencias?escola_id=eq.${student.escola_id}&turma_id=eq.${student.turma_id}&select=*`, {
+            headers: {
+              "apikey": config.supabaseAnonKey,
+              "Authorization": `Bearer ${token}`
+            }
+          });
+          if (freqRes.ok) {
+            const freqs = await freqRes.json();
+            let totalDays = freqs.length;
+            let presences = 0;
+            freqs.forEach(f => {
+              const status = f.presencas ? f.presencas[student.id] : null;
+              if (status === 'P' || status === 'S') {
+                presences++;
+              }
+            });
+            const rate = totalDays > 0 ? Math.round((presences / totalDays) * 100) : 100;
+            document.getElementById("student-attendance").textContent = `${rate}%`;
+          }
+        }
+
+        // 4. Carregar eventos da agenda
+        const agendaRes = await fetch(`${config.supabaseUrl}/rest/v1/agenda?escola_id=eq.${student.escola_id}&select=*`, {
+          headers: {
+            "apikey": config.supabaseAnonKey,
+            "Authorization": `Bearer ${token}`
+          }
+        });
+        if (agendaRes.ok) {
+          const events = await agendaRes.json();
+          const schoolEvents = events.filter(e => e.tipo !== 'ConfiguracaoCalendario' && (!e.turma_id || e.turma_id === student.turma_id));
+          const listContainer = document.getElementById("upcoming-events-list");
+          if (schoolEvents.length === 0) {
+            if (listContainer) {
+              listContainer.innerHTML = `
+                <div class="text-center py-8 text-body-sm text-on-surface-variant/60">
+                  Nenhum compromisso agendado no momento.
+                </div>
+              `;
+            }
+            document.getElementById("student-next-event").textContent = "Nenhum";
+          } else {
+            schoolEvents.sort((a, b) => new Date(a.data_evento) - new Date(b.data_evento));
+            const upcoming = schoolEvents.slice(0, 3);
+            document.getElementById("student-next-event").textContent = upcoming[0] ? upcoming[0].titulo : "Nenhum";
+            
+            if (listContainer) {
+              listContainer.innerHTML = upcoming.map(evt => {
+                const dt = new Date(evt.data_evento + "T00:00:00");
+                const mes = dt.toLocaleDateString('pt-BR', { month: 'short' }).toUpperCase().substring(0, 3);
+                const dia = dt.getDate();
+                return `
+                  <div class="flex gap-sm p-sm rounded-xl border border-surface-variant bg-white">
+                    <div class="w-12 h-12 rounded-xl bg-surface-container-low flex flex-col items-center justify-center text-primary font-black">
+                      <span class="text-[10px] leading-none">${mes}</span>
+                      <span class="text-lg leading-none">${dia}</span>
+                    </div>
+                    <div>
+                      <p class="text-label-md font-bold">${evt.titulo}</p>
+                      <p class="text-body-sm text-on-surface-variant">${evt.descricao}</p>
+                    </div>
+                  </div>
+                `;
+              }).join('');
+            }
+          }
+        }
+      } catch (err) {
+        console.error("Erro ao carregar dados do aluno:", err);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", async function() {
+      const storedSession = localStorage.getItem('sigaedu_student_session');
+      if (storedSession) {
+        try {
+          const session = JSON.parse(storedSession);
+          if (session && session.access_token && session.user && session.user.email) {
+            await carregarDadosDoAluno(session.user.email, session.access_token);
+            showPortal();
+          }
+        } catch (e) {
+          localStorage.removeItem('sigaedu_student_session');
+        }
+      }
+    });
+
     document.getElementById("student-login-form").addEventListener("submit", async function(event) {
       event.preventDefault();
       const login = loginInput.value.trim().toLowerCase();
@@ -777,8 +833,11 @@
           loginError.classList.remove("hidden");
           return;
         }
+        const tokenData = await response.json();
+        localStorage.setItem('sigaedu_student_session', JSON.stringify(tokenData));
         loginError.classList.add("hidden");
         loginInput.classList.remove("border-error");
+        await carregarDadosDoAluno(login, tokenData.access_token);
         showPortal();
       } catch (error) {
         loginError.textContent = "Não foi possível conectar ao Supabase. Tente novamente.";

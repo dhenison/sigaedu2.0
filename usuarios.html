@@ -6,7 +6,7 @@
 <title>SIGAEDU - Gestão de Usuários</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
-                            <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet"/>
+                              <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet"/>
 <style>
         .material-symbols-outlined {
       font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
@@ -246,10 +246,10 @@
         <div class="h-8 w-[1px] bg-surface-variant hidden sm:block"></div>
         <div class="flex items-center gap-sm pl-sm cursor-pointer hover:bg-surface-container-low p-xs rounded-xl transition-all duration-200">
           <div class="text-right hidden sm:block">
-            <p class="text-label-md font-bold text-primary leading-none">Dhenison Carlos</p>
+            <p class="text-label-md font-bold text-primary leading-none">Usuário</p>
             <p class="text-label-sm text-on-surface-variant">Administrador</p>
           </div>
-          <img alt="Dhenison Carlos - Administrador" class="w-10 h-10 rounded-full object-cover border-2 border-secondary-container hover:scale-105 transition-transform duration-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRGSGbqGOo2dzNp40hZk4pp_0rVieA-Su6u1WdWdVVqvGIA6n7dJMIDQVg3vkTYKgYN5HRKv7SOzuV4CGLSmB4xKZHKFpq-2ab9UNYf9ye3MByCMdx_JIehrQjusuLvStYhxK5Qj2eZHDffXBfYxzFUFDsX7kk7oInOP0foJp972O4lAIpD8pOJMQ4ehoA3BKsZHDj0gIh6Fx7Dr-Uvdu89v6j1O2f_mCuy7lSXEnJdzNLXbaD9C36QemEJIA6ok8BwdRRm8oVmvA"/>
+          <img alt="Foto de perfil" class="w-10 h-10 rounded-full object-cover border-2 border-secondary-container hover:scale-105 transition-transform duration-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRGSGbqGOo2dzNp40hZk4pp_0rVieA-Su6u1WdWdVVqvGIA6n7dJMIDQVg3vkTYKgYN5HRKv7SOzuV4CGLSmB4xKZHKFpq-2ab9UNYf9ye3MByCMdx_JIehrQjusuLvStYhxK5Qj2eZHDffXBfYxzFUFDsX7kk7oInOP0foJp972O4lAIpD8pOJMQ4ehoA3BKsZHDj0gIh6Fx7Dr-Uvdu89v6j1O2f_mCuy7lSXEnJdzNLXbaD9C36QemEJIA6ok8BwdRRm8oVmvA"/>
         </div>
       </div>
     </header>
@@ -295,7 +295,7 @@
 <th class="px-6 py-4 font-label-md text-label-md text-on-surface-variant">Ações</th>
 </tr>
 </thead>
-<tbody class="divide-y divide-surface-variant/20">
+<tbody id="usuarios-table-body" class="divide-y divide-surface-variant/20">
 <tr><td colspan="5" class="px-6 py-10 text-center text-on-surface-variant">Nenhum usuário cadastrado.</td></tr>
 </tbody>
 </table>
@@ -330,7 +330,7 @@
 </div>
 <div class="pt-12 px-6 pb-6">
 <div class="mb-4">
-<h3 class="font-headline-md text-headline-md text-primary">Dhenison Carlos</h3>
+<h3 class="font-headline-md text-headline-md text-primary">Usuário</h3>
 <p class="text-on-surface-variant text-label-md font-label-md">Administrador de Sistemas</p>
 </div>
 <form class="space-y-4">
@@ -347,7 +347,7 @@
 <label class="block font-label-md text-label-md text-on-surface-variant mb-1.5">Instagram</label>
 <div class="relative">
 <span class="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm font-bold">@</span>
-<input class="w-full bg-background border border-surface-variant/30 rounded-lg py-2.5 pl-8 pr-3 text-body-sm focus:ring-2 focus:ring-secondary focus:border-transparent transition-all outline-none" type="text" value="dhenison.dev"/>
+<input class="w-full bg-background border border-surface-variant/30 rounded-lg py-2.5 pl-8 pr-3 text-body-sm focus:ring-2 focus:ring-secondary focus:border-transparent transition-all outline-none" type="text" value="usuario.sigaedu"/>
 </div>
 </div>
 </div>
@@ -371,7 +371,7 @@
 <!-- Footer (Footer Shared Component) -->
 <footer class="w-full py-md px-gutter flex justify-between items-center mt-auto bg-transparent">
 <div class="text-label-sm font-label-sm text-on-surface-variant">
-                Desenvolvido por Dhenison Carlos - 2026
+                SIGAEDU - 2026
             </div>
 <div class="flex gap-md">
 <a class="text-label-sm font-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Termos de Uso</a>
@@ -491,4 +491,242 @@
       }
     })();
   </script>
+<!-- Modal Novo Usuário -->
+<div id="modal-novo-usuario" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm hidden">
+  <div class="bg-white rounded-2xl w-full max-w-md p-6 shadow-2xl border border-surface-variant/30 animate-in fade-in zoom-in-95 duration-200">
+    <div class="flex justify-between items-center border-b border-surface-variant/30 pb-4 mb-4">
+      <h3 class="text-headline-md font-bold text-primary">Novo Usuário</h3>
+      <button onclick="fecharModalNovoUsuario()" class="p-1 hover:bg-surface-container-high rounded-full transition-colors">
+        <span class="material-symbols-outlined text-on-surface-variant">close</span>
+      </button>
+    </div>
+    <form id="form-novo-usuario" class="space-y-4">
+      <div>
+        <label class="block font-label-md text-label-md text-on-surface-variant mb-1.5">Nome Completo</label>
+        <input id="new-user-nome" required class="w-full bg-background border border-surface-variant/30 rounded-lg p-2.5 text-body-sm focus:ring-2 focus:ring-secondary focus:border-transparent outline-none" type="text" placeholder="Ex: Maria Souza"/>
+      </div>
+      <div>
+        <label class="block font-label-md text-label-md text-on-surface-variant mb-1.5">E-mail</label>
+        <input id="new-user-email" required class="w-full bg-background border border-surface-variant/30 rounded-lg p-2.5 text-body-sm focus:ring-2 focus:ring-secondary focus:border-transparent outline-none" type="email" placeholder="Ex: maria@escola.com"/>
+      </div>
+      <div>
+        <label class="block font-label-md text-label-md text-on-surface-variant mb-1.5">Senha Inicial</label>
+        <input id="new-user-senha" required minlength="6" class="w-full bg-background border border-surface-variant/30 rounded-lg p-2.5 text-body-sm focus:ring-2 focus:ring-secondary focus:border-transparent outline-none" type="password" placeholder="Mínimo 6 caracteres"/>
+      </div>
+      <div>
+        <label class="block font-label-md text-label-md text-on-surface-variant mb-1.5">Função / Perfil</label>
+        <select id="new-user-perfil" required class="w-full bg-background border border-surface-variant/30 rounded-lg p-2.5 text-body-sm focus:ring-2 focus:ring-secondary focus:border-transparent outline-none">
+          <option value="admin">Administrador</option>
+          <option value="coordenador">Coordenador</option>
+          <option value="secretaria">Secretaria</option>
+          <option value="professor">Professor</option>
+        </select>
+      </div>
+      <div class="flex justify-end gap-2 pt-4 border-t border-surface-variant/30">
+        <button type="button" onclick="fecharModalNovoUsuario()" class="px-4 py-2 bg-surface-container-low text-on-surface-variant font-bold rounded-lg border border-surface-variant hover:bg-surface-container-high transition-colors">Cancelar</button>
+        <button type="submit" class="px-4 py-2 bg-primary text-on-primary font-bold rounded-lg hover:opacity-90 transition-all">Salvar Usuário</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  (async function() {
+    const supabase = window.supabaseClient;
+    const selectedEscola = window.selectedEscola;
+    const session = window.userSession;
+
+    if (!supabase || !selectedEscola || !session) {
+      console.error("Supabase ou sessão ativa não inicializados.");
+      return;
+    }
+
+    const escolaId = selectedEscola.id;
+
+    // 1. Carrega dados do perfil logado
+    const profileId = session.profile.id;
+    const profileNomeEl = document.querySelector(".lg\\:col-span-4 h3.font-headline-md");
+    const profileRoleEl = document.querySelector(".lg\\:col-span-4 p.text-label-md");
+    
+    if (profileNomeEl) profileNomeEl.textContent = session.profile.nome;
+    if (profileRoleEl) {
+      const perfisTraduzidos = {
+        'super_admin': 'Super Admin',
+        'admin': 'Administrador',
+        'coordenador': 'Coordenador',
+        'secretaria': 'Secretaria',
+        'professor': 'Professor'
+      };
+      profileRoleEl.textContent = perfisTraduzidos[session.profile.perfil] || session.profile.perfil;
+    }
+
+    // Carregar informações extras do LocalStorage
+    const metaKey = `sigaedu_profile_meta_${profileId}`;
+    const storedMeta = localStorage.getItem(metaKey);
+    const textareaSobre = document.querySelector("textarea");
+    const inputFormacao = document.querySelectorAll("form input")[0];
+    const inputInstagram = document.querySelectorAll("form input")[1];
+
+    if (storedMeta) {
+      try {
+        const meta = JSON.parse(storedMeta);
+        if (textareaSobre) textareaSobre.value = meta.sobre || '';
+        if (inputFormacao) inputFormacao.value = meta.formacao || '';
+        if (inputInstagram) inputInstagram.value = meta.instagram || '';
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    // Salvar Perfil
+    const btnSalvarPerfil = document.querySelector("form button[type='button']");
+    if (btnSalvarPerfil) {
+      btnSalvarPerfil.addEventListener("click", () => {
+        const meta = {
+          sobre: textareaSobre ? textareaSobre.value.trim() : '',
+          formacao: inputFormacao ? inputFormacao.value.trim() : '',
+          instagram: inputInstagram ? inputInstagram.value.trim() : ''
+        };
+        localStorage.setItem(metaKey, JSON.stringify(meta));
+        alert("Informações de perfil salvas com sucesso!");
+      });
+    }
+
+    // 2. Listar Usuários
+    async function listarUsuarios() {
+      try {
+        const tbody = document.getElementById("usuarios-table-body");
+        tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-10 text-center text-on-surface-variant">Buscando usuários do banco...</td></tr>';
+
+        const { data: users, error } = await supabase
+          .from('usuarios')
+          .select('*')
+          .or(`escola_id.eq.${escolaId},perfil.eq.super_admin`)
+          .order('nome', { ascending: true });
+
+        if (error) throw error;
+
+        tbody.innerHTML = '';
+        if (!users || users.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-10 text-center text-on-surface-variant">Nenhum usuário cadastrado nesta escola.</td></tr>';
+          document.querySelector(".px-6.py-5 span").textContent = "0 Total";
+          return;
+        }
+
+        document.querySelector(".px-6.py-5 span").textContent = `${users.length} Total`;
+
+        const perfisTraduzidos = {
+          'super_admin': 'Super Admin',
+          'admin': 'Administrador',
+          'coordenador': 'Coordenador',
+          'secretaria': 'Secretaria',
+          'professor': 'Professor'
+        };
+
+        users.forEach(usr => {
+          const tr = document.createElement("tr");
+          tr.className = "hover:bg-surface-container-low transition-colors";
+          
+          const role = perfisTraduzidos[usr.perfil] || usr.perfil;
+          const isMe = usr.id === profileId;
+          const initials = usr.nome.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+
+          tr.innerHTML = `
+            <td class="px-6 py-4">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center font-bold text-xs select-none">${initials}</div>
+                <div>
+                  <p class="font-label-md text-label-md text-primary font-bold">${usr.nome} ${isMe ? '<span class="text-xs font-normal text-on-surface-variant">(Você)</span>' : ''}</p>
+                </div>
+              </div>
+            </td>
+            <td class="px-6 py-4 text-body-sm text-on-surface-variant">${usr.email}</td>
+            <td class="px-6 py-4 text-body-sm">${role}</td>
+            <td class="px-6 py-4">
+              <span class="px-2 py-1 bg-green-100 text-green-800 text-[10px] font-bold rounded-full">ATIVO</span>
+            </td>
+            <td class="px-6 py-4 text-right">
+              <button onclick="alert('Funcionalidade de edição de usuário em desenvolvimento.')" class="text-on-surface-variant hover:text-primary transition-colors">
+                <span class="material-symbols-outlined text-sm">edit</span>
+              </button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+      } catch (err) {
+        console.error("Erro ao listar usuários:", err);
+      }
+    }
+
+    // Modal Controle
+    const modalNewUser = document.getElementById("modal-novo-usuario");
+    
+    window.abrirModalNovoUsuario = function() {
+      modalNewUser.classList.remove("hidden");
+    };
+
+    window.fecharModalNovoUsuario = function() {
+      modalNewUser.classList.add("hidden");
+      document.getElementById("form-novo-usuario").reset();
+    };
+
+    // Bind do botão "Novo Usuário"
+    const btnNovoUsuario = document.querySelector("main button.bg-primary");
+    if (btnNovoUsuario) {
+      btnNovoUsuario.onclick = window.abrirModalNovoUsuario;
+    }
+
+    // Ação do Form
+    document.getElementById("form-novo-usuario").onsubmit = async function(e) {
+      e.preventDefault();
+      const nome = document.getElementById("new-user-nome").value.trim();
+      const email = document.getElementById("new-user-email").value.trim();
+      const senha = document.getElementById("new-user-senha").value.trim();
+      const perfil = document.getElementById("new-user-perfil").value;
+
+      try {
+        const { data, error: signUpError } = await supabase.auth.signUp({
+          email: email,
+          password: senha,
+          options: {
+            data: {
+              nome: nome,
+              perfil: perfil
+            }
+          }
+        });
+
+        if (signUpError) throw signUpError;
+
+        if (data && data.user) {
+          const { error: profileError } = await supabase
+            .from('usuarios')
+            .insert({
+              id: data.user.id,
+              escola_id: escolaId,
+              nome: nome,
+              email: email,
+              perfil: perfil
+            });
+
+          if (profileError) {
+            console.warn("Conta criada na Auth, mas falhou ao inserir em public.usuarios (RLS/Permissões):", profileError);
+            alert("Usuário registrado na autenticação do Supabase! Se não aparecer na listagem imediatamente, certifique-se de que a política RLS foi configurada para o seu perfil Super Admin.");
+          } else {
+            alert("Novo usuário cadastrado e vinculado com sucesso!");
+          }
+        }
+
+        fecharModalNovoUsuario();
+        await listarUsuarios();
+
+      } catch (err) {
+        alert("Erro ao cadastrar novo usuário: " + err.message);
+      }
+    };
+
+    await listarUsuarios();
+  })();
+</script>
 </body></html>

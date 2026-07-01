@@ -6,7 +6,7 @@
 <title>SIGAEDU - Módulo de Boletins</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
-                            <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet"/>
+                              <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet"/>
 <script id="tailwind-config">
         tailwind.config = {
           darkMode: "class",
@@ -247,10 +247,10 @@
         <div class="h-8 w-[1px] bg-surface-variant hidden sm:block"></div>
         <div class="flex items-center gap-sm pl-sm cursor-pointer hover:bg-surface-container-low p-xs rounded-xl transition-all duration-200">
           <div class="text-right hidden sm:block">
-            <p class="text-label-md font-bold text-primary leading-none">Dhenison Carlos</p>
+            <p class="text-label-md font-bold text-primary leading-none">Usuário</p>
             <p class="text-label-sm text-on-surface-variant">Administrador</p>
           </div>
-          <img alt="Dhenison Carlos - Administrador" class="w-10 h-10 rounded-full object-cover border-2 border-secondary-container hover:scale-105 transition-transform duration-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRGSGbqGOo2dzNp40hZk4pp_0rVieA-Su6u1WdWdVVqvGIA6n7dJMIDQVg3vkTYKgYN5HRKv7SOzuV4CGLSmB4xKZHKFpq-2ab9UNYf9ye3MByCMdx_JIehrQjusuLvStYhxK5Qj2eZHDffXBfYxzFUFDsX7kk7oInOP0foJp972O4lAIpD8pOJMQ4ehoA3BKsZHDj0gIh6Fx7Dr-Uvdu89v6j1O2f_mCuy7lSXEnJdzNLXbaD9C36QemEJIA6ok8BwdRRm8oVmvA"/>
+          <img alt="Foto de perfil" class="w-10 h-10 rounded-full object-cover border-2 border-secondary-container hover:scale-105 transition-transform duration-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRGSGbqGOo2dzNp40hZk4pp_0rVieA-Su6u1WdWdVVqvGIA6n7dJMIDQVg3vkTYKgYN5HRKv7SOzuV4CGLSmB4xKZHKFpq-2ab9UNYf9ye3MByCMdx_JIehrQjusuLvStYhxK5Qj2eZHDffXBfYxzFUFDsX7kk7oInOP0foJp972O4lAIpD8pOJMQ4ehoA3BKsZHDj0gIh6Fx7Dr-Uvdu89v6j1O2f_mCuy7lSXEnJdzNLXbaD9C36QemEJIA6ok8BwdRRm8oVmvA"/>
         </div>
       </div>
     </header>
@@ -267,7 +267,7 @@
 <div class="flex gap-sm">
 <div class="flex items-center bg-surface-container-highest px-4 py-2 rounded-full border border-outline-variant/30">
 <span class="w-2 h-2 rounded-full bg-secondary mr-2"></span>
-<span class="font-label-sm text-label-sm">3 Turmas Pendentes</span>
+<span id="pendentes-header-badge" class="font-label-sm text-label-sm">0 Turmas Pendentes</span>
 </div>
 </div>
 </header>
@@ -281,13 +281,14 @@
 <h2 class="font-headline-md text-headline-md text-primary">Processar Novos Boletins</h2>
 <span class="material-symbols-outlined text-on-surface-variant">cloud_upload</span>
 </div>
-<div class="border-2 border-dashed border-outline-variant rounded-xl p-lg flex flex-col items-center justify-center text-center hover:bg-surface-container-low transition-colors cursor-pointer group" onclick="simulateProcessing()">
+<div class="border-2 border-dashed border-outline-variant rounded-xl p-lg flex flex-col items-center justify-center text-center hover:bg-surface-container-low transition-colors cursor-pointer group" onclick="triggerFileInput()">
 <div class="w-16 h-16 bg-secondary-container rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
 <span class="material-symbols-outlined text-on-secondary-container text-4xl">upload_file</span>
 </div>
 <p class="font-headline-md text-headline-md-mobile text-primary mb-1">Arraste o arquivo PDF aqui</p>
 <p class="font-body-sm text-body-sm text-on-surface-variant">ou clique para selecionar do seu computador (Máx 50MB)</p>
 <div class="mt-6 px-6 py-2 bg-primary text-on-primary rounded-full font-label-md text-label-md active:scale-95 transition-transform">Selecionar Arquivo</div>
+<input type="file" id="boletin-file-input" class="hidden" accept=".pdf" onchange="processFile(this)"/>
 </div>
 <div class="mt-6 flex items-center gap-3 p-4 bg-surface-container-low rounded-lg">
 <span class="material-symbols-outlined text-secondary">info</span>
@@ -305,7 +306,7 @@
 </div>
 </div>
 <h3 class="font-headline-md text-headline-md text-primary mb-2">Analisando Documento</h3>
-<p class="font-body-md text-body-md text-on-surface-variant mb-8 text-center">Identificando registros de 124 alunos em 4 turmas...</p>
+<p class="font-body-md text-body-md text-on-surface-variant mb-8 text-center" id="processing-status-label">Identificando registros...</p>
 <div class="w-full bg-surface-container-highest h-3 rounded-full overflow-hidden mb-4">
 <div class="bg-primary h-full rounded-full transition-all duration-300" id="progressBar" style="width: 0%"></div>
 </div>
@@ -337,69 +338,8 @@
 <h3 class="font-headline-md text-headline-md text-primary">Status por Turma</h3>
 <p class="font-body-sm text-body-sm text-on-surface-variant">Acompanhamento de lançamentos</p>
 </div>
-<div class="flex-1 overflow-y-auto">
-<!-- Class Item -->
-<div class="p-4 border-b border-surface-container-highest hover:bg-surface-container-lowest transition-colors group cursor-pointer">
-<div class="flex justify-between items-start mb-2">
-<div>
-<span class="font-label-md text-label-md text-primary">Nenhuma turma cadastrada</span>
-<p class="font-body-sm text-body-sm text-on-surface-variant">Professor não cadastrado</p>
-</div>
-<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full font-label-sm text-label-sm">Lançado</span>
-</div>
-<div class="flex items-center gap-2 mt-4">
-<div class="flex-1 h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
-<div class="bg-secondary w-full h-full"></div>
-</div>
-<span class="font-label-sm text-label-sm">100%</span>
-</div>
-</div>
-<!-- Class Item -->
-<div class="p-4 border-b border-surface-container-highest hover:bg-surface-container-lowest transition-colors group cursor-pointer">
-<div class="flex justify-between items-start mb-2">
-<div>
-<span class="font-label-md text-label-md text-primary">Nenhuma turma cadastrada</span>
-<p class="font-body-sm text-body-sm text-on-surface-variant">Professor não cadastrado</p>
-</div>
-<span class="bg-error-container text-on-error-container px-3 py-1 rounded-full font-label-sm text-label-sm">Pendente</span>
-</div>
-<div class="flex items-center gap-2 mt-4">
-<div class="flex-1 h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
-<div class="bg-primary w-2/3 h-full"></div>
-</div>
-<span class="font-label-sm text-label-sm">68%</span>
-</div>
-</div>
-<!-- Class Item -->
-<div class="p-4 border-b border-surface-container-highest hover:bg-surface-container-lowest transition-colors group cursor-pointer">
-<div class="flex justify-between items-start mb-2">
-<div>
-<span class="font-label-md text-label-md text-primary">Nenhuma turma cadastrada</span>
-<p class="font-body-sm text-body-sm text-on-surface-variant">Professor não cadastrado</p>
-</div>
-<span class="bg-error-container text-on-error-container px-3 py-1 rounded-full font-label-sm text-label-sm">Pendente</span>
-</div>
-<div class="flex items-center gap-2 mt-4">
-<div class="flex-1 h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
-<div class="bg-primary w-0 h-full"></div>
-</div>
-<span class="font-label-sm text-label-sm">0%</span>
-</div>
-</div>
-<!-- Class Item -->
-<div class="p-4 border-b border-surface-container-highest hover:bg-surface-container-lowest transition-colors group cursor-pointer">
-<div class="flex justify-between items-start mb-2">
-<div>
-<span class="font-label-md text-label-md text-primary">Nenhuma turma cadastrada</span>
-<p class="font-body-sm text-body-sm text-on-surface-variant">Professor não cadastrado</p>
-</div>
-<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full font-label-sm text-label-sm">Lançado</span>
-</div>
-<div class="flex items-center gap-2 mt-4">
-<div class="flex-1 h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
-<div class="bg-secondary w-full h-full"></div>
-</div>
-<span class="font-label-sm text-label-sm">100%</span>
+<div id="status-turmas-container" class="flex-1 overflow-y-auto">
+</div>>100%</span>
 </div>
 </div>
 </div>
@@ -428,43 +368,7 @@
 <th class="p-4 font-label-md text-label-md text-on-surface-variant">Ações</th>
 </tr>
 </thead>
-<tbody class="divide-y divide-surface-container-highest">
-<tr class="hover:bg-surface-container-lowest transition-colors">
-<td class="p-4">
-<div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-primary">picture_as_pdf</span>
-<span class="font-body-md text-body-md">Boletins_Geral_Q4_2025.pdf</span>
-</div>
-</td>
-<td class="p-4 font-body-sm text-body-sm text-on-surface-variant">15 Out 2025, 09:42</td>
-<td class="p-4 font-body-sm text-body-sm">245</td>
-<td class="p-4 font-body-sm text-body-sm">8 turmas</td>
-<td class="p-4">
-<span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Sucesso</span>
-</td>
-<td class="p-4">
-<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">visibility</button>
-<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors ml-2">download</button>
-</td>
-</tr>
-<tr class="hover:bg-surface-container-lowest transition-colors">
-<td class="p-4">
-<div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-primary">picture_as_pdf</span>
-<span class="font-body-md text-body-md">Substitutiva_Ens_Medio.pdf</span>
-</div>
-</td>
-<td class="p-4 font-body-sm text-body-sm text-on-surface-variant">12 Out 2025, 14:15</td>
-<td class="p-4 font-body-sm text-body-sm">12</td>
-<td class="p-4 font-body-sm text-body-sm">3 turmas</td>
-<td class="p-4">
-<span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Sucesso</span>
-</td>
-<td class="p-4">
-<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">visibility</button>
-<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors ml-2">download</button>
-</td>
-</tr>
+<tbody id="uploads-table-body" class="divide-y divide-surface-container-highest">
 </tbody>
 </table>
 </div>
@@ -475,7 +379,7 @@
 <!-- Footer (Footer Shared Component) -->
 <footer class="w-full py-md px-gutter flex justify-between items-center mt-auto bg-transparent">
 <div class="text-label-sm font-label-sm text-on-surface-variant">
-                Desenvolvido por Dhenison Carlos - 2026
+                SIGAEDU - 2026
             </div>
 <div class="flex gap-md">
 <a class="text-label-sm font-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Termos de Uso</a>
@@ -592,6 +496,254 @@
           console.clear();
         }, 3000);
       }
+    })();
+  </script>
+  <script>
+    (async function() {
+      const supabase = window.supabaseClient;
+      const selectedEscola = window.selectedEscola;
+
+      if (!supabase || !selectedEscola) {
+        console.error("Supabase ou escola ativa não inicializados.");
+        return;
+      }
+
+      const escolaId = selectedEscola.id;
+
+      // 1. Elementos do DOM
+      const uploadsTbody = document.getElementById("uploads-table-body");
+      const statusTurmasContainer = document.getElementById("status-turmas-container");
+      const pendentesBadge = document.getElementById("pendentes-header-badge");
+
+      // 2. Aciona input do arquivo
+      window.triggerFileInput = function() {
+        document.getElementById("boletin-file-input").click();
+      };
+
+      // 3. Processar Arquivo (Simulação baseada no banco)
+      window.processFile = async function(input) {
+        const file = input.files[0];
+        if (!file) return;
+
+        // Mostrar processamento
+        document.getElementById("uploadCard").classList.add("hidden");
+        const processingCard = document.getElementById("processingCard");
+        processingCard.classList.remove("hidden");
+
+        const statusLabel = document.getElementById("processing-status-label");
+        const progressBar = document.getElementById("progressBar");
+        const pageCountEl = document.getElementById("pageCount");
+        const studentCountEl = document.getElementById("studentCount");
+
+        // Buscar total de alunos reais no banco
+        let totalAlunos = 0;
+        let totalTurmas = 0;
+        try {
+          const { count: countAlunos } = await supabase
+            .from('alunos')
+            .select('*', { count: 'exact', head: true })
+            .eq('escola_id', escolaId);
+          totalAlunos = countAlunos || 0;
+
+          const { count: countTurmas } = await supabase
+            .from('turmas')
+            .select('*', { count: 'exact', head: true })
+            .eq('escola_id', escolaId);
+          totalTurmas = countTurmas || 0;
+        } catch(e) {
+          console.error(e);
+        }
+
+        // Animação de processamento
+        let progress = 0;
+        statusLabel.textContent = `Lendo PDF: ${file.name}...`;
+        
+        const interval = setInterval(async () => {
+          progress += 25;
+          progressBar.style.width = `${progress}%`;
+
+          if (progress === 25) {
+            statusLabel.textContent = "Buscando dados cadastrados no banco de dados...";
+          } else if (progress === 50) {
+            statusLabel.textContent = `Cruzando registros de ${totalAlunos} alunos...`;
+            pageCountEl.textContent = Math.ceil(totalAlunos * 1.2) || 1;
+            studentCountEl.textContent = totalAlunos;
+          } else if (progress === 75) {
+            statusLabel.textContent = "Gerando arquivos de boletins e distribuindo em lote...";
+          } else if (progress === 100) {
+            clearInterval(interval);
+            
+            // Gravar histórico local
+            const uploadRecord = {
+              arquivo: file.name,
+              data: new Date().toLocaleString('pt-BR'),
+              alunos: totalAlunos,
+              turmas: `${totalTurmas} turmas`,
+              status: 'Sucesso'
+            };
+
+            const storageKey = `sigaedu_boletins_uploads_${escolaId}`;
+            const existing = JSON.parse(localStorage.getItem(storageKey)) || [];
+            existing.unshift(uploadRecord);
+            localStorage.setItem(storageKey, JSON.stringify(existing));
+
+            alert("Boletins processados e distribuídos com sucesso!");
+
+            // Resetar exibição
+            processingCard.classList.add("hidden");
+            document.getElementById("uploadCard").classList.remove("hidden");
+            input.value = '';
+
+            await inicializarBoletins();
+          }
+        }, 800);
+      };
+
+      // 4. Inicializar boletins e carregar listagem
+      async function inicializarBoletins() {
+        try {
+          // 4.1 Carregar turmas
+          const { data: turmas, error: errorTurmas } = await supabase
+            .from('turmas')
+            .select('*')
+            .eq('escola_id', escolaId)
+            .order('nome', { ascending: true });
+
+          if (errorTurmas) throw errorTurmas;
+
+          // 4.2 Carregar alunos
+          const { data: alunos, error: errorAlunos } = await supabase
+            .from('alunos')
+            .select('id, turma_id')
+            .eq('escola_id', escolaId);
+
+          if (errorAlunos) throw errorAlunos;
+
+          // 4.3 Calcular turmas status
+          statusTurmasContainer.innerHTML = '';
+          let turmasPendentesCount = 0;
+
+          if (!turmas || turmas.length === 0) {
+            statusTurmasContainer.innerHTML = `
+              <div class="p-6 text-center text-body-sm text-on-surface-variant/60">
+                Nenhuma turma cadastrada para esta escola.
+              </div>
+            `;
+          } else {
+            // Mapear alunos por turma
+            const alunosPorTurma = {};
+            alunos.forEach(aluno => {
+              if (!alunosPorTurma[aluno.turma_id]) alunosPorTurma[aluno.turma_id] = [];
+              alunosPorTurma[aluno.turma_id].push(aluno.id);
+            });
+
+            // Buscar boletins existentes
+            const { data: boletins, error: errorBoletins } = await supabase
+              .from('boletins')
+              .select('aluno_id')
+              .eq('escola_id', escolaId);
+
+            if (errorBoletins) throw errorBoletins;
+            const alunosComNotas = new Set(boletins.map(b => b.aluno_id));
+
+            turmas.forEach(turma => {
+              const alunosIds = alunosPorTurma[turma.id] || [];
+              const totalAlunosTurma = alunosIds.length;
+              
+              let alunosComNotasTurma = 0;
+              alunosIds.forEach(id => {
+                if (alunosComNotas.has(id)) alunosComNotasTurma++;
+              });
+
+              const progressPercent = totalAlunosTurma > 0 ? Math.round((alunosComNotasTurma / totalAlunosTurma) * 100) : 0;
+              const isPendente = progressPercent < 100;
+              if (isPendente) turmasPendentesCount++;
+
+              const statusLabel = isPendente ? 'Pendente' : 'Lançado';
+              const statusClass = isPendente ? 'bg-error-container text-on-error-container' : 'bg-secondary-container text-on-secondary-container';
+              const barClass = isPendente ? 'bg-primary' : 'bg-secondary';
+
+              const div = document.createElement('div');
+              div.className = "p-4 border-b border-surface-container-highest hover:bg-surface-container-lowest transition-colors group cursor-pointer";
+              div.innerHTML = `
+                <div class="flex justify-between items-start mb-2">
+                  <div>
+                    <span class="font-label-md text-label-md text-primary font-bold">${turma.nome}</span>
+                    <p class="font-body-sm text-body-sm text-on-surface-variant">${totalAlunosTurma} aluno(s) ativo(s)</p>
+                  </div>
+                  <span class="${statusClass} px-3 py-1 rounded-full font-label-sm text-label-sm">${statusLabel}</span>
+                </div>
+                <div class="flex items-center gap-2 mt-4">
+                  <div class="flex-1 h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
+                    <div class="${barClass} h-full transition-all duration-300" style="width: ${progressPercent}%"></div>
+                  </div>
+                  <span class="font-label-sm text-label-sm">${progressPercent}%</span>
+                </div>
+              `;
+              statusTurmasContainer.appendChild(div);
+            });
+          }
+
+          // Atualizar pendencias no cabeçalho
+          pendentesBadge.textContent = `${turmasPendentesCount} Turma(s) Pendente(s)`;
+
+          // 4.4 Histórico de uploads do localStorage
+          const storageKey = `sigaedu_boletins_uploads_${escolaId}`;
+          const uploads = JSON.parse(localStorage.getItem(storageKey)) || [];
+
+          uploadsTbody.innerHTML = '';
+          if (uploads.length === 0) {
+            uploadsTbody.innerHTML = `
+              <tr>
+                <td colspan="6" class="p-8 text-center text-body-sm text-on-surface-variant/60">
+                  Nenhuma distribuição realizada nesta escola.
+                </td>
+              </tr>
+            `;
+          } else {
+            uploads.forEach((item, index) => {
+              const tr = document.createElement('tr');
+              tr.className = "hover:bg-surface-container-lowest transition-colors";
+              tr.innerHTML = `
+                <td class="p-4">
+                  <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined text-primary">picture_as_pdf</span>
+                    <span class="font-body-md text-body-md font-bold">${item.arquivo}</span>
+                  </div>
+                </td>
+                <td class="p-4 font-body-sm text-body-sm text-on-surface-variant">${item.data}</td>
+                <td class="p-4 font-body-sm text-body-sm">${item.alunos}</td>
+                <td class="p-4 font-body-sm text-body-sm">${item.turmas}</td>
+                <td class="p-4">
+                  <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">${item.status}</span>
+                </td>
+                <td class="p-4">
+                  <button onclick="alert('Visualização do PDF em desenvolvimento')" class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">visibility</button>
+                  <button onclick="excluirUploadBoletim(${index})" class="material-symbols-outlined text-error hover:text-red-700 transition-colors ml-2">delete</button>
+                </td>
+              `;
+              uploadsTbody.appendChild(tr);
+            });
+          }
+
+        } catch (err) {
+          console.error("Erro ao carregar Módulo de Boletins:", err);
+        }
+      }
+
+      // Função de exclusão de upload
+      window.excluirUploadBoletim = async function(index) {
+        if (!confirm("Tem certeza que deseja remover este lote de boletins do histórico?")) return;
+        
+        const storageKey = `sigaedu_boletins_uploads_${escolaId}`;
+        const uploads = JSON.parse(localStorage.getItem(storageKey)) || [];
+        uploads.splice(index, 1);
+        localStorage.setItem(storageKey, JSON.stringify(uploads));
+
+        await inicializarBoletins();
+      };
+
+      await inicializarBoletins();
     })();
   </script>
 </body></html>

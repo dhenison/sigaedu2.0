@@ -6,7 +6,7 @@
 <title>SIGAEDU - Módulo WhatsApp</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
-                            <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet"/>
+                              <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet"/>
 <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -235,10 +235,10 @@
         <div class="h-8 w-[1px] bg-surface-variant hidden sm:block"></div>
         <div class="flex items-center gap-sm pl-sm cursor-pointer hover:bg-surface-container-low p-xs rounded-xl transition-all duration-200">
           <div class="text-right hidden sm:block">
-            <p class="text-label-md font-bold text-primary leading-none">Dhenison Carlos</p>
+            <p class="text-label-md font-bold text-primary leading-none">Usuário</p>
             <p class="text-label-sm text-on-surface-variant">Administrador</p>
           </div>
-          <img alt="Dhenison Carlos - Administrador" class="w-10 h-10 rounded-full object-cover border-2 border-secondary-container hover:scale-105 transition-transform duration-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRGSGbqGOo2dzNp40hZk4pp_0rVieA-Su6u1WdWdVVqvGIA6n7dJMIDQVg3vkTYKgYN5HRKv7SOzuV4CGLSmB4xKZHKFpq-2ab9UNYf9ye3MByCMdx_JIehrQjusuLvStYhxK5Qj2eZHDffXBfYxzFUFDsX7kk7oInOP0foJp972O4lAIpD8pOJMQ4ehoA3BKsZHDj0gIh6Fx7Dr-Uvdu89v6j1O2f_mCuy7lSXEnJdzNLXbaD9C36QemEJIA6ok8BwdRRm8oVmvA"/>
+          <img alt="Foto de perfil" class="w-10 h-10 rounded-full object-cover border-2 border-secondary-container hover:scale-105 transition-transform duration-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRGSGbqGOo2dzNp40hZk4pp_0rVieA-Su6u1WdWdVVqvGIA6n7dJMIDQVg3vkTYKgYN5HRKv7SOzuV4CGLSmB4xKZHKFpq-2ab9UNYf9ye3MByCMdx_JIehrQjusuLvStYhxK5Qj2eZHDffXBfYxzFUFDsX7kk7oInOP0foJp972O4lAIpD8pOJMQ4ehoA3BKsZHDj0gIh6Fx7Dr-Uvdu89v6j1O2f_mCuy7lSXEnJdzNLXbaD9C36QemEJIA6ok8BwdRRm8oVmvA"/>
         </div>
       </div>
     </header>
@@ -279,15 +279,15 @@
 <div class="p-2 bg-white rounded-lg shadow-sm group-hover:bg-secondary-container transition-colors">
 <span class="material-symbols-outlined text-primary">login</span>
 </div>
-<span class="text-secondary font-bold text-headline-md leading-none">142</span>
+<span id="entrada-count" class="text-secondary font-bold text-headline-md leading-none">0</span>
 </div>
 <h4 class="font-label-md text-label-md text-primary mb-1">Frequência Entrada</h4>
 <p class="text-body-sm text-on-surface-variant">Mensagens de boas-vindas e registro matutino.</p>
 <div class="mt-4 flex items-center gap-2">
 <div class="flex-1 h-1 bg-surface-container-highest rounded-full overflow-hidden">
-<div class="h-full bg-secondary w-4/5"></div>
+<div id="entrada-bar" class="h-full bg-secondary w-0"></div>
 </div>
-<span class="text-[10px] font-bold text-on-surface-variant">80%</span>
+<span id="entrada-percent" class="text-[10px] font-bold text-on-surface-variant">0%</span>
 </div>
 </div>
 <!-- Occurrences -->
@@ -296,15 +296,15 @@
 <div class="p-2 bg-white rounded-lg shadow-sm group-hover:bg-secondary-container transition-colors">
 <span class="material-symbols-outlined text-primary">report_problem</span>
 </div>
-<span class="text-secondary font-bold text-headline-md leading-none">28</span>
+<span id="ocorrencias-count" class="text-secondary font-bold text-headline-md leading-none">0</span>
 </div>
 <h4 class="font-label-md text-label-md text-primary mb-1">Ocorrências</h4>
 <p class="text-body-sm text-on-surface-variant">Comunicados disciplinares e pedagógicos.</p>
 <div class="mt-4 flex items-center gap-2">
 <div class="flex-1 h-1 bg-surface-container-highest rounded-full overflow-hidden">
-<div class="h-full bg-secondary w-1/3"></div>
+<div id="ocorrencias-bar" class="h-full bg-secondary w-0"></div>
 </div>
-<span class="text-[10px] font-bold text-on-surface-variant">33%</span>
+<span id="ocorrencias-percent" class="text-[10px] font-bold text-on-surface-variant">0%</span>
 </div>
 </div>
 <!-- Exit -->
@@ -313,15 +313,15 @@
 <div class="p-2 bg-white rounded-lg shadow-sm group-hover:bg-secondary-container transition-colors">
 <span class="material-symbols-outlined text-primary">logout</span>
 </div>
-<span class="text-secondary font-bold text-headline-md leading-none">0</span>
+<span id="saida-count" class="text-secondary font-bold text-headline-md leading-none">0</span>
 </div>
 <h4 class="font-label-md text-label-md text-primary mb-1">Frequência Saída</h4>
 <p class="text-body-sm text-on-surface-variant">Confirmação de saída do aluno e avisos.</p>
 <div class="mt-4 flex items-center gap-2">
 <div class="flex-1 h-1 bg-surface-container-highest rounded-full overflow-hidden">
-<div class="h-full bg-surface-container-highest w-0"></div>
+<div id="saida-bar" class="h-full bg-surface-container-highest w-0"></div>
 </div>
-<span class="text-[10px] font-bold text-on-surface-variant">0%</span>
+<span id="saida-percent" class="text-[10px] font-bold text-on-surface-variant">0%</span>
 </div>
 </div>
 </div>
@@ -331,26 +331,26 @@
 <div class="absolute top-0 right-0 w-32 h-32 bg-secondary-container opacity-10 rounded-bl-full translate-x-12 -translate-y-12"></div>
 <h3 class="font-headline-md text-headline-md mb-6 flex items-center gap-3">
 <span class="material-symbols-outlined text-secondary-container">hourglass_top</span>
-                        Status Geral
-                    </h3>
+Status Geral
+</h3>
 <div class="space-y-6 relative z-10">
 <div>
 <div class="flex justify-between text-label-md mb-2">
 <span>Progresso de Envio</span>
-<span class="text-secondary-fixed">72%</span>
+<span id="progress-percent" class="text-secondary-fixed">0%</span>
 </div>
 <div class="h-3 bg-white/10 rounded-full overflow-hidden border border-white/5">
-<div class="h-full bg-secondary-container transition-all duration-1000 shadow-[0_0_10px_rgba(252,212,0,0.5)]" id="global-progress" style="width: 72%;"></div>
+<div class="h-full bg-secondary-container transition-all duration-1000 shadow-[0_0_10px_rgba(252,212,0,0.5)]" id="global-progress" style="width: 0%;"></div>
 </div>
 </div>
 <div class="grid grid-cols-2 gap-4">
 <div class="bg-white/5 p-4 rounded-lg border border-white/10">
 <p class="text-[10px] uppercase text-primary-fixed-dim font-bold">Sucesso</p>
-<p class="text-headline-md font-black">1.402</p>
+<p id="sucesso-count" class="text-headline-md font-black">0</p>
 </div>
 <div class="bg-error/20 p-4 rounded-lg border border-error/30">
 <p class="text-[10px] uppercase text-error-container font-bold">Erros</p>
-<p class="text-headline-md font-black text-error-container">12</p>
+<p id="erro-count" class="text-headline-md font-black text-error-container">0</p>
 </div>
 </div>
 <div class="bg-white/5 p-4 rounded-lg border border-white/10 flex items-center gap-3 animate-pulse">
@@ -374,25 +374,25 @@
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 <div>
 <label class="font-label-md text-label-md text-primary block mb-2">Filtrar Aluno</label>
-<select class="w-full bg-surface-container-low border border-surface-variant/30 rounded-lg p-3 text-body-md focus:ring-primary focus:border-primary transition-all">
-<option>Selecione o aluno...</option>
+<select id="aluno-select-filter" class="w-full bg-surface-container-low border border-surface-variant/30 rounded-lg p-3 text-body-md focus:ring-primary focus:border-primary transition-all">
+<option value="">Selecione o aluno...</option>
 </select>
 </div>
 <div>
 <label class="font-label-md text-label-md text-primary block mb-2">Template</label>
-<select class="w-full bg-surface-container-low border border-surface-variant/30 rounded-lg p-3 text-body-md focus:ring-primary focus:border-primary transition-all">
-<option>Mensagem Padrão</option>
-<option>Lembrete de Mensalidade</option>
-<option>Convocação Reunião</option>
+<select id="template-select" class="w-full bg-surface-container-low border border-surface-variant/30 rounded-lg p-3 text-body-md focus:ring-primary focus:border-primary transition-all">
+<option value="default">Mensagem Padrão</option>
+<option value="mensalidade">Lembrete de Mensalidade</option>
+<option value="reuniao">Convocação Reunião</option>
 </select>
 </div>
 </div>
 <div>
 <label class="font-label-md text-label-md text-primary block mb-2">Mensagem</label>
-<textarea class="w-full bg-surface-container-low border border-surface-variant/30 rounded-lg p-4 text-body-md focus:ring-primary focus:border-primary transition-all" placeholder="Digite sua mensagem aqui..." rows="4"></textarea>
+<textarea id="individual-msg-textarea" class="w-full bg-surface-container-low border border-surface-variant/30 rounded-lg p-4 text-body-md focus:ring-primary focus:border-primary transition-all" placeholder="Digite sua mensagem aqui..." rows="4"></textarea>
 </div>
 <div class="flex justify-end">
-<button class="bg-primary text-white px-8 py-3 rounded-lg font-bold hover:bg-black/80 transition-all flex items-center gap-2">
+<button id="btn-enviar-individual" class="bg-primary text-white px-8 py-3 rounded-lg font-bold hover:bg-black/80 transition-all flex items-center gap-2">
 <span class="material-symbols-outlined">send</span> Enviar Agora
                             </button>
 </div>
@@ -422,7 +422,7 @@
 <span class="material-symbols-outlined">delete</span>
 </button>
 </div>
-<button class="w-full bg-secondary-container text-on-secondary-container font-black py-4 rounded-xl shadow-lg hover:shadow-xl hover:translate-y-[-2px] transition-all flex items-center justify-center gap-3">
+<button id="btn-campanha-geral" class="w-full bg-secondary-container text-on-secondary-container font-black py-4 rounded-xl shadow-lg hover:shadow-xl hover:translate-y-[-2px] transition-all flex items-center justify-center gap-3">
 <span class="material-symbols-outlined">campaign</span> Iniciar Campanha Geral
                         </button>
 </div>
@@ -445,53 +445,7 @@
 <th class="px-6 py-4 text-right">AÇÕES</th>
 </tr>
 </thead>
-<tbody class="divide-y divide-surface-variant/10">
-<tr class="hover:bg-surface-container-low/50 transition-colors">
-<td class="px-6 py-4">
-<div class="flex items-center gap-3">
-<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center font-bold text-[12px]">GM</div>
-<div>
-<p class="font-label-md text-label-md text-primary">Aluno não cadastrado</p>
-<p class="text-[11px] text-on-surface-variant">(11) 98765-4321</p>
-</div>
-</div>
-</td>
-<td class="px-6 py-4">
-<span class="bg-surface-container-high px-3 py-1 rounded-full text-[11px] font-bold">Frequência Entrada</span>
-</td>
-<td class="px-6 py-4 text-body-sm text-on-surface-variant">Hoje, 07:42</td>
-<td class="px-6 py-4">
-<div class="flex items-center gap-2 text-secondary font-bold text-[11px]">
-<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">done_all</span> Entregue
-                                    </div>
-</td>
-<td class="px-6 py-4 text-right">
-<button class="text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined">more_vert</span></button>
-</td>
-</tr>
-<tr class="hover:bg-surface-container-low/50 transition-colors">
-<td class="px-6 py-4">
-<div class="flex items-center gap-3">
-<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center font-bold text-[12px]">LO</div>
-<div>
-<p class="font-label-md text-label-md text-primary">Aluno não cadastrado</p>
-<p class="text-[11px] text-on-surface-variant">(11) 91234-5678</p>
-</div>
-</div>
-</td>
-<td class="px-6 py-4">
-<span class="bg-surface-container-high px-3 py-1 rounded-full text-[11px] font-bold">Ocorrência</span>
-</td>
-<td class="px-6 py-4 text-body-sm text-on-surface-variant">Hoje, 10:15</td>
-<td class="px-6 py-4">
-<div class="flex items-center gap-2 text-error font-bold text-[11px]">
-<span class="material-symbols-outlined text-[16px]">error</span> Erro de Envio
-                                    </div>
-</td>
-<td class="px-6 py-4 text-right">
-<button class="text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined">more_vert</span></button>
-</td>
-</tr>
+<tbody id="logs-table-body" class="divide-y divide-surface-variant/10">
 </tbody>
 </table>
 </div>
@@ -503,7 +457,7 @@
 <!-- Footer (Footer Shared Component) -->
 <footer class="w-full py-md px-gutter flex justify-between items-center mt-auto bg-transparent">
 <div class="text-label-sm font-label-sm text-on-surface-variant">
-                Desenvolvido por Dhenison Carlos - 2026
+                SIGAEDU - 2026
             </div>
 <div class="flex gap-md">
 <a class="text-label-sm font-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Termos de Uso</a>
@@ -627,6 +581,288 @@
           console.clear();
         }, 3000);
       }
+    })();
+  </script>
+  <script>
+    (async function() {
+      const supabase = window.supabaseClient;
+      const selectedEscola = window.selectedEscola;
+
+      if (!supabase || !selectedEscola) {
+        console.error("Supabase ou escola ativa não inicializados.");
+        return;
+      }
+
+      const escolaId = selectedEscola.id;
+
+      // 1. Elementos do DOM
+      const entradaCountEl = document.getElementById("entrada-count");
+      const entradaBar = document.getElementById("entrada-bar");
+      const entradaPercent = document.getElementById("entrada-percent");
+
+      const ocorrenciasCountEl = document.getElementById("ocorrencias-count");
+      const ocorrenciasBar = document.getElementById("ocorrencias-bar");
+      const ocorrenciasPercent = document.getElementById("ocorrencias-percent");
+
+      const saidaCountEl = document.getElementById("saida-count");
+      const saidaBar = document.getElementById("saida-bar");
+      const saidaPercent = document.getElementById("saida-percent");
+
+      const sucessoCountEl = document.getElementById("sucesso-count");
+      const erroCountEl = document.getElementById("erro-count");
+      const progressPercentEl = document.getElementById("progress-percent");
+      const globalProgressEl = document.getElementById("global-progress");
+
+      const logsTbody = document.getElementById("logs-table-body");
+      const alunoSelect = document.getElementById("aluno-select-filter");
+      const templateSelect = document.getElementById("template-select");
+      const msgTextarea = document.getElementById("individual-msg-textarea");
+
+      let alunos = [];
+
+      // 2. Carregar dados reais do Supabase
+      async function carregarDados() {
+        try {
+          // Alunos
+          const { data: dbAlunos } = await supabase
+            .from('alunos')
+            .select('*')
+            .eq('escola_id', escolaId)
+            .order('nome', { ascending: true });
+          alunos = dbAlunos || [];
+
+          // Popular select
+          alunoSelect.innerHTML = '<option value="">Selecione o aluno...</option>';
+          alunos.forEach(a => {
+            const opt = document.createElement("option");
+            opt.value = a.id;
+            opt.textContent = `${a.nome} (${a.turno})`;
+            alunoSelect.appendChild(opt);
+          });
+
+          // Buscar frequências
+          const { data: freqs } = await supabase
+            .from('frequencias')
+            .select('*')
+            .eq('escola_id', escolaId);
+          
+          // Calcular Entrada e Saída
+          const entradaCount = freqs ? freqs.filter(f => f.status_entrada).length : 0;
+          const saidaCount = freqs ? freqs.filter(f => f.status_saida).length : 0;
+
+          entradaCountEl.textContent = String(entradaCount);
+          saidaCountEl.textContent = String(saidaCount);
+
+          const totalAlunos = alunos.length;
+          const entradaPct = totalAlunos > 0 ? Math.round((entradaCount / totalAlunos) * 100) : 0;
+          const saidaPct = totalAlunos > 0 ? Math.round((saidaCount / totalAlunos) * 100) : 0;
+
+          entradaBar.style.width = `${entradaPct}%`;
+          entradaPercent.textContent = `${entradaPct}%`;
+          
+          saidaBar.style.width = `${saidaPct}%`;
+          saidaPercent.textContent = `${saidaPct}%`;
+
+          // Buscar Ocorrências
+          const { data: ocos } = await supabase
+            .from('ocorrencias')
+            .select('*')
+            .eq('escola_id', escolaId);
+          
+          const ocosCount = ocos ? ocos.length : 0;
+          ocorrenciasCountEl.textContent = String(ocosCount);
+          const ocosPct = totalAlunos > 0 ? Math.round((ocosCount / totalAlunos) * 100) : 0;
+          ocorrenciasBar.style.width = `${ocosPct}%`;
+          ocorrenciasPercent.textContent = `${ocosPct}%`;
+
+          // Carregar logs locais de disparo
+          carregarLogsLocais();
+
+        } catch (err) {
+          console.error("Erro ao carregar painel de mensagens:", err);
+        }
+      }
+
+      // 3. Gerenciamento de Logs de Envio locais (para simular atividade interativa)
+      function carregarLogsLocais() {
+        const storageKey = `sigaedu_whatsapp_logs_${escolaId}`;
+        const logs = JSON.parse(localStorage.getItem(storageKey)) || [];
+
+        // Atualiza os contadores de Status Geral baseado nos logs
+        const sucesso = logs.filter(l => l.status === 'Entregue').length;
+        const erro = logs.filter(l => l.status === 'Erro').length;
+        const total = logs.length;
+        const progresso = total > 0 ? Math.round((sucesso / total) * 100) : 0;
+
+        sucessoCountEl.textContent = String(sucesso);
+        erroCountEl.textContent = String(erro);
+        progressPercentEl.textContent = `${progresso}%`;
+        globalProgressEl.style.width = `${progresso}%`;
+
+        logsTbody.innerHTML = '';
+        if (logs.length === 0) {
+          logsTbody.innerHTML = `
+            <tr>
+              <td colspan="5" class="px-6 py-8 text-center text-body-sm text-on-surface-variant/60">
+                Nenhuma mensagem disparada recentemente nesta escola.
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
+        logs.forEach(log => {
+          const tr = document.createElement("tr");
+          tr.className = "hover:bg-surface-container-low/50 transition-colors";
+          
+          const isSuccess = log.status === 'Entregue';
+          const statusColor = isSuccess ? 'text-secondary' : 'text-error';
+          const icon = isSuccess ? 'done_all' : 'error';
+          const statusLabel = isSuccess ? 'Entregue' : 'Erro de Envio';
+          
+          tr.innerHTML = `
+            <td class="px-6 py-4">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center font-bold text-[12px] select-none">
+                  ${log.nome.substring(0, 2).toUpperCase()}
+                </div>
+                <div>
+                  <p class="font-label-md text-label-md text-primary font-bold">${log.nome}</p>
+                  <p class="text-[11px] text-on-surface-variant">${log.contato}</p>
+                </div>
+              </div>
+            </td>
+            <td class="px-6 py-4">
+              <span class="bg-surface-container-high px-3 py-1 rounded-full text-[11px] font-bold">${log.tipo}</span>
+            </td>
+            <td class="px-6 py-4 text-body-sm text-on-surface-variant">${log.horario}</td>
+            <td class="px-6 py-4">
+              <div class="flex items-center gap-2 ${statusColor} font-bold text-[11px]">
+                <span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">${icon}</span> ${statusLabel}
+              </div>
+            </td>
+            <td class="px-6 py-4 text-right">
+              <button onclick="alert('Template enviado: ' + decodeURIComponent('${encodeURIComponent(log.mensagem)}'))" class="text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined font-normal text-sm">visibility</span></button>
+            </td>
+          `;
+          logsTbody.appendChild(tr);
+        });
+      }
+
+      // 4. Template Autocompletion
+      templateSelect.onchange = function() {
+        const val = templateSelect.value;
+        const alunoId = alunoSelect.value;
+        const student = alunos.find(a => a.id === alunoId);
+        const studentName = student ? student.nome : '[Nome do Aluno]';
+
+        if (val === 'default') {
+          msgTextarea.value = `Olá! Gostaríamos de compartilhar um informativo geral da escola com você.`;
+        } else if (val === 'mensalidade') {
+          msgTextarea.value = `Prezados responsáveis por ${studentName}, lembramos que a mensalidade deste mês está próxima do vencimento. Agradecemos a colaboração.`;
+        } else if (val === 'reuniao') {
+          msgTextarea.value = `Convocamos os responsáveis do aluno ${studentName} para nossa Reunião Pedagógica Geral neste próximo sábado às 09h. Contamos com sua presença!`;
+        }
+      };
+
+      alunoSelect.onchange = function() {
+        templateSelect.onchange();
+      };
+
+      // 5. Enviar Mensagem Individual (Simulado)
+      document.getElementById("btn-enviar-individual").onclick = function() {
+        const alunoId = alunoSelect.value;
+        const msg = msgTextarea.value.trim();
+
+        if (!alunoId) {
+          alert("Por favor, selecione um aluno destinatário.");
+          return;
+        }
+        if (!msg) {
+          alert("Por favor, digite a mensagem a ser enviada.");
+          return;
+        }
+
+        const student = alunos.find(a => a.id === alunoId);
+        if (!student) return;
+
+        // Adicionar novo log local
+        const newLog = {
+          nome: student.nome,
+          contato: student.contato_responsavel || "(11) 99999-0000",
+          tipo: "Individual",
+          horario: "Agora mesmo",
+          status: Math.random() > 0.05 ? "Entregue" : "Erro", // 95% sucesso
+          mensagem: msg
+        };
+
+        const storageKey = `sigaedu_whatsapp_logs_${escolaId}`;
+        const logs = JSON.parse(localStorage.getItem(storageKey)) || [];
+        logs.unshift(newLog);
+        localStorage.setItem(storageKey, JSON.stringify(logs));
+
+        alert(`Mensagem enviada com sucesso para os responsáveis de ${student.nome}!`);
+        
+        // Resetar form
+        alunoSelect.value = '';
+        msgTextarea.value = '';
+        templateSelect.value = 'default';
+
+        carregarLogsLocais();
+      };
+
+      // 6. Iniciar Campanha Geral Flyer (Simulado)
+      const btnCampanhaGeral = document.getElementById("btn-campanha-geral");
+      if (btnCampanhaGeral) {
+        btnCampanhaGeral.onclick = function() {
+          if (alunos.length === 0) {
+            alert("Não há alunos cadastrados nesta escola para disparar campanha.");
+            return;
+          }
+
+          if (!confirm(`Deseja iniciar o disparo em massa da campanha (Flyer) para todos os ${alunos.length} alunos cadastrados?`)) {
+            return;
+          }
+
+          let index = 0;
+          btnCampanhaGeral.disabled = true;
+          btnCampanhaGeral.textContent = "Disparando Campanha...";
+
+          const storageKey = `sigaedu_whatsapp_logs_${escolaId}`;
+          const logs = JSON.parse(localStorage.getItem(storageKey)) || [];
+
+          const interval = setInterval(() => {
+            if (index >= alunos.length) {
+              clearInterval(interval);
+              btnCampanhaGeral.disabled = false;
+              btnCampanhaGeral.innerHTML = '<span class="material-symbols-outlined">campaign</span> Iniciar Campanha Geral';
+              alert(`Campanha finalizada! ${alunos.length} mensagens processadas.`);
+              carregarLogsLocais();
+              return;
+            }
+
+            const student = alunos[index];
+            const success = Math.random() > 0.08;
+
+            const campLog = {
+              nome: student.nome,
+              contato: student.contato_responsavel || "(11) 99999-0000",
+              tipo: "Flyer Geral",
+              horario: "Agora mesmo",
+              status: success ? "Entregue" : "Erro",
+              mensagem: "Campanha Flyer_Reuniao_Pais.png disparada para toda a escola."
+            };
+
+            logs.unshift(campLog);
+            localStorage.setItem(storageKey, JSON.stringify(logs));
+
+            carregarLogsLocais();
+            index++;
+          }, 150);
+        };
+      }
+
+      await carregarDados();
     })();
   </script>
 </body></html>
